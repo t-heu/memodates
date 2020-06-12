@@ -39,7 +39,7 @@ class UserRepository {
             const user = yield this.ormRepository.findOne({
                 email,
             });
-            return user;
+            return user || false;
         });
     }
     findById(id) {

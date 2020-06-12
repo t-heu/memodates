@@ -11,7 +11,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const dotenv_1 = require("dotenv");
 dotenv_1.config({
-    path: process.env.NODE_ENV === 'development' ? '.env.development' : '.env'
+    path: process.env.NODE_ENV === 'test' ? '.env.test' : '.env'
 });
 const typeorm_1 = require("typeorm");
 const User_1 = require("../../../domain/User");

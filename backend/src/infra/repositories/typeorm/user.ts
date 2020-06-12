@@ -1,7 +1,5 @@
 import {getRepository, Repository} from 'typeorm'
-import { sign } from 'jsonwebtoken'
 
-import * as authConfig from '../../../config/auth'
 import {User} from '../../../domain/User'
 import IUserRepository from '../../../domain/user_repository'
 
@@ -14,10 +12,6 @@ interface IcreateDTO {
   name: string
 }
 
-interface Iuser extends User {
-  acess_token: string
-}
-
 class UserRepository implements IUserRepository {
   private ormRepository: Repository<User>
 
@@ -26,7 +20,7 @@ class UserRepository implements IUserRepository {
   }
 
   public async create({yourBirthday, email, password, name, hasFacebook, hasPassword}: IcreateDTO): Promise<User> {
-    const user = <Iuser>this.ormRepository.create({
+    const user = this.ormRepository.create({
       yourBirthday,
       email,
       password,
@@ -35,17 +29,12 @@ class UserRepository implements IUserRepository {
       name
     })
 
-    user.acess_token = sign({ id: user.id }, authConfig.ACCESS_TOKEN_SECRET, {
-      expiresIn: authConfig.EXPIRES_IN,
-    })
-
     await this.ormRepository.save(user);
 
     return user
   }
 
   public async findEmail(email: string): Promise<User | false> {
-    
     const user = await this.ormRepository.findOne({
       email,
     })
@@ -61,7 +50,6 @@ class UserRepository implements IUserRepository {
 
     return user
   }
-
 }
 
 export default UserRepository

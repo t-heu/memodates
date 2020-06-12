@@ -46,7 +46,6 @@ const resolvers = {
     oauth: async (_: any, root: any) => {
       const { access_token, TypeServiceOauth } = root
       
-      //EAAFC1okoWeQBAL0a3IFDqPplcmZCGGtC7xmCLTT5WKHT184i6pXy2vQeg3vJiAXqo9pNIvliTpTZAApabmRnMUVTdY6gxCif9ESE4XcDAuQHyvUZAS3uHRojSdbwAAF10isnEHRedysgpK9q9ILbPDEYP10pD4QBPyzKuxkBKYPzx2UJYZA0TpyKcZBDZBjfSRsy9K8nVLoSgi8zbQhDBJMtwor034QfBdxyOylvDaorMkvi79bqYZBmI8JIoDbipEZD
       const oauth = container.resolve(OauthService)//new OauthService()
       const response = await oauth.execute({access_token, TypeServiceOauth})
       

@@ -16,7 +16,6 @@ interface Iuser {
   hasFacebook: boolean
   id: string
   email: string
-  acess_token?: string
 }
 
 type Tuser = Iuser | false
@@ -40,10 +39,8 @@ export default class AuthenticateUserService {
       }
     }
     
-    user.acess_token = sign({ id: user.id }, authConfig.ACCESS_TOKEN_SECRET, {
+    return sign({ id: user.id }, authConfig.ACCESS_TOKEN_SECRET, {
       expiresIn: authConfig.EXPIRES_IN,
     })
-
-    return user
   }
 }

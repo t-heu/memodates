@@ -17,8 +17,6 @@ const auth = (request: any, requireAuth = true) => {
   if (authorization) {
     const [, token] = authorization.split(' ')
     const { id } = verify(token, ACCESS_TOKEN_SECRET) as authT;
-    //console.log(data)
-    //(request as any).userId = data.userId
     
     return id
   }

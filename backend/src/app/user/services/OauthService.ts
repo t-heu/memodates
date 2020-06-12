@@ -11,7 +11,6 @@ interface Iuser {
   hasFacebook: boolean
   id?: string
   email?: string
-  acess_token?: string
 }
 
 type Tuser = Iuser | false
@@ -58,23 +57,17 @@ export default class OauthService {
           hasFacebook
         })
 
-        user.acess_token = sign({ id: user.id }, authConfig.ACCESS_TOKEN_SECRET, {
+        return sign({ id: user.id }, authConfig.ACCESS_TOKEN_SECRET, {
           expiresIn: authConfig.EXPIRES_IN,
         })
-
-        return user
       }
     
-      usersExist.acess_token = sign({ id: usersExist.id }, authConfig.ACCESS_TOKEN_SECRET, {
+      return sign({ id: usersExist.id }, authConfig.ACCESS_TOKEN_SECRET, {
         expiresIn: authConfig.EXPIRES_IN,
       })
-        
-      return usersExist
     } catch(e) {
       return null
     }
-    
-    //return await this.service[TypeServiceOauth](access_token)
   }
 
   private async facebookService(access_token: string) {

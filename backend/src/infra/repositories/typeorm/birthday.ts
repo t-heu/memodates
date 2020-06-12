@@ -37,7 +37,6 @@ class BirthdayRepository implements IBirthdayRepository {
 
     return false
   }
-
 }
 
 export default BirthdayRepository

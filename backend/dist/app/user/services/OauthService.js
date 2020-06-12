@@ -39,14 +39,9 @@ let OauthService = class OauthService {
         };
     }
     execute({ access_token, TypeServiceOauth }) {
-        return this.service[TypeServiceOauth](access_token);
-    }
-    facebookService(access_token) {
         return __awaiter(this, void 0, void 0, function* () {
-            const URI = `https://graph.facebook.com/me?fields=birthday,email,name,picture&access_token=${access_token}`;
             try {
-                const response = yield axios_1.default.get(URI);
-                const { email, id, name } = response.data;
+                const { email, id, name, hasFacebook } = yield this.service[TypeServiceOauth](access_token);
                 const usersExist = yield this.createRepository.findEmail(email);
                 if (!usersExist) {
                     const user = yield this.createRepository.create({
@@ -55,7 +50,10 @@ let OauthService = class OauthService {
                         password: id,
                         name,
                         hasPassword: false,
-                        hasFacebook: true
+                        hasFacebook
+                    });
+                    user.acess_token = jsonwebtoken_1.sign({ id: user.id }, authConfig.ACCESS_TOKEN_SECRET, {
+                        expiresIn: authConfig.EXPIRES_IN,
                     });
                     return user;
                 }
@@ -63,6 +61,23 @@ let OauthService = class OauthService {
                     expiresIn: authConfig.EXPIRES_IN,
                 });
                 return usersExist;
+            }
+            catch (e) {
+                return null;
+            }
+        });
+    }
+    facebookService(access_token) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const response = yield axios_1.default.get(`https://graph.facebook.com/me?fields=birthday,email,name,picture&access_token=${access_token}`);
+                const { email, id, name } = response.data;
+                return {
+                    email,
+                    id,
+                    name,
+                    hasFacebook: true
+                };
             }
             catch (e) {
                 console.log(e);

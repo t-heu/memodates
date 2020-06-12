@@ -8,7 +8,6 @@ const typeDefs = gql`
     name: String!
     birthday: [Birthday]
     password: String
-    acess_token: String
   }
 
   # enum SocialNetwork {
@@ -32,8 +31,8 @@ const typeDefs = gql`
   # }
 
   type Mutation {
-    signup(email: String!, password: String!, yourBirthday: String!, name: String!): User
-    signin(email: String!, password: String!): User
+    signup(email: String!, password: String!, yourBirthday: String!, name: String!): String!
+    signin(email: String!, password: String!): String!
     oauth(access_token: String!, TypeServiceOauth: String!): User
     createBirthday(name: String!, date: String!, idExist: String): Birthday
   }
