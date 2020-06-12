@@ -1,0 +1,21 @@
+{
+   "type": "postgres",
+   "host": "salt.db.elephantsql.com",
+   "port": "",
+   "username": "ciyieeng",
+   "password": "aYrDBI8qvUVjIUKphDALrcbB0zGN9yUU",
+   "database": "ciyieeng",
+   "synchronize": true,
+   "logging": false,
+   "migrations": [
+      "src/migration/**/*.ts"
+   ],
+   "subscribers": [
+      "src/subscriber/**/*.ts"
+   ],
+   "cli": {
+      "entitiesDir": "src/entity",
+      "migrationsDir": "src/migration",
+      "subscribersDir": "src/subscriber"
+   }
+}
