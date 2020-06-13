@@ -10,9 +10,7 @@ import { SignInSuccess, SignRequest, SignInFailure } from '../../store/ducks/aut
 
 const OAUTH = gql`
   mutation Oauth($access_token: String!, $TypeServiceOauth: String!) {
-    oauth(access_token: $access_token, TypeServiceOauth: $TypeServiceOauth) {
-      acess_token
-    }
+    oauth(access_token: $access_token, TypeServiceOauth: $TypeServiceOauth)
   }
 `;
 
@@ -26,11 +24,12 @@ export default function Fb() {
       function(result) {
         if (result.isCancelled) {
           console.log("Login cancelled");
+          dispatch(SignInFailure())
         } else {
           AccessToken.getCurrentAccessToken().then((data: any) => {
             const TypeServiceOauth = 'FACEBOOK'
             oauth({ variables: { access_token: data.accessToken.toString(), TypeServiceOauth } }).then(datas => {
-              const token = datas.data.oauth.acess_token
+              const token = datas.data.oauth//datas.data.oauth.acess_token
               dispatch(SignInSuccess({token, TypeServiceOauth}))
             }).catch(e => {
               console.log(e)

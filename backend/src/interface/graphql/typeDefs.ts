@@ -33,7 +33,7 @@ const typeDefs = gql`
   type Mutation {
     signup(email: String!, password: String!, yourBirthday: String!, name: String!): String!
     signin(email: String!, password: String!): String!
-    oauth(access_token: String!, TypeServiceOauth: String!): User
+    oauth(access_token: String!, TypeServiceOauth: String!): String!
     createBirthday(name: String!, date: String!, idExist: String): Birthday
   }
 `;

@@ -65,6 +65,7 @@ export default class OauthService {
       /*return sign({ id: usersExist.id }, authConfig.ACCESS_TOKEN_SECRET, {
         expiresIn: authConfig.EXPIRES_IN,
       })*/
+      
       return authenticate(usersExist.id)
     } catch(e) {
       return null

@@ -22,9 +22,7 @@ const SIGNIN = gql`
     signin(
       email: $email
       password: $password
-    ) {
-      acess_token
-    }
+    )
   }
 `;
 
@@ -49,7 +47,7 @@ export default function SignIn({navigation}: any) {
 
     Signin({variables: {email, password}})
       .then((data) => {
-        dispatch(SignInSuccess({token: data.data.signin.acess_token, TypeServiceOauth: 'EMAIL'}))
+        dispatch(SignInSuccess({token: data.data.signin, TypeServiceOauth: 'EMAIL'}))
         navigation.navigate('Home')
       })
       .catch((e) => {

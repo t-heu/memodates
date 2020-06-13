@@ -30,9 +30,7 @@ const SIGNUP = gql`
       password: $password
       yourBirthday: $yourBirthday
       name: $name
-    ) {
-      acess_token
-    }
+    )
   }
 `;
 
@@ -86,7 +84,7 @@ export default function SignUp({navigation}: any) {
 
     Signup({variables: {email, password, yourBirthday, name}})
       .then((data) => {
-        dispatch(SignInSuccess({token: data.data.signup.acess_token, TypeServiceOauth: 'em'}))
+        dispatch(SignInSuccess({token: data.data.signup, TypeServiceOauth: 'em'}))
         navigation.navigate('Home')
       })
       .catch((e) => {

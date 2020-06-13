@@ -1,9 +1,10 @@
 import React, { useState,useEffect } from 'react';
-import { TouchableOpacity, Text, View, StyleSheet } from 'react-native';
+import { TouchableOpacity, Text, View, StyleSheet, TextInput } from 'react-native';
 import {LocaleConfig, CalendarList} from 'react-native-calendars';
 import {format} from 'date-fns-tz'
 import {useNavigation} from '@react-navigation/native'
 //import Dash from 'react-native-dash'
+import EvilIcons from 'react-native-vector-icons/EvilIcons'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 
 LocaleConfig.locales['ptBR'] = {
@@ -42,23 +43,8 @@ export default function CalendarComponent({birthday}: Ibirthday) {
         setBirthday(arr)
       }
     })
-  }
 
-  function handleDay(state: string) {
-    switch(state) {
-      case 'disabled': {
-        return '#fff'
-      }
-      case 'today': {
-        return '#444'
-      }
-      case '': {
-        return '#444'
-      }
-      default: {
-        return '#fff'
-      }
-    }
+    if(arr.length < 1) setActiveModal(false)
   }
 
   useEffect(() => {
@@ -92,12 +78,11 @@ export default function CalendarComponent({birthday}: Ibirthday) {
               <View style={styles.calendar}>
                 <View style={{position: 'relative'}}>
                   <View>
-                    <Text style={[{color: handleDay(state), textAlign: 'center'}, {}]}>
+                    <Text style={[{color: state === 'today' ? '#3771D4' : '#444', textAlign: 'center'}, {}]}>
                       {date.day}
                     </Text>
                   </View>
                 
-                  <View style={[{height: 35, width: 35, top: -7, right: -7, zIndex: -5, position: 'absolute'}, state === 'today' ? styles.calendar__dayAge : null]}></View>
                   <View style={[{height: 35, width: 35, top: -7, right: -7, zIndex: -2, position: 'absolute'}, date.dateString === dateChange ? styles.selectedDay : null]}></View>
                 </View>
                                 
@@ -134,20 +119,23 @@ export default function CalendarComponent({birthday}: Ibirthday) {
       
       {comp}
 
-      <View style={{padding: 20, marginTop: 0, alignItems: 'center'}}>
-        {activeModal && (
-          <>
-            <View style={{marginBottom: 10, flexDirection: 'row', flexWrap: 'wrap'}}>
-              {birthdays.map((r: any) => {
-                return (
-                  <View style={{borderWidth: 1, borderRadius: 20, borderColor: '#3771D4', backgroundColor: '#3771D4', width: 70, height: 70, margin: 5, justifyContent: 'center', alignItems: 'center', shadowColor: '#000', shadowOpacity: 0.2, shadowOffset: {height: 4, width: 4}, elevation: 2}} key={r.id}>
-                    <Text style={{color: '#fff', fontSize: 12}}>{r.name}</Text>
-                    <Text style={{color: '#fff', fontSize: 12}}>{format(new Date(r.date), 'dd/MM/yyyy')}</Text>
-                  </View>
-                )
-              })}
-            </View>
-          </>
+      <View>
+        {activeModal && birthdays.length > 0 && (
+          <View style={{paddingTop: 5, paddingBottom: 5}}>
+            <Text style={{fontSize: 20, marginBottom: 10, fontFamily: 'OpenSans-SemiBold',  fontWeight: '400', color: '#222', marginLeft: 8}}>Marcados</Text>
+            {birthdays.map((r: any) => (
+              <View style={{alignItems: 'center', justifyContent: 'space-around', flexDirection: 'row'}} key={r.id}>
+                <TextInput style={styles.input} value={r.name}/>   
+                
+                {/*<Dash dashThickness={2} dashLength={4} dashGap={4} dashColor={'#fff'} style={{flexDirection: 'column', width: 10, height: 20, alignItems:'center'}} />*/}
+                <TextInput style={styles.input} value={format(new Date(r.date), 'dd/MM/yyyy')}/>
+
+                <TouchableOpacity style={[styles.input, {width: 60}]}>
+                  <EvilIcons name={'trash'} size={30} color={'red'} />
+                </TouchableOpacity>
+              </View>
+            ))}
+          </View>
         )}
       </View>
     </>
@@ -159,13 +147,8 @@ const styles = StyleSheet.create({
     width: 20, 
     textAlign: 'center'
   },
-  calendar__dayAge: {
-    backgroundColor: '#A6B0BF',//'#c0c0c2',
-    opacity: 0.2,
-    borderRadius: 50
-  },
   selectedDay: {
-    backgroundColor: '#3771D4',//'#c0c0c2',
+    backgroundColor: '#A6B0BF',//'#c0c0c2',
     opacity: 0.2,
     borderRadius: 50
   },
@@ -178,5 +161,18 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     height: 5,
     width: 5
+  },
+  input: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 5,
+    height: 40,
+    width: 110,
+    marginBottom: 10,
+    backgroundColor: 'transparent',
+    borderWidth: 1,
+    borderColor: '#999',
+    paddingHorizontal: 13,
+    borderRadius: 4
   }
 });
