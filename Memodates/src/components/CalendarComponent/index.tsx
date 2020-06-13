@@ -1,10 +1,9 @@
 import React, { useState,useEffect } from 'react';
 import { TouchableOpacity, Text, View, StyleSheet } from 'react-native';
-import {LocaleConfig,Calendar, CalendarList} from 'react-native-calendars';
+import {LocaleConfig, CalendarList} from 'react-native-calendars';
 import {format} from 'date-fns-tz'
 import {useNavigation} from '@react-navigation/native'
 //import Dash from 'react-native-dash'
-import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 
 LocaleConfig.locales['ptBR'] = {
@@ -27,11 +26,9 @@ export default function CalendarComponent({birthday}: Ibirthday) {
   const [activeModal, setActiveModal] = useState(false);
   const [birthdays, setBirthday] = useState([] as Ibirthday[]);
   const [activeAdd, setActiveAdd] = useState(new Date());
-  const navigation = useNavigation()
+  const navigation = useNavigation();
   const [dateChange, setDateChange] = useState(format(new Date(), 'yyyy-MM-dd'));
-  const [comp, setComp] = useState(<View style={{justifyContent: 'center', alignItems: 'center', height: 300}}>
-  <SimpleLineIcons name={'reload'} size={26} color={'#222'} />
-</View>);
+  const [comp, setComp] = useState(<RenderCalendar />);
 
   function modal(date: any) {
     setDateChange(date.dateString)
@@ -65,18 +62,12 @@ export default function CalendarComponent({birthday}: Ibirthday) {
   }
 
   useEffect(() => {
-    setComp(
-      <View style={{justifyContent: 'center', alignItems: 'center', height: 300}}>
-        <SimpleLineIcons name={'reload'} size={26} color={'#222'} />
-      </View>
-    )
-
     setTimeout(() => {
-      setComp(renderCalendar())
+      setComp(<RenderCalendar />)
     }, 100)
   }, [dateChange])
 
-  function renderCalendar() {
+  function RenderCalendar() {
     return (
       <CalendarList
         horizontal={true}
@@ -107,7 +98,7 @@ export default function CalendarComponent({birthday}: Ibirthday) {
                   </View>
                 
                   <View style={[{height: 35, width: 35, top: -7, right: -7, zIndex: -5, position: 'absolute'}, state === 'today' ? styles.calendar__dayAge : null]}></View>
-                  <View style={[{height: 35, width: 35, top: -7, right: -7, zIndex: -5, position: 'absolute'}, date.dateString === dateChange ? styles.selectedDay : null]}></View>
+                  <View style={[{height: 35, width: 35, top: -7, right: -7, zIndex: -2, position: 'absolute'}, date.dateString === dateChange ? styles.selectedDay : null]}></View>
                 </View>
                                 
                 <View style={styles.calendar__item}>
@@ -143,62 +134,6 @@ export default function CalendarComponent({birthday}: Ibirthday) {
       
       {comp}
 
-      {/*<CalendarList
-        horizontal={true}
-        theme={{
-          backgroundColor: '#fefeff',
-          calendarBackground: '#fefeff',
-          monthTextColor: '#8B9BB5',
-          textMonthFontWeight: 'bold',
-          arrowColor: '#8B9BB5',
-          textSectionTitleColor: '#8B9BB5',//'#c0c0c2',
-          textDayHeaderFontWeight: 'bold',
-          // "stylesheet.calendar.header": {
-          //   header: {
-          //     height: 16,
-          //     opacity: 0
-          //   }
-          // }
-        }}
-        //renderArrow={(a) => a === 'left' ? () : ()}
-        monthFormat={'MMMM yyyy'}
-        style={{
-          padding: 0,
-          margin: 0,
-          height: 260,
-        }}
-        dayComponent={({date, state}) => {
-          return (
-            <TouchableOpacity onPress={() => modal(date)}>
-              <View style={styles.calendar}>
-                <View style={{position: 'relative'}}>
-                  <View>
-                    <Text style={[{color: handleDay(state), textAlign: 'center'}, {}]}>
-                      {date.day}
-                    </Text>
-                  </View>
-                
-                  <View style={[{height: 35, width: 35, top: -7, right: -7, zIndex: -5, position: 'absolute'}, state === 'today' ? styles.calendar__dayAge : null]}></View>
-                  <View style={[{height: 35, width: 35, top: -7, right: -7, zIndex: -5, position: 'absolute'}, date.dateString === '2020-06-20' ? styles.ca : null]}></View>
-                </View>
-                                
-                <View style={styles.calendar__item}>
-                  {birthday.map((data: any) => {
-                    const dateBirthday = `${format(new Date(), 'yyyy')}-${format(new Date(data.date), 'MM-dd')}`
-
-                    return (
-                      <View key={data.id} style={{margin: 1}}>
-                        <View style={date.dateString == dateBirthday ? [{backgroundColor: '#3771D4'}, styles.dot]: null}></View>
-                      </View>
-                    )
-                  })}
-                </View>
-              </View>
-            </TouchableOpacity>
-          );
-        }}
-      />*/}
-      
       <View style={{padding: 20, marginTop: 0, alignItems: 'center'}}>
         {activeModal && (
           <>

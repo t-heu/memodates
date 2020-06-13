@@ -101,7 +101,7 @@ export default function Banner() {
             null
           )}
           
-          <View style={{justifyContent: 'center', alignItems: "center", position: 'absolute', right: 13, top: 10, backgroundColor: 'rgba(255, 255, 255, 0.2)', padding: 5, borderRadius: 6, width: 40, height: 40}}>
+          <View style={{justifyContent: 'center', alignItems: "center", position: 'absolute', right: 12, top: 12, backgroundColor: 'rgba(255, 255, 255, 0.2)', padding: 5, borderRadius: 6, width: 40, height: 40}}>
             <TouchableOpacity onPress={() => {
               setHam(!ham)
               if(openCloseEmail) setOpenCloseEmail(!openCloseEmail)
@@ -166,7 +166,7 @@ export default function Banner() {
         </View>
       ):(
         <ImageBackground source={Back} style={{height: 200, justifyContent: 'center', alignItems: 'center', position: 'relative'}}>
-          <View style={{position: 'absolute', zIndex: 20, right: 13, top: 11, backgroundColor: 'rgba(255, 255, 255, 0.5)', padding: 5, borderRadius: 6, width: 40, height: 40, justifyContent: 'center', alignItems: "center"}}>
+          <View style={{position: 'absolute', zIndex: 20, right: 12, top: 12, backgroundColor: 'rgba(255, 255, 255, 0.5)', padding: 5, borderRadius: 6, width: 40, height: 40, justifyContent: 'center', alignItems: "center"}}>
             <TouchableOpacity onPress={() => setHam(!ham)}>
               <Entypo name={'list'} size={26} color={'#4989f7'}/>
             </TouchableOpacity>

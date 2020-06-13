@@ -1,8 +1,7 @@
 import {injectable, inject} from 'tsyringe'
-import { sign } from 'jsonwebtoken'
 import { compare } from 'bcryptjs'
 
-import * as authConfig from '../../../config/auth'
+import authenticate from '../../../interface/utils/auth'
 import IUserRepository from '../../../domain/user_repository'
 
 interface RequestDTO {
@@ -39,8 +38,9 @@ export default class AuthenticateUserService {
       }
     }
     
-    return sign({ id: user.id }, authConfig.ACCESS_TOKEN_SECRET, {
+    /*return sign({ id: user.id }, authConfig.ACCESS_TOKEN_SECRET, {
       expiresIn: authConfig.EXPIRES_IN,
-    })
+    })*/
+    return authenticate(user.id)
   }
 }

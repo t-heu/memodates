@@ -1,16 +1,15 @@
 import axios from 'axios'
 import {injectable, inject} from 'tsyringe'
-import { sign } from 'jsonwebtoken'
 
-import * as authConfig from '../../../config/auth'
+import authenticate from '../../../interface/utils/auth'
 import IUserRepository from '../../../domain/user_repository'
 
 interface Iuser {
   password?: string
   hasPassword: boolean
   hasFacebook: boolean
-  id?: string
-  email?: string
+  id: string
+  email: string
 }
 
 type Tuser = Iuser | false
@@ -57,14 +56,16 @@ export default class OauthService {
           hasFacebook
         })
 
-        return sign({ id: user.id }, authConfig.ACCESS_TOKEN_SECRET, {
+        return authenticate(user.id)
+        /*return sign({ id: user.id }, authConfig.ACCESS_TOKEN_SECRET, {
           expiresIn: authConfig.EXPIRES_IN,
-        })
+        })*/
       }
     
-      return sign({ id: usersExist.id }, authConfig.ACCESS_TOKEN_SECRET, {
+      /*return sign({ id: usersExist.id }, authConfig.ACCESS_TOKEN_SECRET, {
         expiresIn: authConfig.EXPIRES_IN,
-      })
+      })*/
+      return authenticate(usersExist.id)
     } catch(e) {
       return null
     }

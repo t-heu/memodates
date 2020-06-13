@@ -5,7 +5,7 @@ import {setContext} from 'apollo-link-context';
 
 import {store} from './store';
 
-export const URI_SERVER = 'http://192.168.1.4:3333'
+export const URI_SERVER = 'https://bhqmemodatesdback.herokuapp.com'//'http://192.168.1.4:3333'
 
 const httpLink = new HttpLink({uri: `${URI_SERVER}/graphql`});
 
