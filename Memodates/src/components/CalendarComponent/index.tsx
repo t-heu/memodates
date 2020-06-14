@@ -121,17 +121,17 @@ export default function CalendarComponent({birthday}: Ibirthday) {
 
       <View>
         {activeModal && birthdays.length > 0 && (
-          <View style={{paddingTop: 5, paddingBottom: 5}}>
-            <Text style={{fontSize: 20, marginBottom: 10, fontFamily: 'OpenSans-SemiBold',  fontWeight: '400', color: '#222', marginLeft: 8}}>Marcados</Text>
+          <View style={{padding: 10}}>
+            <Text style={{fontSize: 20, marginBottom: 10, fontFamily: 'OpenSans-SemiBold',  fontWeight: '400', color: '#222'}}>Marcados</Text>
             {birthdays.map((r: any) => (
-              <View style={{alignItems: 'center', justifyContent: 'space-around', flexDirection: 'row'}} key={r.id}>
+              <View style={{alignItems: 'center', justifyContent: 'space-around', flexDirection: 'row', borderWidth: 1, borderColor: '#999', borderRadius: 4, marginBottom: 10}} key={r.id}>
                 <TextInput style={styles.input} value={r.name}/>   
                 
                 {/*<Dash dashThickness={2} dashLength={4} dashGap={4} dashColor={'#fff'} style={{flexDirection: 'column', width: 10, height: 20, alignItems:'center'}} />*/}
                 <TextInput style={styles.input} value={format(new Date(r.date), 'dd/MM/yyyy')}/>
 
                 <TouchableOpacity style={[styles.input, {width: 60}]}>
-                  <EvilIcons name={'trash'} size={30} color={'red'} />
+                  <EvilIcons name={'trash'} size={28} color={'red'} />
                 </TouchableOpacity>
               </View>
             ))}
@@ -168,11 +168,6 @@ const styles = StyleSheet.create({
     padding: 5,
     height: 40,
     width: 110,
-    marginBottom: 10,
     backgroundColor: 'transparent',
-    borderWidth: 1,
-    borderColor: '#999',
-    paddingHorizontal: 13,
-    borderRadius: 4
   }
 });
