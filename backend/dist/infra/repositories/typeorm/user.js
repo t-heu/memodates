@@ -10,8 +10,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const typeorm_1 = require("typeorm");
-const jsonwebtoken_1 = require("jsonwebtoken");
-const authConfig = require("../../../config/auth");
 const User_1 = require("../../../domain/User");
 class UserRepository {
     constructor() {
@@ -26,9 +24,6 @@ class UserRepository {
                 hasFacebook,
                 hasPassword,
                 name
-            });
-            user.acess_token = jsonwebtoken_1.sign({ id: user.id }, authConfig.ACCESS_TOKEN_SECRET, {
-                expiresIn: authConfig.EXPIRES_IN,
             });
             yield this.ormRepository.save(user);
             return user;

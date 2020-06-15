@@ -67,7 +67,7 @@ export default function CalendarComponent({birthday}: Ibirthday) {
           textSectionTitleColor: '#fff',//'#8B9BB5',
           textDayHeaderFontWeight: 'bold',
         }}
-        monthFormat={'MMMM yyyy'}
+        monthFormat={'dd De MMMM De yyyy'}
         style={{
           padding: 0,
           margin: 0,
@@ -121,8 +121,8 @@ export default function CalendarComponent({birthday}: Ibirthday) {
         </View>
         
         {comp}
-          
-        <Svg style={{height:200, zIndex: 10, bottom: 0, left: 0, right: 0}} viewBox="-1 50 375 187">
+        
+        <Svg style={{height:180, zIndex: 10, bottom: 0, left: 0, right: 0}} viewBox="-1 50 375 087">
           <Path fill="#0d6ec6" fillOpacity={1} d={"M380.279 107.377C380.279 107.377 295.739 13.1031 187.625 107.25C79.5108 201.397 -1.97128 107.125 -1.97128 107.125L-1.89778 1.07516e-06L380.353 0.252415L380.279 107.377Z"}></Path>
         </Svg>
       </View>

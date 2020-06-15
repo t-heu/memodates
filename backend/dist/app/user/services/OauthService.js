@@ -23,8 +23,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const axios_1 = require("axios");
 const tsyringe_1 = require("tsyringe");
-const jsonwebtoken_1 = require("jsonwebtoken");
-const authConfig = require("../../../config/auth");
+const auth_1 = require("../../../interface/utils/auth");
 var ServicesTypes;
 (function (ServicesTypes) {
     ServicesTypes["FACEBOOK"] = "FACEBOOK";
@@ -52,15 +51,9 @@ let OauthService = class OauthService {
                         hasPassword: false,
                         hasFacebook
                     });
-                    user.acess_token = jsonwebtoken_1.sign({ id: user.id }, authConfig.ACCESS_TOKEN_SECRET, {
-                        expiresIn: authConfig.EXPIRES_IN,
-                    });
-                    return user;
+                    return auth_1.default(user.id);
                 }
-                usersExist.acess_token = jsonwebtoken_1.sign({ id: usersExist.id }, authConfig.ACCESS_TOKEN_SECRET, {
-                    expiresIn: authConfig.EXPIRES_IN,
-                });
-                return usersExist;
+                return auth_1.default(usersExist.id);
             }
             catch (e) {
                 return null;

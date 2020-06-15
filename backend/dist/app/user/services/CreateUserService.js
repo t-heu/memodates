@@ -22,12 +22,16 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const tsyringe_1 = require("tsyringe");
+const auth_1 = require("../../../interface/utils/auth");
 let CreateUserService = class CreateUserService {
     constructor(createRepository) {
         this.createRepository = createRepository;
     }
     execute({ yourBirthday, email, password, name, hasFacebook, hasPassword }) {
         return __awaiter(this, void 0, void 0, function* () {
+            if (yield this.createRepository.findEmail(email)) {
+                throw new Error('User exist');
+            }
             const user = yield this.createRepository.create({
                 yourBirthday,
                 email,
@@ -36,7 +40,7 @@ let CreateUserService = class CreateUserService {
                 hasPassword,
                 name
             });
-            return user;
+            return auth_1.default(user.id);
         });
     }
 };

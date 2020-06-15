@@ -9,7 +9,6 @@ const typeDefs = apollo_server_1.gql `
     name: String!
     birthday: [Birthday]
     password: String
-    acess_token: String
   }
 
   # enum SocialNetwork {
@@ -33,9 +32,9 @@ const typeDefs = apollo_server_1.gql `
   # }
 
   type Mutation {
-    signup(email: String!, password: String!, yourBirthday: String!, name: String!): User
-    signin(email: String!, password: String!): User
-    oauth(access_token: String!, TypeServiceOauth: String!): User
+    signup(email: String!, password: String!, yourBirthday: String!, name: String!): String!
+    signin(email: String!, password: String!): String!
+    oauth(access_token: String!, TypeServiceOauth: String!): String!
     createBirthday(name: String!, date: String!, idExist: String): Birthday
   }
 `;

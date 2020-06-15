@@ -22,9 +22,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const tsyringe_1 = require("tsyringe");
-const jsonwebtoken_1 = require("jsonwebtoken");
 const bcryptjs_1 = require("bcryptjs");
-const authConfig = require("../../../config/auth");
+const auth_1 = require("../../../interface/utils/auth");
 let AuthenticateUserService = class AuthenticateUserService {
     constructor(createRepository) {
         this.createRepository = createRepository;
@@ -42,10 +41,7 @@ let AuthenticateUserService = class AuthenticateUserService {
                     throw new Error('invalid password');
                 }
             }
-            user.acess_token = jsonwebtoken_1.sign({ id: user.id }, authConfig.ACCESS_TOKEN_SECRET, {
-                expiresIn: authConfig.EXPIRES_IN,
-            });
-            return user;
+            return auth_1.default(user.id);
         });
     }
 };
