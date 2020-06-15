@@ -198,7 +198,7 @@ const styles = StyleSheet.create({
     height: 50, 
     justifyContent: 'center', 
     alignItems: 'center', 
-    backgroundColor: '#4989f7',   
+    backgroundColor: '#0d6ec6',   
   },
   btnDate: {
     height: 50,

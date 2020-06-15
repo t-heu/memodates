@@ -152,10 +152,10 @@ const styles = StyleSheet.create({
   btnSalve: {
     height: 50,
     padding: 15,
-    backgroundColor: '#4989f9',
+    backgroundColor: '#0d6ec6',
     borderRadius: 6,
     borderWidth: 1,
-    borderColor: '#4989f9',
+    borderColor: '#0d6ec6',
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: 10

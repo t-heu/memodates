@@ -6,12 +6,13 @@ import {useNavigation} from '@react-navigation/native'
 //import Dash from 'react-native-dash'
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
 import Ionicons from 'react-native-vector-icons/Ionicons'
+import {Path, Svg} from 'react-native-svg'
 
 LocaleConfig.locales['ptBR'] = {
   monthNames: ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'],
   monthNamesShort: ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'],
   dayNames: ['Domingo','Segunda','Terça','Quarta','Quinta','Sexta','Sábado'],
-  dayNamesShort: ['D','S','T','Q','Q','S','S'],
+  dayNamesShort: ['Dom','Seg','Ter','Qua','Qui','Sex','Sab'],
 };
 LocaleConfig.defaultLocale = 'ptBR';
 
@@ -58,19 +59,19 @@ export default function CalendarComponent({birthday}: Ibirthday) {
       <CalendarList
         horizontal={true}
         theme={{
-          backgroundColor: '#fefeff',
-          calendarBackground: '#fefeff',
-          monthTextColor: '#8B9BB5',
+          backgroundColor: '#0d6ec6',
+          calendarBackground: '#0d6ec6',
+          monthTextColor: '#fff',//'#8B9BB5',
           textMonthFontWeight: 'bold',
-          arrowColor: '#8B9BB5',
-          textSectionTitleColor: '#8B9BB5',//'#c0c0c2',
+          arrowColor: '#fff',//'#8B9BB5',
+          textSectionTitleColor: '#fff',//'#8B9BB5',
           textDayHeaderFontWeight: 'bold',
         }}
         monthFormat={'MMMM yyyy'}
         style={{
           padding: 0,
           margin: 0,
-          height: 270,
+          height: 265,
         }}
         dayComponent={({date, state}) => {
           return (
@@ -78,7 +79,7 @@ export default function CalendarComponent({birthday}: Ibirthday) {
               <View style={styles.calendar}>
                 <View style={{position: 'relative'}}>
                   <View>
-                    <Text style={[{color: state === 'today' ? '#3771D4' : '#444', textAlign: 'center'}, {}]}>
+                    <Text style={[{color: state === 'today' ? '#ffbe76' : '#fff'/*'#444'*/, textAlign: 'center'}, {}]}>
                       {date.day}
                     </Text>
                   </View>
@@ -92,7 +93,7 @@ export default function CalendarComponent({birthday}: Ibirthday) {
 
                     return (
                       <View key={data.id} style={{margin: 1}}>
-                        <View style={date.dateString == dateBirthday ? [{backgroundColor: '#3771D4'}, styles.dot]: null}></View>
+                        <View style={date.dateString == dateBirthday ? [{backgroundColor: '#f9ca24'}, styles.dot]: null}></View>
                       </View>
                     )
                   })}
@@ -107,21 +108,28 @@ export default function CalendarComponent({birthday}: Ibirthday) {
 
   return (
     <>
-      <View style={{marginTop: 5, marginBottom: 10, position: 'absolute', top: -35, right: 15, zIndex: 100}}>
-        {activeAdd && (
-          <TouchableOpacity onPress={() => navigation.navigate('CreateBirthday', {
-              dateSelected: String(activeAdd)
-            })} style={{backgroundColor: '#4989f7', width: 60, height: 60, borderRadius: 50, alignItems: 'center', justifyContent: 'center', shadowColor: '#fff', shadowOpacity: 0.2, shadowOffset: {height: 4, width: 4}, elevation: 2}}>
-            <Ionicons name={'md-add'} size={36} color={'#fff'} />
-          </TouchableOpacity>
-        )}
+      <View>
+        <View style={{marginTop: 5, marginBottom: 10, position: 'absolute', bottom: 5, right: 0, left: 0, justifyContent: 'center', alignItems: 'center', zIndex: 100}}>
+          {activeAdd && (
+            <TouchableOpacity onPress={() => navigation.navigate('CreateBirthday', {
+                dateSelected: String(activeAdd)
+              })} style={{backgroundColor: '#0d6ec6', width: 150, height: 50, borderRadius: 50, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', shadowColor: '#fff', shadowOpacity: 0.2, shadowOffset: {height: 4, width: 4}, elevation: 2}}>
+              <Ionicons name={'md-add'} size={28} color={'#fff'} />
+              <Text style={{paddingLeft: 8, fontSize: 18, fontFamily: 'OpenSans-SemiBold',  fontWeight: '400', color: '#fff'}}>adicionar</Text>
+            </TouchableOpacity>
+          )}
+        </View>
+        
+        {comp}
+          
+        <Svg style={{height:200, zIndex: 10, bottom: 0, left: 0, right: 0}} viewBox="-1 50 375 187">
+          <Path fill="#0d6ec6" fillOpacity={1} d={"M380.279 107.377C380.279 107.377 295.739 13.1031 187.625 107.25C79.5108 201.397 -1.97128 107.125 -1.97128 107.125L-1.89778 1.07516e-06L380.353 0.252415L380.279 107.377Z"}></Path>
+        </Svg>
       </View>
-      
-      {comp}
 
       <View>
         {activeModal && birthdays.length > 0 && (
-          <View style={{padding: 10}}>
+          <View style={{padding: 10, paddingTop: 0}}>
             <Text style={{fontSize: 20, marginBottom: 10, fontFamily: 'OpenSans-SemiBold',  fontWeight: '400', color: '#222'}}>Marcados</Text>
             {birthdays.map((r: any) => (
               <View style={{alignItems: 'center', justifyContent: 'space-around', flexDirection: 'row', borderWidth: 1, borderColor: '#999', borderRadius: 4, marginBottom: 10}} key={r.id}>
@@ -148,7 +156,7 @@ const styles = StyleSheet.create({
     textAlign: 'center'
   },
   selectedDay: {
-    backgroundColor: '#A6B0BF',//'#c0c0c2',
+    backgroundColor: '#eee',//'#A6B0BF',//'#c0c0c2',
     opacity: 0.2,
     borderRadius: 50
   },

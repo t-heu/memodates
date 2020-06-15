@@ -46,8 +46,8 @@ export default function Fb() {
   }
 
   return (
-    <TouchableOpacity onPress={() => handleSubmit()} style={{backgroundColor: 'rgba(255, 255, 255, 0.2)', padding: 5, borderRadius: 6, width: 40, height: 40, justifyContent: 'center', alignItems: "center"}}>
-      <Icon name="sc-facebook" color={'#fff'} size={26} />
+    <TouchableOpacity onPress={() => handleSubmit()} style={{backgroundColor: 'rgba(255, 255, 255, 0.9)', padding: 5, borderRadius: 6, width: 40, height: 40, justifyContent: 'center', alignItems: "center"}}>
+      <Icon name="sc-facebook" color={'#0d6ec6'} size={26} />
     </TouchableOpacity>
   );
 }

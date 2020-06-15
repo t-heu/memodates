@@ -90,7 +90,7 @@ export default function Banner() {
   return (
     <View style={styles.container}>            
       {ham ? (
-        <View style={{backgroundColor: '#4989f7', height: 200, justifyContent: 'center', alignItems: 'center', position: 'relative'}}>
+        <View style={{backgroundColor: '#0d6ec6'/*'#4989f7'*/, height: 100, justifyContent: 'center', alignItems: 'center', position: 'relative'}}>
           {auth.loading ? (
             <View style={{backgroundColor: 'rgba(255, 255, 255, 0.2)', position: 'absolute', top: 0, left: 0, zIndex: 10, height: 200, width: '100%'}}>
               <View style={{justifyContent: 'center', alignItems: 'center', height: 200}}>
@@ -101,74 +101,74 @@ export default function Banner() {
             null
           )}
           
-          <View style={{justifyContent: 'center', alignItems: "center", position: 'absolute', right: 12, top: 12, backgroundColor: 'rgba(255, 255, 255, 0.2)', padding: 5, borderRadius: 6, width: 40, height: 40}}>
+          <View style={{justifyContent: 'center', alignItems: "center", position: 'absolute', left: 12, top: 12, backgroundColor: 'rgba(255, 255, 255, 0.9)', padding: 5, borderRadius: 6, width: 40, height: 40}}>
             <TouchableOpacity onPress={() => {
               setHam(!ham)
               if(openCloseEmail) setOpenCloseEmail(!openCloseEmail)
             }}>
-              <MaterialIcons name={'close'} size={26} color={'#fff'}/>
+              <MaterialIcons name={'close'} size={26} color={'#0d6ec6'}/>
             </TouchableOpacity>
           </View>
 
-          <View style={{flexDirection: 'row', marginTop: 0}}>
-            <View style={{marginLeft: 0, marginRight: 0, flexDirection: 'row'}}>
-              { auth.signed ? (
-                <>
-                  <View style={{marginLeft: 0, marginRight: 5}}>
-                    <TouchableOpacity onPress={() => backup()} style={{backgroundColor: 'rgba(255, 255, 255, 0.2)', padding: 5, borderRadius: 6, width: 40, height: 40, justifyContent: 'center', alignItems: "center"}}>
-                      <MaterialIcons name={'backup'} size={26} color={'#fff'} />
-                    </TouchableOpacity>
-                  </View>
-
-                  <View style={{marginLeft: 5, marginRight: 5}}>
-                    <TouchableOpacity 
-                      onPress={() => restored()} 
-                      style={{backgroundColor: 'rgba(255, 255, 255, 0.2)', padding: 5, borderRadius: 6, width: 40, height: 40, justifyContent: 'center', alignItems: "center"}}>
-                      <MaterialIcons name={'file-download'} size={26} color={'#fff'}/>
-                    </TouchableOpacity>
-                  </View>
-
-                  <View style={{marginLeft: 5, marginRight: 0}}>
-                    <TouchableOpacity onPress={async() => {
-                      dispatch(SignOut())
-                      //client.resetStore({data})
-                    }} style={{backgroundColor: 'rgba(255, 255, 255, 0.2)', padding: 5, borderRadius: 6, width: 40, height: 40, justifyContent: 'center', alignItems: "center"}}>
-                      <Ionicons name={'md-exit'} size={26} color={'#fff'} />
-                    </TouchableOpacity>
-                  </View>
-                </>
-              ):(
-                <View style={{flexDirection: 'row'}}>
-                  <View style={{marginLeft: 5, marginRight: 5}}>
-                    <FBoauth />
-                  </View>
-
-                  <View style={{marginLeft: 5, marginRight: 0}}>
-                    <TouchableOpacity onPress={() => setOpenCloseEmail(!openCloseEmail)} style={{backgroundColor: 'rgba(255, 255, 255, 0.2)', padding: 5, borderRadius: 6, width: 40, height: 40, justifyContent: 'center', alignItems: "center"}}>
-                      <MaterialIcons name={'email'} size={26} color={'#fff'} />
-                    </TouchableOpacity>
-                  </View>
+          
+          <View style={{flexDirection: 'row'}}>
+            { auth.signed ? (
+              <>
+                <View style={{marginLeft: 0, marginRight: 5}}>
+                  <TouchableOpacity onPress={() => backup()} style={{backgroundColor: 'rgba(255, 255, 255, 0.9)', padding: 5, borderRadius: 6, width: 40, height: 40, justifyContent: 'center', alignItems: "center"}}>
+                    <MaterialIcons name={'backup'} size={26} color={'#0d6ec6'} />
+                  </TouchableOpacity>
                 </View>
-              )}
-            </View>
+
+                <View style={{marginLeft: 5, marginRight: 5}}>
+                  <TouchableOpacity 
+                    onPress={() => restored()} 
+                    style={{backgroundColor: 'rgba(255, 255, 255, 0.9)', padding: 5, borderRadius: 6, width: 40, height: 40, justifyContent: 'center', alignItems: "center"}}>
+                    <MaterialIcons name={'file-download'} size={26} color={'#0d6ec6'}/>
+                  </TouchableOpacity>
+                </View>
+
+                <View style={{marginLeft: 5, marginRight: 0}}>
+                  <TouchableOpacity onPress={async() => {
+                    dispatch(SignOut())
+                    //client.resetStore({data})
+                  }} style={{backgroundColor: 'rgba(255, 255, 255, 0.9)', padding: 5, borderRadius: 6, width: 40, height: 40, justifyContent: 'center', alignItems: "center"}}>
+                    <Ionicons name={'md-exit'} size={26} color={'#0d6ec6'} />
+                  </TouchableOpacity>
+                </View>
+              </>
+            ):(
+              <View style={{flexDirection: 'row'}}>
+                <View style={{marginLeft: 5, marginRight: 5}}>
+                  <FBoauth />
+                </View>
+
+                <View style={{marginLeft: 5, marginRight: 0}}>
+                  <TouchableOpacity onPress={() => setOpenCloseEmail(!openCloseEmail)} style={{backgroundColor: 'rgba(255, 255, 255, 0.9)', padding: 5, borderRadius: 6, width: 40, height: 40, justifyContent: 'center', alignItems: "center"}}>
+                    <MaterialIcons name={'email'} size={26} color={'#0d6ec6'} />
+                  </TouchableOpacity>
+                </View>
+              </View>
+            )}
           </View>
+          
           {openCloseEmail && !auth.signed && (
             <View style={{justifyContent: 'space-around', alignItems: 'center', marginTop: 14, flexDirection: 'row', width: '100%'}}>
               <TouchableOpacity onPress={() => navigation.navigate('SignIn')} style={{justifyContent: 'center', alignItems: 'center', backgroundColor: '#fff', borderRadius: 100, height: 36, width: 100,}}>
-                <Text style={{color: '#4989f7', fontWeight: 'bold'}}>Entrar</Text>
+                <Text style={{color: '#0d6ec6', fontWeight: 'bold'}}>Entrar</Text>
               </TouchableOpacity>
 
               <TouchableOpacity onPress={() => navigation.navigate('SignUp')} style={{justifyContent: 'center', alignItems: 'center', backgroundColor: '#fff', borderRadius: 100, height: 36, width: 100,}}>
-                <Text style={{color: '#4989f7', fontWeight: 'bold'}}>Criar conta</Text>
+                <Text style={{color: '#0d6ec6', fontWeight: 'bold'}}>Criar conta</Text>
               </TouchableOpacity>
             </View>
           )}
         </View>
       ):(
-        <ImageBackground source={Back} style={{height: 200, justifyContent: 'center', alignItems: 'center', position: 'relative'}}>
-          <View style={{position: 'absolute', zIndex: 20, right: 12, top: 12, backgroundColor: 'rgba(255, 255, 255, 0.5)', padding: 5, borderRadius: 6, width: 40, height: 40, justifyContent: 'center', alignItems: "center"}}>
+        <View style={{backgroundColor: '#0d6ec6'/*'#4989f7'*/, height: 100, flexDirection: 'row',justifyContent: 'space-around', alignItems: 'center', position: 'relative'}}>
+          <View style={{backgroundColor: 'rgba(255, 255, 255, 0.9)', padding: 5, borderRadius: 6, width: 40, height: 40, justifyContent: 'center', alignItems: "center"}}>
             <TouchableOpacity onPress={() => setHam(!ham)}>
-              <Entypo name={'list'} size={26} color={'#4989f7'}/>
+              <Entypo name={'list'} size={26} color={'#0d6ec6'}/>
             </TouchableOpacity>
           </View>
 
@@ -177,7 +177,7 @@ export default function Banner() {
             >
               {`Hoje é ${configDate.dayNames[new Date().getDay()]} `}
             </Text>
-        </ImageBackground>
+        </View>
       )}
     </View>
   );

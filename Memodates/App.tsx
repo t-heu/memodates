@@ -67,7 +67,7 @@ const App: React.FC = () => {
 
   return (
     <NavigationContainer>
-      <StatusBar backgroundColor='#4989f9' barStyle="light-content" />
+      <StatusBar backgroundColor='#0d6ec6' barStyle="light-content" />
       <Provider store={store}>
         <PersistGate persistor={persistor}>
           <ApolloProvider client={client}>
