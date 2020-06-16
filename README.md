@@ -11,16 +11,19 @@
 
 ###  Tecnologias usadas
 Este maravilhoso projeto foi desenvolvido com as seguintes tecnologias:
-- [Node.js](https://nodejs.org/en/)
-- [Express](https://expressjs.com/pt-br/)
+- ~~[Node.js](https://nodejs.org/en/)~~
+- ~~[Express](https://expressjs.com/pt-br/)~~
 - [React Native](https://pt-br.reactjs.org/)
-- jsonwebtoken
-- Graphql
-- Typeorm
+- ~~jsonwebtoken~~
+- ~~Graphql~~
+- ~~Typeorm~~
 - Realm
+- @react-native-community/google-signin
+- redux
+- redux-persist
 - date-fns
-- react-native-fbsdk (oauth Facebook)
-- Apollo
+- ~~react-native-fbsdk (oauth Facebook)~~
+- ~~Apollo~~
 - react-native-push-notification (notification local)
 - react-native-background-fetch
 - TypeScript
@@ -42,14 +45,6 @@ Quem nunca teve um leve esquecimento de uma data de aniversário de um amigo(a) 
 
 ### configuração e execução
 
-```
-<!--strings.xml-->
-<resources>
-  <string name="app_name">Memodates</string>
-  <string name="facebook_app_id">ID_FACE</string>
-</resources>
-````
-
 <ul>
   <li>em backend</li>
   <ul>
@@ -57,8 +52,7 @@ Quem nunca teve um leve esquecimento de uma data de aniversário de um amigo(a) 
   </ul>
   <li>em Memodates</li>
   <ul>
-    <li>crie strings.xml ecoloque em <code>android/app/src/main/res/values/</code></li>
-    <li>e cole aquele código srings.xml mudando śo "ID_FACE" para seu id</li>
+    <li>gere seu google-services do firebase e coloque em <code>android/app</code></li>
   </ul>
 </ul>
 
