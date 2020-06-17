@@ -15,13 +15,24 @@ export function deleteRealms() {
 
 export async function create(data: any) {
   const realm = await getRealm()
-   
-   realm.write(() => {
-     //realm.deleteAll()
-     data.map((info: {id: string, name: string, date: string}) => {
+
+  if(typeof data === 'string') {
+    Object.keys(JSON.parse(data)).map(res => {
+      const info = JSON.parse(data)[res]
+  
+      realm.write(() => {
+        realm.create('Birthday', info, 'modified');
+      })
+    })
+    return
+  }
+
+  realm.write(() => {
+    //realm.deleteAll()
+    data.map((info: {id: string, name: string, date: string}) => {
        realm.create('Birthday', info, 'modified');
-     })
-   })
+    })
+  })
  }
 
  export async function offList() {

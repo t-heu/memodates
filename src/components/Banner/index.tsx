@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {Image, View, TouchableOpacity, Alert, Text} from 'react-native';
 //import Entypo from 'react-native-vector-icons/Entypo'
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -6,6 +6,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 //import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import {useNetInfo} from '@react-native-community/netinfo';
 import {useDispatch, useSelector} from 'react-redux';
+import GDrive from 'react-native-google-drive-api-wrapper';
 
 import GoogleSign from '../GoogleSign';
 import styles from './styles';
@@ -17,23 +18,44 @@ export default function Banner() {
   const {auth} = useSelector((state: ApplicationState) => state);
   const netinfo = useNetInfo();
   const dispatch = useDispatch();
-  //const navigation = useNavigation();
+
+  function initialized() {
+    try {
+      GDrive.setAccessToken(auth.token)
+      GDrive.init()
+  
+      if(GDrive.isInitialized()) {
+        return 'success'
+      } else {
+        return 'error'
+      } 
+    } catch(e) {
+      console.log(e)
+      return e
+    }
+  }
 
   function backup() {
     if (netinfo.isConnected) {
+      // const decoded = decode(auth.token as string)
+      // console.log(decoded.exp < Date.now() / 1000)
+
       offList().then((response: any) => {
-        response.map((res: any) => {
-          try {
-            console.log(res);
-            // createBirthday({
-            //   variables: {name: res.name, date: res.date, idExist: res.id},
-            // });
-          } catch (e) {
-            Alert.alert(
-              'Alguma coisa deu errado, \n tente novamente mais tarde',
-            );
+        try {
+          if(initialized() === 'success') {
+            const content = JSON.stringify(response)
+            
+            GDrive.files.createFileMultipart(
+              content,
+              "application/json", {
+                parents: ["root"],
+                name: 'memodates-backup.json'
+              },
+              false).then((res: any) => console.log(res, 'ok')).catch((e: any) => console.log(e))
           }
-        });
+        } catch(e) {
+          console.log(e)
+        }
       });
       Alert.alert('salvos!');
     } else {
@@ -41,13 +63,16 @@ export default function Banner() {
     }
   }
 
-  function restored() {
+  async function restored() {
     try {
-      // if (data) {
-      //   create(data.profile.birthday);
-      // }
-      Alert.alert('Recuperado com sucesso');
+      if(initialized() === 'success') {
+        const response = await (await GDrive.files.get(await GDrive.files.getId("memodates-backup.json", ["root"]), {alt: "media"})).text()
+
+        if (response) create(response);
+        Alert.alert('Recuperado com sucesso');
+      }
     } catch (e) {
+      console.log(e)
       Alert.alert('Alguma coisa deu errado, \n tente novamente mais tarde');
     }
   }

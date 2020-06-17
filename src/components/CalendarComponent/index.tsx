@@ -67,7 +67,7 @@ export default function CalendarComponent({birthday}: Ibirthday) {
           textSectionTitleColor: '#fff',//'#8B9BB5',
           textDayHeaderFontWeight: 'bold',
         }}
-        monthFormat={'dd De MMMM De yyyy'}
+        monthFormat={"'Dia' dd 'de' MMMM 'de' yyyy"}
         style={{
           padding: 0,
           margin: 0,
