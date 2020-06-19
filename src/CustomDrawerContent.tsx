@@ -5,6 +5,9 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {useNetInfo} from '@react-native-community/netinfo';
 import GDrive from 'react-native-google-drive-api-wrapper';
+import {
+  GoogleSignin,
+} from '@react-native-community/google-signin';
 
 import {ApplicationState} from './store';
 import GoogleSign from './components/GoogleSign';
@@ -16,9 +19,9 @@ function CustomDrawerContent() {
   const netinfo = useNetInfo();
   const dispatch = useDispatch();
 
-  function initialized() {
+  async function initialized() {
     try {
-      GDrive.setAccessToken(auth.token)
+      GDrive.setAccessToken((await GoogleSignin.getTokens()).accessToken)
       GDrive.init()
   
       if(GDrive.isInitialized()) {
@@ -34,12 +37,17 @@ function CustomDrawerContent() {
 
   function backup() {
     if (netinfo.isConnected) {
-      // const decoded = decode(auth.token as string)
       // console.log(decoded.exp < Date.now() / 1000)
 
-      offList().then((response: any) => {
+      offList().then(async (response: any) => {
         try {
-          if(initialized() === 'success') {
+          if(await initialized() === 'success') {
+            const response = await (await GDrive.files.get(await GDrive.files.getId("memodates-backup.json", ["root"]), {alt: "json"})).text()
+              
+            if(JSON.parse(response).id) {
+              GDrive.files.delete(JSON.parse(response).id).then(r => console.log(r)).catch(e => console.log(e))
+            }
+
             const content = JSON.stringify(response)
             
             GDrive.files.createFileMultipart(
@@ -56,14 +64,14 @@ function CustomDrawerContent() {
       });
       Alert.alert('salvos!');
     } else {
-      Alert.alert('sem conexão');
+      Alert.alert('sem conexão com a internet');
     }
   }
 
   async function restored() {
     if (netinfo.isConnected) {
       try {
-        if(initialized() === 'success') {
+        if(await initialized() === 'success') {
           const response = await (await GDrive.files.get(await GDrive.files.getId("memodates-backup.json", ["root"]), {alt: "media"})).text()
 
           if (response) create(response);
@@ -74,17 +82,17 @@ function CustomDrawerContent() {
         Alert.alert('Alguma coisa deu errado, \n tente novamente mais tarde');
       }
     } else {
-      Alert.alert('sem conexão');
+      Alert.alert('sem conexão com a internet');
     }
   }
 
   return (
-    <View style={{justifyContent: 'center'}}>
-      <View style={{padding: 20, justifyContent: 'center', alignItems: 'center', backgroundColor: '#ff6849'}}>
+    <View style={{justifyContent: 'center', backgroundColor: '#f5f5f5'}}>
+      <View style={{padding: 20, justifyContent: 'center', alignItems: 'center', backgroundColor: '#ff6849', height: 180}}>
         {auth.signed ? (
           <>
-            <Image source={{uri: auth.user.photo}} style={{backgroundColor: 'red', borderRadius: 100, width: 90, height: 90, marginBottom: 20}} />
-            <Text style={{color: '#fff'}}>{auth.user.name}</Text>
+            <Image source={{uri: auth.user.photo}} style={{borderRadius: 100, width: 70, height: 70, marginBottom: 20}} />
+            <Text style={{color: '#fff', fontSize: 18}}>{auth.user.name}</Text>
           </>
         ): (
           <GoogleSign />
@@ -97,46 +105,53 @@ function CustomDrawerContent() {
             padding: 5,
             paddingTop: 15,
           }}>
-            <View style={{margin: 5}}>
-              <TouchableOpacity
-                onPress={() => backup()}
-                style={styles.btnSigned}>
-                <MaterialIcons
-                  name={'backup'}
-                  size={26}
-                  color={'#ff6849'}
-                />
-                <Text style={{fontSize: 16, marginLeft: 20}}>Backup</Text>
-              </TouchableOpacity>
-            </View>
+            {auth.signed ? (
+              <>
+                <View style={{margin: 5}}>
+                  <TouchableOpacity
+                    onPress={() => backup()}
+                    style={styles.btnSigned}>
+                    <MaterialIcons
+                      name={'backup'}
+                      size={26}
+                      color={'#ff6849'}
+                    />
+                    <Text style={{fontSize: 16, marginLeft: 20, fontFamily: 'OpenSans-Regular'}}>Backup</Text>
+                  </TouchableOpacity>
+                </View>
 
-            <View style={{margin: 5}}>
-              <TouchableOpacity
-                onPress={() => restored()}
-                style={styles.btnSigned}>
-                <MaterialIcons
-                  name={'file-download'}
-                  size={26}
-                  color={'#ff6849'}
-                />
-                <Text style={{fontSize: 16, marginLeft: 20}}>Restaurar</Text>
-              </TouchableOpacity>
-            </View>
+                <View style={{margin: 5}}>
+                  <TouchableOpacity
+                    onPress={() => restored()}
+                    style={styles.btnSigned}>
+                    <MaterialIcons
+                      name={'file-download'}
+                      size={26}
+                      color={'#ff6849'}
+                    />
+                    <Text style={{fontSize: 16, marginLeft: 20, fontFamily: 'OpenSans-Regular'}}>Restaurar</Text>
+                  </TouchableOpacity>
+                </View>
 
-            <View style={{margin: 5}}>
-              <TouchableOpacity
-                onPress={async () => {
-                  dispatch(SignOut())
-                }}
-                style={styles.btnSigned}>
-                <Ionicons 
-                  name={'md-exit'} 
-                  size={26} 
-                  color={'#ff6849'} 
-                />
-                <Text style={{fontSize: 16, marginLeft: 20}}>Sair</Text>
-              </TouchableOpacity>
-            </View>
+                <View style={{margin: 5}}>
+                  <TouchableOpacity
+                    onPress={async () => {
+                      dispatch(SignOut())
+                    }}
+                    style={styles.btnSigned}>
+                    <Ionicons 
+                      name={'md-exit'} 
+                      size={26} 
+                      color={'#ff6849'} 
+                      style={{marginLeft: 5}}
+                    />
+                    <Text style={{fontSize: 16, marginLeft: 20, fontFamily: 'OpenSans-Regular'}}>Sair</Text>
+                  </TouchableOpacity>
+                </View>
+              </>
+            ):(
+              null  
+            )}
         </View>
       </ScrollView>
     </View>

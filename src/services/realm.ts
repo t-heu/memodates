@@ -35,6 +35,14 @@ export async function create(data: any) {
   })
  }
 
+ export async function deleteObj(data: any) {
+  const realm = await getRealm()
+
+  realm.write(() => {
+    realm.delete(data);
+  })
+ } 
+
  export async function offList() {
    try {
     const realm = await getRealm()

@@ -73,30 +73,30 @@ export default function CreateBirthdayComponent({dateSelected}:any) {
                     
           {show && (
             <DateTimePicker
-                testID="dateTimePicker"
-                timeZoneOffsetInMinutes={0}
-                value={date}
-                mode={"date"}
-                is24Hour={true}
-                display="default"
-                onChange={onChangeDate}
+              testID="dateTimePicker"
+              timeZoneOffsetInMinutes={0}
+              value={date}
+              mode={"date"}
+              is24Hour={true}
+              display="default"
+              onChange={onChangeDate}
             />
           )}
         </View>
 
         <TextInput 
-            style={styles.input} 
-            placeholder="Nome"
-            onChangeText={setName}
-            value={name}
-            placeholderTextColor="#999"
-            blurOnSubmit={false}
-            autoCompleteType="email"
-            autoCapitalize="words"
-            autoCorrect={false}
+          style={styles.input} 
+          placeholder="Tem algum evento em mente?"
+          onChangeText={setName}
+          value={name}
+          placeholderTextColor="#999"
+          blurOnSubmit={false}
+          autoCompleteType="email"
+          autoCapitalize="words"
+          autoCorrect={false}
         />
 
-        <TouchableOpacity  onPress={() => HandleSubmit()} style={{width: 60, height: 50, borderRadius: 50, flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
+        <TouchableOpacity  onPress={() => HandleSubmit()} style={{width: 50, height: 50, borderRadius: 50, flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
           <Ionicons name={'md-add'} size={28} color={'#ff6849'} />
         </TouchableOpacity>
       </View>
@@ -109,20 +109,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     padding: 5,
+    paddingLeft: 0,
     height: 40,
-    width: 110,
+    width: 200,
     backgroundColor: 'transparent',
-  },
-  btnSalve: {
-    height: 50,
-    padding: 15,
-    backgroundColor: '#ff6849',
-    borderRadius: 6,
-    borderWidth: 1,
-    borderColor: '#ff6849',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 10
   },
   btnSalveText: {
     color: '#fff',
@@ -140,6 +130,6 @@ const styles = StyleSheet.create({
   },
   btnDateText: {
     color: '#222',
-    fontSize: 10,
+    fontSize: 12,
   }
 });

@@ -2,12 +2,12 @@ import React, { useState,useEffect } from 'react';
 import { TouchableOpacity, Text, View, StyleSheet, TextInput } from 'react-native';
 import {LocaleConfig, CalendarList} from 'react-native-calendars';
 import {format} from 'date-fns-tz'
-//import Dash from 'react-native-dash'
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
 import {Path, Svg} from 'react-native-svg'
 
 import CreateBirthday from '../../pages/CreateBirthday'
 import configDate from '../../utils/configDate'
+import {deleteObj} from '../../services/realm';
 
 LocaleConfig.locales['ptBR'] = {
   monthNames: configDate.monthNames,
@@ -61,17 +61,17 @@ export default function CalendarComponent({birthday}: Ibirthday) {
         theme={{
           backgroundColor: '#ff6849',
           calendarBackground: '#ff6849',
-          monthTextColor: '#fff',//'#8B9BB5',
+          monthTextColor: '#fff',
           textMonthFontWeight: 'bold',
-          arrowColor: '#fff',//'#8B9BB5',
-          textSectionTitleColor: '#fff',//'#8B9BB5',
+          arrowColor: '#fff',
+          textSectionTitleColor: '#fff',
           textDayHeaderFontWeight: 'bold',
         }}
         monthFormat={"MMMM 'de' yyyy"}
         style={{
           padding: 0,
           margin: 0,
-          height: 270,
+          height: 270
         }}
         dayComponent={({date, state}) => {
           return (
@@ -108,10 +108,11 @@ export default function CalendarComponent({birthday}: Ibirthday) {
 
   return (
     <>
-      <View>      
+      <View>
+        <View style={{borderTopLeftRadius: 100, borderTopRightRadius: 100, backgroundColor: '#ff6849', height: 20}} />
         {comp}
         
-        <Svg style={{height:180, zIndex: 10, bottom: 0, left: 0, right: 0}} viewBox="-1 50 375 087">
+        <Svg style={{height:160, zIndex: 10, bottom: 0, left: 0, right: 0}} viewBox="-1 50 375 087">
           <Path fill="#ff6849" fillOpacity={1} d={"M380.279 107.377C380.279 107.377 295.739 13.1031 187.625 107.25C79.5108 201.397 -1.97128 107.125 -1.97128 107.125L-1.89778 1.07516e-06L380.353 0.252415L380.279 107.377Z"}></Path>
         </Svg>
       </View>
@@ -123,13 +124,11 @@ export default function CalendarComponent({birthday}: Ibirthday) {
             {birthdays.map((r: any) => (
               <View style={{backgroundColor: '#fff', alignItems: 'center', justifyContent: 'space-between', flexDirection: 'row', borderWidth: 1, borderColor: '#eee', height: 60}} key={r.id}>
                 <View style={{height: 60, borderRightWidth: 2, borderColor: '#ff6849', alignItems: 'center', justifyContent: 'center'}}>
-                  <Text style={{fontSize: 10, padding: 15}}>all-day</Text>
+                  <Text style={{fontSize: 12, padding: 15}}>all-day</Text>
                 </View>
                 <TextInput style={styles.input} value={r.name}/>   
                 
-                {/*<Dash dashThickness={2} dashLength={4} dashGap={4} dashColor={'#fff'} style={{flexDirection: 'column', width: 10, height: 20, alignItems:'center'}} />*/}
-
-                <TouchableOpacity style={[styles.input, {width: 60}]}>
+                <TouchableOpacity onPress={() => deleteObj(r)} style={[styles.input, {width: 60}]}>
                   <EvilIcons name={'trash'} size={28} color={'red'} />
                 </TouchableOpacity>
               </View>
@@ -165,7 +164,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     height: 40,
-    width: 110,
+    width: 200,
     backgroundColor: 'transparent',
   }
 });

@@ -30,7 +30,7 @@ export default function GoogleSign() {
       const userInfo = await GoogleSignin.signIn();
       //setUserInfo(userInfo.idToken);
       //console.log(userInfo);
-      dispatch(SignInSuccess({token: (await GoogleSignin.getTokens()).accessToken, user: userInfo.user}));
+      dispatch(SignInSuccess({token: userInfo.idToken, user: userInfo.user}));
     } catch (error) {
       if (error.code === statusCodes.SIGN_IN_CANCELLED) {
         // user cancelled the login flow
