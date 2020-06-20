@@ -22,6 +22,7 @@
     "react": "16.11.0",
     "react-dom": "~16.9.0",
     "react-native": "0.62.2",
+    "react-native-admob": "^2.0.0-beta.6",
     "react-native-background-fetch": "^3.0.5",
     "react-native-calendar-picker": "^6.1.2",
     "react-native-calendars": "^1.269.0",

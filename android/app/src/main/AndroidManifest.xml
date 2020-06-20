@@ -16,7 +16,10 @@
       android:theme="@style/AppTheme">
       <meta-data  android:name="com.dieam.reactnativepushnotification.notification_channel_name" android:value="YOUR NOTIFICATION CHANNEL NAME"/>
       <meta-data  android:name="com.dieam.reactnativepushnotification.notification_channel_description" android:value="YOUR NOTIFICATION CHANNEL DESCRIPTION"/>
-
+      <!-- Sample AdMob App ID: ca-app-pub-3940256099942544~3347511713 -->
+      <meta-data
+        android:name="com.google.android.gms.ads.APPLICATION_ID"
+        android:value="ca-app-pub-7158647172444246~6388067039"/>
       <!-- Change the value to true to enable pop-up for in foreground (remote-only, for local use ignoreInForeground) -->
       <meta-data  android:name="com.dieam.reactnativepushnotification.notification_foreground" android:value="false"/>
       <!-- Change the resource name to your App's accent color - or any other color you want -->

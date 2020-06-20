@@ -13,18 +13,20 @@ const persistor = persistStore(store);
 
 export { store, persistor };*/
 
-import { persistStore } from 'redux-persist';
-import { createStore, Store } from 'redux'
+import {persistStore} from 'redux-persist';
+import {createStore, Store} from 'redux';
 
-import {AuthState} from './ducks/auth/types'
+import {AuthState} from './ducks/auth/types';
 import persistReducers from './persistReducers';
 import rootReducer from './ducks/rootReducer';
 
 export interface ApplicationState {
-  auth: AuthState
+  auth: AuthState;
 }
 
-const store: Store<ApplicationState> = createStore(persistReducers(rootReducer));
+const store: Store<ApplicationState> = createStore(
+  persistReducers(rootReducer),
+);
 const persistor = persistStore(store);
 
-export { store, persistor };
+export {store, persistor};

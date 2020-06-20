@@ -19,11 +19,11 @@ export interface Auth {
 //aa
 interface Iuser {
   email: string;
-  name: string;
-  photo: string;
-  id: string;
-  familyName: string;
-  givenName: string;
+  name: string | null;
+  photo: string | null;
+  //id: string;
+  //familyName: string | null;
+  //givenName: string | null;
 }
 
 /**

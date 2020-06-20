@@ -13,24 +13,23 @@ import {
 } from '../../store/ducks/auth/action';
 
 GoogleSignin.configure({
-  scopes: ['https://www.googleapis.com/auth/drive'],//https://www.googleapis.com/auth/drive.readonly
+  scopes: ['https://www.googleapis.com/auth/drive'], //https://www.googleapis.com/auth/drive.readonly
   webClientId:
     '544070490320-86b9dkrqn7bpvfsmio8mebf0p8ll096o.apps.googleusercontent.com',
 });
 
 export default function GoogleSign() {
-  const [isSigninInProgress, setIsSigninInProgress] = useState(false)
+  const [isSigninInProgress, setIsSigninInProgress] = useState(false);
   const dispatch = useDispatch();
 
   async function signIn() {
-    setIsSigninInProgress(true)
+    setIsSigninInProgress(true);
     dispatch(SignRequest());
     try {
       await GoogleSignin.hasPlayServices();
       const userInfo = await GoogleSignin.signIn();
-      //setUserInfo(userInfo.idToken);
-      //console.log(userInfo);
-      dispatch(SignInSuccess({token: userInfo.idToken, user: userInfo.user}));
+      const token = userInfo.idToken as string;
+      dispatch(SignInSuccess({token, user: userInfo.user}));
     } catch (error) {
       if (error.code === statusCodes.SIGN_IN_CANCELLED) {
         // user cancelled the login flow

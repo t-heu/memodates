@@ -1,13 +1,19 @@
-import React from 'react'
-import { ScrollView, Text, Image, View, Alert, TouchableOpacity, StyleSheet } from 'react-native'
+import React from 'react';
+import {
+  ScrollView,
+  Text,
+  Image,
+  View,
+  Alert,
+  TouchableOpacity,
+  StyleSheet,
+} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {useNetInfo} from '@react-native-community/netinfo';
 import GDrive from 'react-native-google-drive-api-wrapper';
-import {
-  GoogleSignin,
-} from '@react-native-community/google-signin';
+import {GoogleSignin} from '@react-native-community/google-signin';
 
 import {ApplicationState} from './store';
 import GoogleSign from './components/GoogleSign';
@@ -21,17 +27,17 @@ function CustomDrawerContent() {
 
   async function initialized() {
     try {
-      GDrive.setAccessToken((await GoogleSignin.getTokens()).accessToken)
-      GDrive.init()
-  
-      if(GDrive.isInitialized()) {
-        return 'success'
+      GDrive.setAccessToken((await GoogleSignin.getTokens()).accessToken);
+      GDrive.init();
+
+      if (GDrive.isInitialized()) {
+        return 'success';
       } else {
-        return 'error'
-      } 
-    } catch(e) {
-      console.log(e)
-      return e
+        return 'error';
+      }
+    } catch (e) {
+      console.log(e);
+      return e;
     }
   }
 
@@ -39,27 +45,40 @@ function CustomDrawerContent() {
     if (netinfo.isConnected) {
       // console.log(decoded.exp < Date.now() / 1000)
 
-      offList().then(async (response: any) => {
+      offList().then(async (res: any) => {
         try {
-          if(await initialized() === 'success') {
-            const response = await (await GDrive.files.get(await GDrive.files.getId("memodates-backup.json", ["root"]), {alt: "json"})).text()
-              
-            if(JSON.parse(response).id) {
-              GDrive.files.delete(JSON.parse(response).id).then(r => console.log(r)).catch(e => console.log(e))
+          if ((await initialized()) === 'success') {
+            const response = await (
+              await GDrive.files.get(
+                await GDrive.files.getId('memodates-backup.json', ['root']),
+                {alt: 'json'},
+              )
+            ).text();
+
+            if (JSON.parse(response).id) {
+              GDrive.files
+                .delete(JSON.parse(response).id)
+                .then((r: any) => console.log(r))
+                .catch((e: any) => console.log(e));
             }
 
-            const content = JSON.stringify(response)
-            
-            GDrive.files.createFileMultipart(
-              content,
-              "application/json", {
-                parents: ["root"],
-                name: 'memodates-backup.json'
-              },
-              false).then((res: any) => console.log(res, 'ok')).catch((e: any) => console.log(e))
+            const content = JSON.stringify(res);
+
+            GDrive.files
+              .createFileMultipart(
+                content,
+                'application/json',
+                {
+                  parents: ['root'],
+                  name: 'memodates-backup.json',
+                },
+                false,
+              )
+              .then((r: any) => console.log(r, 'ok'))
+              .catch((e: any) => console.log(e));
           }
-        } catch(e) {
-          console.log(e)
+        } catch (e) {
+          console.log(e);
         }
       });
       Alert.alert('salvos!');
@@ -71,14 +90,21 @@ function CustomDrawerContent() {
   async function restored() {
     if (netinfo.isConnected) {
       try {
-        if(await initialized() === 'success') {
-          const response = await (await GDrive.files.get(await GDrive.files.getId("memodates-backup.json", ["root"]), {alt: "media"})).text()
+        if ((await initialized()) === 'success') {
+          const response = await (
+            await GDrive.files.get(
+              await GDrive.files.getId('memodates-backup.json', ['root']),
+              {alt: 'media'},
+            )
+          ).text();
 
-          if (response) create(response);
+          if (response) {
+            create(response);
+          }
           Alert.alert('Recuperado com sucesso');
         }
       } catch (e) {
-        console.log(e)
+        console.log(e);
         Alert.alert('Alguma coisa deu errado, \n tente novamente mais tarde');
       }
     } else {
@@ -88,74 +114,104 @@ function CustomDrawerContent() {
 
   return (
     <View style={{justifyContent: 'center', backgroundColor: '#f5f5f5'}}>
-      <View style={{padding: 20, justifyContent: 'center', alignItems: 'center', backgroundColor: '#ff6849', height: 180}}>
+      <View
+        style={{
+          padding: 20,
+          justifyContent: 'center',
+          alignItems: 'center',
+          backgroundColor: '#ff6849',
+          height: 180,
+        }}>
         {auth.signed ? (
           <>
-            <Image source={{uri: auth.user.photo}} style={{borderRadius: 100, width: 70, height: 70, marginBottom: 20}} />
+            <Image
+              source={{uri: auth.user.photo}}
+              style={{
+                borderRadius: 100,
+                width: 70,
+                height: 70,
+                marginBottom: 20,
+              }}
+            />
             <Text style={{color: '#fff', fontSize: 18}}>{auth.user.name}</Text>
           </>
-        ): (
+        ) : (
           <GoogleSign />
         )}
       </View>
-      
+
       <ScrollView>
         <View
           style={{
             padding: 5,
             paddingTop: 15,
           }}>
-            {auth.signed ? (
-              <>
-                <View style={{margin: 5}}>
-                  <TouchableOpacity
-                    onPress={() => backup()}
-                    style={styles.btnSigned}>
-                    <MaterialIcons
-                      name={'backup'}
-                      size={26}
-                      color={'#ff6849'}
-                    />
-                    <Text style={{fontSize: 16, marginLeft: 20, fontFamily: 'OpenSans-Regular'}}>Backup</Text>
-                  </TouchableOpacity>
-                </View>
+          {auth.signed ? (
+            <>
+              <View style={{margin: 5}}>
+                <TouchableOpacity
+                  onPress={() => backup()}
+                  style={styles.btnSigned}>
+                  <MaterialIcons name={'backup'} size={26} color={'#ff6849'} />
+                  <Text
+                    style={{
+                      fontSize: 16,
+                      marginLeft: 20,
+                      fontFamily: 'OpenSans-Regular',
+                    }}>
+                    Backup
+                  </Text>
+                </TouchableOpacity>
+              </View>
 
-                <View style={{margin: 5}}>
-                  <TouchableOpacity
-                    onPress={() => restored()}
-                    style={styles.btnSigned}>
-                    <MaterialIcons
-                      name={'file-download'}
-                      size={26}
-                      color={'#ff6849'}
-                    />
-                    <Text style={{fontSize: 16, marginLeft: 20, fontFamily: 'OpenSans-Regular'}}>Restaurar</Text>
-                  </TouchableOpacity>
-                </View>
+              <View style={{margin: 5}}>
+                <TouchableOpacity
+                  onPress={() => restored()}
+                  style={styles.btnSigned}>
+                  <MaterialIcons
+                    name={'file-download'}
+                    size={26}
+                    color={'#ff6849'}
+                  />
+                  <Text
+                    style={{
+                      fontSize: 16,
+                      marginLeft: 20,
+                      fontFamily: 'OpenSans-Regular',
+                    }}>
+                    Restaurar
+                  </Text>
+                </TouchableOpacity>
+              </View>
 
-                <View style={{margin: 5}}>
-                  <TouchableOpacity
-                    onPress={async () => {
-                      dispatch(SignOut())
-                    }}
-                    style={styles.btnSigned}>
-                    <Ionicons 
-                      name={'md-exit'} 
-                      size={26} 
-                      color={'#ff6849'} 
-                      style={{marginLeft: 5}}
-                    />
-                    <Text style={{fontSize: 16, marginLeft: 20, fontFamily: 'OpenSans-Regular'}}>Sair</Text>
-                  </TouchableOpacity>
-                </View>
-              </>
-            ):(
-              null  
-            )}
+              <View style={{margin: 5}}>
+                <TouchableOpacity
+                  onPress={async () => {
+                    dispatch(SignOut());
+                  }}
+                  style={styles.btnSigned}>
+                  <Ionicons
+                    name={'md-exit'}
+                    size={26}
+                    color={'#ff6849'}
+                    style={{marginLeft: 5}}
+                  />
+                  <Text
+                    style={{
+                      fontSize: 16,
+                      marginLeft: 20,
+                      fontFamily: 'OpenSans-Regular',
+                    }}>
+                    Sair
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            </>
+          ) : null}
         </View>
       </ScrollView>
     </View>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
@@ -166,6 +222,6 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     alignItems: 'center',
   },
-})
+});
 
-export default CustomDrawerContent
+export default CustomDrawerContent;

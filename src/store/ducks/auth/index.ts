@@ -7,7 +7,14 @@ const INITIAL_STATE: AuthState = {
   token: null,
   signed: false,
   loading: false,
-  user: {},
+  user: {
+    email: '',
+    name: '',
+    photo: '',
+    // id: '',
+    // familyName: '',
+    // givenName: '',
+  },
 };
 
 const reducer: Reducer<AuthState> = (state = INITIAL_STATE, action) => {
