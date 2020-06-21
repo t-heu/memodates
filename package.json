@@ -26,6 +26,7 @@
     "react-native-background-fetch": "^3.0.5",
     "react-native-calendar-picker": "^6.1.2",
     "react-native-calendars": "^1.269.0",
+    "react-native-code-push": "^6.2.1",
     "react-native-fs": "^2.16.6",
     "react-native-gesture-handler": "~1.6.0",
     "react-native-google-drive-api-wrapper": "^1.2.0",

@@ -81,8 +81,23 @@ export default function CreateBirthdayComponent({dateSelected}: any) {
       <View style={styles.form}>
         <View style={styles.date}>
           <TouchableOpacity onPress={showDatepicker} style={styles.btnDate}>
-            <Text style={styles.btnDateText}>
-              {format(new Date(date), 'dd/MM/yyyy')}
+            <Text
+              style={{
+                fontSize: 24,
+                paddingLeft: 7,
+                paddingRight: 0,
+                color: '#f9ca24',
+              }}>
+              {format(new Date(date), 'dd')}
+            </Text>
+            <Text
+              style={{
+                fontSize: 12,
+                padding: 0,
+                paddingLeft: 0,
+                color: '#f9ca24',
+              }}>
+              {format(new Date(date), 'MM')}
             </Text>
           </TouchableOpacity>
 
@@ -106,13 +121,15 @@ export default function CreateBirthdayComponent({dateSelected}: any) {
           value={name}
           placeholderTextColor="#999"
           blurOnSubmit={false}
+          multiline={true}
+          numberOfLines={5}
           autoCompleteType="email"
           autoCapitalize="words"
           autoCorrect={false}
         />
 
         <TouchableOpacity onPress={() => HandleSubmit()} style={styles.btnAdd}>
-          <Ionicons name={'md-add'} size={28} color={'#ff6849'} />
+          <Ionicons name={'md-add'} size={28} color={'#8dbd59'} />
         </TouchableOpacity>
       </View>
     </KeyboardAvoidingView>
@@ -121,18 +138,18 @@ export default function CreateBirthdayComponent({dateSelected}: any) {
 
 const styles = StyleSheet.create({
   form: {
-    backgroundColor: '#fff',
+    backgroundColor: '#1d2533',
     alignItems: 'center',
     justifyContent: 'space-between',
     flexDirection: 'row',
-    borderWidth: 1,
-    borderColor: '#eee',
+    //borderWidth: 1,
+    //borderColor: '#eee',
     height: 60,
   },
   date: {
     height: 60,
-    borderRightWidth: 2,
-    borderColor: '#ff6849',
+    //borderRightWidth: 2,
+    //borderColor: '#ff6849',
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -141,14 +158,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     padding: 5,
     paddingLeft: 0,
-    height: 40,
+    height: 70,
+    color: '#fff',
     width: 200,
     backgroundColor: 'transparent',
-  },
-  btnSalveText: {
-    color: '#fff',
-    fontSize: 18,
-    fontWeight: 'bold',
   },
   btnDate: {
     height: 50,
@@ -157,10 +170,11 @@ const styles = StyleSheet.create({
     color: '#333',
     backgroundColor: 'transparent', //'#4989f9',
     justifyContent: 'center',
+    flexDirection: 'row',
     marginTop: 2,
   },
   btnDateText: {
-    color: '#222',
+    color: '#f9ca24',
     fontSize: 12,
   },
   btnAdd: {

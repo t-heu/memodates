@@ -113,13 +113,13 @@ function CustomDrawerContent() {
   }
 
   return (
-    <View style={{justifyContent: 'center', backgroundColor: '#f5f5f5'}}>
+    <View style={{justifyContent: 'center', backgroundColor: '#1d2533'}}>
       <View
         style={{
           padding: 20,
           justifyContent: 'center',
           alignItems: 'center',
-          backgroundColor: '#ff6849',
+          backgroundColor: '#8dbd59',
           height: 180,
         }}>
         {auth.signed ? (
@@ -152,12 +152,13 @@ function CustomDrawerContent() {
                 <TouchableOpacity
                   onPress={() => backup()}
                   style={styles.btnSigned}>
-                  <MaterialIcons name={'backup'} size={26} color={'#ff6849'} />
+                  <MaterialIcons name={'backup'} size={26} color={'#8dbd59'} />
                   <Text
                     style={{
                       fontSize: 16,
                       marginLeft: 20,
                       fontFamily: 'OpenSans-Regular',
+                      color: '#fff',
                     }}>
                     Backup
                   </Text>
@@ -171,13 +172,14 @@ function CustomDrawerContent() {
                   <MaterialIcons
                     name={'file-download'}
                     size={26}
-                    color={'#ff6849'}
+                    color={'#8dbd59'}
                   />
                   <Text
                     style={{
                       fontSize: 16,
                       marginLeft: 20,
                       fontFamily: 'OpenSans-Regular',
+                      color: '#fff',
                     }}>
                     Restaurar
                   </Text>
@@ -193,7 +195,7 @@ function CustomDrawerContent() {
                   <Ionicons
                     name={'md-exit'}
                     size={26}
-                    color={'#ff6849'}
+                    color={'#8dbd59'}
                     style={{marginLeft: 5}}
                   />
                   <Text
@@ -201,6 +203,7 @@ function CustomDrawerContent() {
                       fontSize: 16,
                       marginLeft: 20,
                       fontFamily: 'OpenSans-Regular',
+                      color: '#fff',
                     }}>
                     Sair
                   </Text>

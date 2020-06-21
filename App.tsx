@@ -7,10 +7,13 @@ import {PersistGate} from 'redux-persist/integration/react';
 import {Provider} from 'react-redux';
 import BackgroundFetch from 'react-native-background-fetch';
 import PushNotification from 'react-native-push-notification';
+import codePush from 'react-native-code-push';
 
 import Routes from './src/routes';
 import {store, persistor} from './src/store';
 import {TaskVerifyDate} from './src/backgroundtask';
+
+const codePushOptions = {checkFrequency: codePush.CheckFrequency.ON_APP_RESUME};
 
 const App: React.FC = () => {
   useEffect(() => {
@@ -69,7 +72,7 @@ const App: React.FC = () => {
 
   return (
     <NavigationContainer>
-      <StatusBar backgroundColor="#fd4b2d" barStyle="light-content" />
+      <StatusBar backgroundColor="#8dbd59" barStyle="light-content" />
       <Provider store={store}>
         <PersistGate persistor={persistor}>
           <Routes />
@@ -79,4 +82,4 @@ const App: React.FC = () => {
   );
 };
 
-export default App;
+export default codePush(codePushOptions)(App);

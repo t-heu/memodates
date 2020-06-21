@@ -6,7 +6,7 @@ import {
   StyleSheet,
   TextInput,
 } from 'react-native';
-import {LocaleConfig, CalendarList} from 'react-native-calendars';
+import {LocaleConfig, CalendarList, Calendar} from 'react-native-calendars';
 import {format} from 'date-fns-tz';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import {Path, Svg} from 'react-native-svg';
@@ -62,6 +62,16 @@ export default function CalendarComponent({birthday}: Ibirthday) {
     }
   }
 
+  function colorDay(color: string) {
+    if (color === 'today') {
+      return '#ff6849';
+    } else if (color === 'disabled') {
+      return '#c0c0c2';
+    } else {
+      return '#fff';
+    }
+  }
+
   useEffect(() => {
     setTimeout(() => {
       setComp(<RenderCalendar />);
@@ -73,15 +83,15 @@ export default function CalendarComponent({birthday}: Ibirthday) {
       <CalendarList
         horizontal={true}
         theme={{
-          backgroundColor: '#ff6849',
-          calendarBackground: '#ff6849',
-          monthTextColor: '#fff',
-          textMonthFontWeight: 'bold',
-          arrowColor: '#fff',
-          textSectionTitleColor: '#fff',
+          backgroundColor: '#1d2533', //'#ff6849',
+          calendarBackground: '#1d2533', //'#ff6849',
+          monthTextColor: '#8dbd59',
+          textMonthFontWeight: '400',
+          arrowColor: '#ff6849',
+          textSectionTitleColor: '#ff6849',
           textDayHeaderFontWeight: 'bold',
         }}
-        monthFormat={"MMMM 'de' yyyy"}
+        monthFormat={"'Hoje é' dddd 'de' MMMM 'de' yyyy"}
         style={styles.calendarList}
         dayComponent={({date, state}) => {
           return (
@@ -91,7 +101,7 @@ export default function CalendarComponent({birthday}: Ibirthday) {
                   <Text
                     style={[
                       {
-                        color: state === 'today' ? '#222' : '#fff',
+                        color: colorDay(state),
                         textAlign: 'center',
                       },
                     ]}>
@@ -102,10 +112,10 @@ export default function CalendarComponent({birthday}: Ibirthday) {
                 <View
                   style={[
                     {
-                      height: 35,
-                      width: 35,
-                      top: -7,
-                      right: -7,
+                      height: 26,
+                      width: 26,
+                      top: -3,
+                      right: -3,
                       zIndex: -2,
                       position: 'absolute',
                     },
@@ -126,7 +136,7 @@ export default function CalendarComponent({birthday}: Ibirthday) {
                           style={
                             date.dateString === dateBirthday
                               ? [{backgroundColor: '#f9ca24'}, styles.dot]
-                              : null
+                              : [{backgroundColor: '#1d2533'}, styles.dot]
                           }
                         />
                       </View>
@@ -148,13 +158,13 @@ export default function CalendarComponent({birthday}: Ibirthday) {
           style={{
             borderTopLeftRadius: 100,
             borderTopRightRadius: 100,
-            backgroundColor: '#ff6849',
+            //backgroundColor: '#ff6849',
             height: 20,
           }}
         />
         {comp}
 
-        <Svg
+        {/*<Svg
           style={{height: 160, zIndex: 10, bottom: 0, left: 0, right: 0}}
           viewBox="-1 50 375 087">
           <Path
@@ -164,7 +174,7 @@ export default function CalendarComponent({birthday}: Ibirthday) {
               'M380.279 107.377C380.279 107.377 295.739 13.1031 187.625 107.25C79.5108 201.397 -1.97128 107.125 -1.97128 107.125L-1.89778 1.07516e-06L380.353 0.252415L380.279 107.377Z'
             }
           />
-        </Svg>
+        </Svg>*/}
       </View>
 
       <View>
@@ -174,31 +184,55 @@ export default function CalendarComponent({birthday}: Ibirthday) {
             {birthdays.map((r: any) => (
               <View
                 style={{
-                  backgroundColor: '#fff',
+                  backgroundColor: '#1d2533',
                   alignItems: 'center',
                   justifyContent: 'space-between',
                   flexDirection: 'row',
-                  borderWidth: 1,
-                  borderColor: '#eee',
+                  //borderWidth: 1,
+                  //borderColor: '#eee',
                   height: 60,
                 }}
                 key={r.id}>
                 <View
                   style={{
                     height: 60,
-                    borderRightWidth: 2,
-                    borderColor: '#ff6849',
-                    alignItems: 'center',
+                    //borderRightWidth: 2,
+                    //borderColor: '#ff6849',
+                    //alignItems: 'center',
                     justifyContent: 'center',
+                    flexDirection: 'row',
+                    padding: 10,
                   }}>
-                  <Text style={{fontSize: 12, padding: 15}}>all-day</Text>
+                  <Text
+                    style={{
+                      fontSize: 24,
+                      paddingLeft: 7,
+                      paddingRight: 0,
+                      color: '#f9ca24',
+                    }}>
+                    {format(new Date(r.date), 'dd')}
+                  </Text>
+                  <Text
+                    style={{
+                      fontSize: 12,
+                      padding: 0,
+                      paddingLeft: 0,
+                      color: '#f9ca24',
+                    }}>
+                    {format(new Date(r.date), 'MM')}
+                  </Text>
                 </View>
-                <TextInput style={styles.input} value={r.name} />
+                <TextInput
+                  style={styles.input}
+                  value={r.name}
+                  multiline={true}
+                  numberOfLines={5}
+                />
 
                 <TouchableOpacity
                   onPress={() => deleteObj(r)}
                   style={[styles.input, {width: 60}]}>
-                  <EvilIcons name={'trash'} size={28} color={'red'} />
+                  <EvilIcons name={'trash'} size={28} color={'#ff6849'} />
                 </TouchableOpacity>
               </View>
             ))}
@@ -213,15 +247,18 @@ const styles = StyleSheet.create({
   calendarList: {
     padding: 0,
     margin: 0,
-    height: 270,
+    height: 320,
+    marginBottom: 30,
   },
   calendar: {
     width: 20,
     textAlign: 'center',
   },
   selectedDay: {
-    backgroundColor: '#eee', //'#A6B0BF',//'#c0c0c2',
-    opacity: 0.2,
+    //backgroundColor: '#a6ba9a', //'#eee', //'#A6B0BF',//'#c0c0c2',
+    borderWidth: 1,
+    borderColor: '#8dbd59',
+    //opacity: 0.2,
     borderRadius: 50,
   },
   calendar__item: {
@@ -234,12 +271,14 @@ const styles = StyleSheet.create({
     height: 5,
     width: 5,
     margin: 1,
+    marginTop: 9,
   },
   input: {
     alignItems: 'center',
     justifyContent: 'center',
     height: 40,
     width: 200,
+    color: '#fff',
     backgroundColor: 'transparent',
   },
 });
