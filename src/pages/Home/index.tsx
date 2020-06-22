@@ -1,15 +1,11 @@
 import React, {useState, useEffect} from 'react';
-import {View, ScrollView, Text, TouchableOpacity} from 'react-native';
+import {View, ScrollView, Text} from 'react-native';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
-import Entypo from 'react-native-vector-icons/Entypo';
-import {useNavigation} from '@react-navigation/native';
 import {AdMobBanner, AdMobInterstitial} from 'react-native-admob';
-//import {useSelector} from 'react-redux';
 
 import styles from './styles';
 import CalendarComponent from '../../components/CalendarComponent';
 import {offList} from '../../services/realm';
-import configDate from '../../utils/configDate';
 
 interface Ibirthday {
   string: {
@@ -23,7 +19,6 @@ export default function Home() {
   const [birthday, setBirthday] = useState({} as Ibirthday);
   const [load, setLoad] = useState(false);
   const [loadAds, setLoadAds] = useState(false);
-  //const navigation = useNavigation();
 
   useEffect(() => {
     function loadAd() {
@@ -46,15 +41,6 @@ export default function Home() {
 
   return (
     <ScrollView style={styles.container}>
-      {/*<View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.openDrawer()}>
-          <Entypo name={'list'} size={30} color={'#f34b56'} />
-        </TouchableOpacity>
-        <Text style={{color: '#636e72'}}>{`Hoje é ${
-          configDate.dayNames[new Date().getDay()]
-        }`}</Text>
-      </View>*/}
-
       <View>
         {load ? (
           <CalendarComponent birthday={birthday} />

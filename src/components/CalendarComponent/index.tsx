@@ -59,16 +59,6 @@ export default function CalendarComponent({birthday}: Ibirthday) {
     }
   }
 
-  function colorDay(color: string) {
-    if (color === 'today') {
-      return '#fff';
-    } else if (color === 'disabled') {
-      return '#c0c0c2';
-    } else {
-      return '#222';
-    }
-  }
-
   useEffect(() => {
     setTimeout(() => {
       setComp(<RenderCalendar />);
@@ -138,7 +128,7 @@ export default function CalendarComponent({birthday}: Ibirthday) {
             },
           },
         }}
-        monthFormat={'MMMM'} //monthFormat={"'Hoje é' dddd 'de' MMMM 'de' yyyy"}
+        monthFormat={'MMMM yyyy'} //{"dddd 'de' MMMM 'de' yyyy"}
         style={styles.calendarList}
         dayComponent={({date, state}) => (
           <TouchableOpacity onPress={() => modal(date)}>
@@ -161,36 +151,6 @@ export default function CalendarComponent({birthday}: Ibirthday) {
                   {date.day}
                 </Text>
               </View>
-
-              {/*<View style={styles.calendar__item}>
-                {birthday.map((data: any) => {
-                  const dateBirthday = `${format(new Date(), 'yyyy')}-${format(
-                    new Date(data.date),
-                    'MM-dd',
-                  )}`;
-
-                  return (
-                    <View
-                      key={data.id}
-                      style={
-                        date.dateString === dateBirthday
-                          ? [
-                              {
-                                position: 'absolute',
-                                backgroundColor: randomColorBack(),
-                                height: 48,
-                                top: 0,
-                                right: 0,
-                                width: 48,
-                                zIndex: -2,
-                              },
-                            ]
-                          : [{backgroundColor: '#fff'}]
-                      }
-                    />
-                  );
-                })}
-              </View>*/}
             </View>
           </TouchableOpacity>
         )}
@@ -206,6 +166,27 @@ export default function CalendarComponent({birthday}: Ibirthday) {
         onPress={() => navigation.openDrawer()}>
         <Entypo name={'list'} size={30} color={'#f34b56'} />
       </TouchableOpacity>
+
+      <View
+        style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'flex-start',
+          padding: 10,
+        }}>
+        <View
+          style={[
+            styles.dot,
+            {backgroundColor: '#f34b56', height: 12, width: 12},
+          ]}
+        />
+        <Text
+          style={{
+            marginLeft: 10,
+            fontFamily: 'OpenSans-Regular',
+            paddingTop: 6,
+          }}>{`Hoje é ${configDate.dayNames[new Date().getDay()]}`}</Text>
+      </View>
 
       <View>
         <CreateBirthday dateSelected={String(activeAdd)} />
@@ -306,6 +287,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     //height: 60,
+    paddingTop: 8,
     fontSize: 20,
     width: 150,
     color: '#666',
