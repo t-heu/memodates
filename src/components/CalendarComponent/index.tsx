@@ -1,15 +1,11 @@
 import React, {useState, useEffect} from 'react';
-import {
-  TouchableOpacity,
-  Text,
-  View,
-  StyleSheet,
-  TextInput,
-} from 'react-native';
+import {TouchableOpacity, Text, View, StyleSheet} from 'react-native';
 import {LocaleConfig, CalendarList, Calendar} from 'react-native-calendars';
 import {format} from 'date-fns-tz';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
-import {Path, Svg} from 'react-native-svg';
+//import {Path, Svg} from 'react-native-svg';
+import Entypo from 'react-native-vector-icons/Entypo';
+import {useNavigation} from '@react-navigation/native';
 
 import CreateBirthday from '../../pages/CreateBirthday';
 import configDate from '../../utils/configDate';
@@ -37,13 +33,14 @@ export default function CalendarComponent({birthday}: Ibirthday) {
   const [activeModal, setActiveModal] = useState(false);
   const [birthdays, setBirthday] = useState([] as Ibirthday[]);
   const [activeAdd, setActiveAdd] = useState(new Date());
-  const [dateChange, setDateChange] = useState(
-    format(new Date(), 'yyyy-MM-dd'),
-  );
+  const navigation = useNavigation();
+  // const [dateChange, setDateChange] = useState(
+  //   format(new Date(), 'yyyy-MM-dd'),
+  // );
   const [comp, setComp] = useState(<RenderCalendar />);
 
   function modal(date: any) {
-    setDateChange(date.dateString);
+    //setDateChange(date.dateString);
     setActiveModal(true);
     setActiveAdd(
       new Date(`${format(new Date(date.dateString), 'yyyy/MM')}/${date.day}`),
@@ -64,11 +61,11 @@ export default function CalendarComponent({birthday}: Ibirthday) {
 
   function colorDay(color: string) {
     if (color === 'today') {
-      return '#ff6849';
+      return '#fff';
     } else if (color === 'disabled') {
       return '#c0c0c2';
     } else {
-      return '#fff';
+      return '#222';
     }
   }
 
@@ -76,85 +73,247 @@ export default function CalendarComponent({birthday}: Ibirthday) {
     setTimeout(() => {
       setComp(<RenderCalendar />);
     }, 100);
-  }, [dateChange]);
+  }, []);
+
+  function randomColor(dat: string, types: string) {
+    const colors = ['#2ed573', '#ffa502', '#1e90ff', '#eccc68'];
+
+    function aa() {
+      return birthday.map((data: any) => {
+        if (
+          dat ===
+          `${format(new Date(), 'yyyy')}-${format(
+            new Date(data.date),
+            'MM-dd',
+          )}`
+        ) {
+          return true;
+        } else {
+          return false;
+        }
+      });
+    }
+
+    if (types === 'back') {
+      if (aa().indexOf(true) !== -1) {
+        return colors[Math.floor(Math.random() * Number(colors.length))];
+      } else {
+        return 'transparent';
+      }
+    } else {
+      if (aa().indexOf(true) !== -1) {
+        return '#fff';
+      } else if (types === 'today') {
+        return '#fff';
+      } else if (types === 'disabled') {
+        return '#c0c0c2';
+      } else {
+        return '#222';
+      }
+    }
+  }
 
   function RenderCalendar() {
     return (
       <CalendarList
         horizontal={true}
         theme={{
-          backgroundColor: '#1d2533', //'#ff6849',
-          calendarBackground: '#1d2533', //'#ff6849',
-          monthTextColor: '#8dbd59',
-          textMonthFontWeight: '400',
-          arrowColor: '#ff6849',
-          textSectionTitleColor: '#ff6849',
+          calendarBackground: '#fff',
+          monthTextColor: '#2f3542',
+          textMonthFontWeight: '700',
+          textSectionTitleColor: '#f34b56',
+          textDayHeaderFontFamily: 'OpenSans-Regular',
           textDayHeaderFontWeight: 'bold',
+          'stylesheet.calendar.header': {
+            header: {
+              marginTop: 10,
+              justifyContent: 'flex-start',
+            },
+          },
+          'stylesheet.calendar.main': {
+            week: {
+              marginTop: 0,
+              flexDirection: 'row',
+              justifyContent: 'space-around',
+            },
+          },
         }}
-        monthFormat={"'Hoje é' dddd 'de' MMMM 'de' yyyy"}
+        monthFormat={'MMMM'} //monthFormat={"'Hoje é' dddd 'de' MMMM 'de' yyyy"}
         style={styles.calendarList}
-        dayComponent={({date, state}) => {
-          return (
-            <TouchableOpacity onPress={() => modal(date)}>
-              <View style={[styles.calendar]}>
-                <View>
-                  <Text
-                    style={[
-                      {
-                        color: colorDay(state),
-                        textAlign: 'center',
-                      },
-                    ]}>
-                    {date.day}
-                  </Text>
-                </View>
-
-                <View
+        dayComponent={({date, state}) => (
+          <TouchableOpacity onPress={() => modal(date)}>
+            <View
+              style={[
+                styles.calendar,
+                date.dateString === format(new Date(), 'yyyy-MM-dd') //dateChange
+                  ? {backgroundColor: '#f34b56'}
+                  : {backgroundColor: randomColor(date.dateString, 'back')},
+                ,
+              ]}>
+              <View>
+                <Text
                   style={[
                     {
-                      height: 26,
-                      width: 26,
-                      top: -3,
-                      right: -3,
-                      zIndex: -2,
-                      position: 'absolute',
+                      color: randomColor(date.dateString, state), //colorDay(state),
+                      textAlign: 'center',
                     },
-                    date.dateString === dateChange ? styles.selectedDay : null,
-                  ]}
-                />
-
-                <View style={styles.calendar__item}>
-                  {birthday.map((data: any) => {
-                    const dateBirthday = `${format(
-                      new Date(),
-                      'yyyy',
-                    )}-${format(new Date(data.date), 'MM-dd')}`;
-
-                    return (
-                      <View key={data.id}>
-                        <View
-                          style={
-                            date.dateString === dateBirthday
-                              ? [{backgroundColor: '#f9ca24'}, styles.dot]
-                              : [{backgroundColor: '#1d2533'}, styles.dot]
-                          }
-                        />
-                      </View>
-                    );
-                  })}
-                </View>
+                  ]}>
+                  {date.day}
+                </Text>
               </View>
-            </TouchableOpacity>
-          );
-        }}
+
+              {/*<View style={styles.calendar__item}>
+                {birthday.map((data: any) => {
+                  const dateBirthday = `${format(new Date(), 'yyyy')}-${format(
+                    new Date(data.date),
+                    'MM-dd',
+                  )}`;
+
+                  return (
+                    <View
+                      key={data.id}
+                      style={
+                        date.dateString === dateBirthday
+                          ? [
+                              {
+                                position: 'absolute',
+                                backgroundColor: randomColorBack(),
+                                height: 48,
+                                top: 0,
+                                right: 0,
+                                width: 48,
+                                zIndex: -2,
+                              },
+                            ]
+                          : [{backgroundColor: '#fff'}]
+                      }
+                    />
+                  );
+                })}
+              </View>*/}
+            </View>
+          </TouchableOpacity>
+        )}
       />
     );
   }
 
   return (
     <>
+      {comp}
+      <TouchableOpacity
+        style={{position: 'absolute', right: 20, top: 15}}
+        onPress={() => navigation.openDrawer()}>
+        <Entypo name={'list'} size={30} color={'#f34b56'} />
+      </TouchableOpacity>
+
       <View>
-        <View
+        <CreateBirthday dateSelected={String(activeAdd)} />
+        {activeModal && birthdays.length > 0 && (
+          <View>
+            {birthdays.map((r: any) => (
+              <View
+                style={{
+                  backgroundColor: '#fff',
+                  alignItems: 'center',
+                  justifyContent: 'space-around',
+                  flexDirection: 'row',
+                  borderTopWidth: 1,
+                  borderColor: '#eee',
+                  height: 100,
+                  padding: 5,
+                }}
+                key={r.id}>
+                <View style={[{backgroundColor: '#f34b56'}, styles.dot]} />
+                <Text style={styles.input}>{r.name}</Text>
+
+                <TouchableOpacity
+                  onPress={() => deleteObj(r)}
+                  style={[styles.input, {width: 30}]}>
+                  <EvilIcons name={'trash'} size={28} color={'#ff6849'} />
+                </TouchableOpacity>
+
+                <View
+                  style={{
+                    height: 60,
+                    width: 100,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    flexDirection: 'row',
+                    padding: 10,
+                  }}>
+                  <Text
+                    style={{
+                      fontSize: 48,
+                      //fontWeight: 'bold',
+                      fontFamily: 'OpenSans-Regular',
+                      color: '#f34b56',
+                    }}>
+                    {format(new Date(r.date), 'dd')}
+                  </Text>
+                  <Text
+                    style={{
+                      fontSize: 12,
+                      fontFamily: 'OpenSans-Regular',
+                      color: '#f34b56',
+                    }}>
+                    {format(new Date(r.date), 'MMMM')}
+                  </Text>
+                </View>
+              </View>
+            ))}
+          </View>
+        )}
+      </View>
+    </>
+  );
+}
+
+const styles = StyleSheet.create({
+  calendarList: {
+    padding: 0,
+    margin: 0,
+    height: 330,
+    marginBottom: 30,
+  },
+  calendar: {
+    width: 50,
+    height: 48,
+    margin: 0,
+    padding: 0,
+    // borderWidth: 1,
+    // borderColor: '#fa2',
+    textAlign: 'center',
+    //borderRadius: 50,
+  },
+  calendar__item: {
+    //flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    position: 'absolute',
+    top: 0,
+    right: 0,
+    //height: 50,
+  },
+  dot: {
+    borderRadius: 50,
+    height: 8,
+    width: 8,
+    margin: 1,
+    marginTop: 9,
+  },
+  input: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    //height: 60,
+    fontSize: 20,
+    width: 150,
+    color: '#666',
+    backgroundColor: 'transparent',
+  },
+});
+/**
+ * <View
           style={{
             borderTopLeftRadius: 100,
             borderTopRightRadius: 100,
@@ -174,111 +333,6 @@ export default function CalendarComponent({birthday}: Ibirthday) {
               'M380.279 107.377C380.279 107.377 295.739 13.1031 187.625 107.25C79.5108 201.397 -1.97128 107.125 -1.97128 107.125L-1.89778 1.07516e-06L380.353 0.252415L380.279 107.377Z'
             }
           />
-        </Svg>*/}
-      </View>
-
-      <View>
-        <CreateBirthday dateSelected={String(activeAdd)} />
-        {activeModal && birthdays.length > 0 && (
-          <View>
-            {birthdays.map((r: any) => (
-              <View
-                style={{
-                  backgroundColor: '#1d2533',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  flexDirection: 'row',
-                  //borderWidth: 1,
-                  //borderColor: '#eee',
-                  height: 60,
-                }}
-                key={r.id}>
-                <View
-                  style={{
-                    height: 60,
-                    //borderRightWidth: 2,
-                    //borderColor: '#ff6849',
-                    //alignItems: 'center',
-                    justifyContent: 'center',
-                    flexDirection: 'row',
-                    padding: 10,
-                  }}>
-                  <Text
-                    style={{
-                      fontSize: 24,
-                      paddingLeft: 7,
-                      paddingRight: 0,
-                      color: '#f9ca24',
-                    }}>
-                    {format(new Date(r.date), 'dd')}
-                  </Text>
-                  <Text
-                    style={{
-                      fontSize: 12,
-                      padding: 0,
-                      paddingLeft: 0,
-                      color: '#f9ca24',
-                    }}>
-                    {format(new Date(r.date), 'MM')}
-                  </Text>
-                </View>
-                <TextInput
-                  style={styles.input}
-                  value={r.name}
-                  multiline={true}
-                  numberOfLines={5}
-                />
-
-                <TouchableOpacity
-                  onPress={() => deleteObj(r)}
-                  style={[styles.input, {width: 60}]}>
-                  <EvilIcons name={'trash'} size={28} color={'#ff6849'} />
-                </TouchableOpacity>
-              </View>
-            ))}
-          </View>
-        )}
-      </View>
-    </>
-  );
-}
-
-const styles = StyleSheet.create({
-  calendarList: {
-    padding: 0,
-    margin: 0,
-    height: 320,
-    marginBottom: 30,
-  },
-  calendar: {
-    width: 20,
-    textAlign: 'center',
-  },
-  selectedDay: {
-    //backgroundColor: '#a6ba9a', //'#eee', //'#A6B0BF',//'#c0c0c2',
-    borderWidth: 1,
-    borderColor: '#8dbd59',
-    //opacity: 0.2,
-    borderRadius: 50,
-  },
-  calendar__item: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  dot: {
-    borderRadius: 50,
-    height: 5,
-    width: 5,
-    margin: 1,
-    marginTop: 9,
-  },
-  input: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    height: 40,
-    width: 200,
-    color: '#fff',
-    backgroundColor: 'transparent',
-  },
-});
+        </Svg>
+        </View>
+ */

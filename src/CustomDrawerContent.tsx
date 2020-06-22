@@ -113,13 +113,13 @@ function CustomDrawerContent() {
   }
 
   return (
-    <View style={{justifyContent: 'center', backgroundColor: '#1d2533'}}>
+    <View style={{justifyContent: 'center', backgroundColor: '#fff'}}>
       <View
         style={{
           padding: 20,
           justifyContent: 'center',
           alignItems: 'center',
-          backgroundColor: '#8dbd59',
+          backgroundColor: '#f34b56',
           height: 180,
         }}>
         {auth.signed ? (
@@ -152,13 +152,13 @@ function CustomDrawerContent() {
                 <TouchableOpacity
                   onPress={() => backup()}
                   style={styles.btnSigned}>
-                  <MaterialIcons name={'backup'} size={26} color={'#8dbd59'} />
+                  <MaterialIcons name={'backup'} size={26} color={'#f34b56'} />
                   <Text
                     style={{
                       fontSize: 16,
                       marginLeft: 20,
                       fontFamily: 'OpenSans-Regular',
-                      color: '#fff',
+                      color: '#333',
                     }}>
                     Backup
                   </Text>
@@ -172,14 +172,14 @@ function CustomDrawerContent() {
                   <MaterialIcons
                     name={'file-download'}
                     size={26}
-                    color={'#8dbd59'}
+                    color={'#f34b56'}
                   />
                   <Text
                     style={{
                       fontSize: 16,
                       marginLeft: 20,
                       fontFamily: 'OpenSans-Regular',
-                      color: '#fff',
+                      color: '#333',
                     }}>
                     Restaurar
                   </Text>
@@ -195,7 +195,7 @@ function CustomDrawerContent() {
                   <Ionicons
                     name={'md-exit'}
                     size={26}
-                    color={'#8dbd59'}
+                    color={'#f34b56'}
                     style={{marginLeft: 5}}
                   />
                   <Text
@@ -203,7 +203,7 @@ function CustomDrawerContent() {
                       fontSize: 16,
                       marginLeft: 20,
                       fontFamily: 'OpenSans-Regular',
-                      color: '#fff',
+                      color: '#333',
                     }}>
                     Sair
                   </Text>

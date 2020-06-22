@@ -86,7 +86,7 @@ export default function CreateBirthdayComponent({dateSelected}: any) {
                 fontSize: 24,
                 paddingLeft: 7,
                 paddingRight: 0,
-                color: '#f9ca24',
+                color: '#f34b56',
               }}>
               {format(new Date(date), 'dd')}
             </Text>
@@ -95,9 +95,9 @@ export default function CreateBirthdayComponent({dateSelected}: any) {
                 fontSize: 12,
                 padding: 0,
                 paddingLeft: 0,
-                color: '#f9ca24',
+                color: '#f34b56',
               }}>
-              {format(new Date(date), 'MM')}
+              {format(new Date(date), '/MM')}
             </Text>
           </TouchableOpacity>
 
@@ -129,7 +129,7 @@ export default function CreateBirthdayComponent({dateSelected}: any) {
         />
 
         <TouchableOpacity onPress={() => HandleSubmit()} style={styles.btnAdd}>
-          <Ionicons name={'md-add'} size={28} color={'#8dbd59'} />
+          <Ionicons name={'md-add'} size={28} color={'#f34b56'} />
         </TouchableOpacity>
       </View>
     </KeyboardAvoidingView>
@@ -138,12 +138,12 @@ export default function CreateBirthdayComponent({dateSelected}: any) {
 
 const styles = StyleSheet.create({
   form: {
-    backgroundColor: '#1d2533',
+    backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'space-between',
     flexDirection: 'row',
-    //borderWidth: 1,
-    //borderColor: '#eee',
+    borderTopWidth: 1,
+    borderColor: '#eee',
     height: 60,
   },
   date: {
@@ -159,7 +159,7 @@ const styles = StyleSheet.create({
     padding: 5,
     paddingLeft: 0,
     height: 70,
-    color: '#fff',
+    color: '#222',
     width: 200,
     backgroundColor: 'transparent',
   },

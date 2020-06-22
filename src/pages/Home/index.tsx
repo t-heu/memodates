@@ -9,7 +9,7 @@ import {AdMobBanner, AdMobInterstitial} from 'react-native-admob';
 import styles from './styles';
 import CalendarComponent from '../../components/CalendarComponent';
 import {offList} from '../../services/realm';
-//import configDate from '../../utils/configDate';
+import configDate from '../../utils/configDate';
 
 interface Ibirthday {
   string: {
@@ -23,7 +23,7 @@ export default function Home() {
   const [birthday, setBirthday] = useState({} as Ibirthday);
   const [load, setLoad] = useState(false);
   const [loadAds, setLoadAds] = useState(false);
-  const navigation = useNavigation();
+  //const navigation = useNavigation();
 
   useEffect(() => {
     function loadAd() {
@@ -46,11 +46,14 @@ export default function Home() {
 
   return (
     <ScrollView style={styles.container}>
-      <View style={styles.header}>
+      {/*<View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.openDrawer()}>
-          <Entypo name={'list'} size={30} color={'#fff'} />
+          <Entypo name={'list'} size={30} color={'#f34b56'} />
         </TouchableOpacity>
-      </View>
+        <Text style={{color: '#636e72'}}>{`Hoje é ${
+          configDate.dayNames[new Date().getDay()]
+        }`}</Text>
+      </View>*/}
 
       <View>
         {load ? (
