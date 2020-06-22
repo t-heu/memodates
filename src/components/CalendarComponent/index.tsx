@@ -1,9 +1,8 @@
 import React, {useState, useEffect} from 'react';
 import {TouchableOpacity, Text, View, StyleSheet} from 'react-native';
-import {LocaleConfig, CalendarList, Calendar} from 'react-native-calendars';
+import {LocaleConfig, CalendarList} from 'react-native-calendars';
 import {format} from 'date-fns-tz';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
-//import {Path, Svg} from 'react-native-svg';
 import Entypo from 'react-native-vector-icons/Entypo';
 import {useNavigation} from '@react-navigation/native';
 
@@ -34,6 +33,7 @@ export default function CalendarComponent({birthday}: Ibirthday) {
   const [birthdays, setBirthday] = useState([] as Ibirthday[]);
   const [activeAdd, setActiveAdd] = useState(new Date());
   const navigation = useNavigation();
+  const [updateList, setUpdateList] = useState(0);
   // const [dateChange, setDateChange] = useState(
   //   format(new Date(), 'yyyy-MM-dd'),
   // );
@@ -63,10 +63,10 @@ export default function CalendarComponent({birthday}: Ibirthday) {
     setTimeout(() => {
       setComp(<RenderCalendar />);
     }, 100);
-  }, []);
+  }, [updateList]);
 
   function randomColor(dat: string, types: string) {
-    const colors = ['#2ed573', '#ffa502', '#1e90ff', '#eccc68'];
+    const colors = ['#2ed573', '#ffa502', '#1e90ff', '#eccc68', '#9b59b6'];
 
     function aa() {
       return birthday.map((data: any) => {
@@ -119,6 +119,13 @@ export default function CalendarComponent({birthday}: Ibirthday) {
               marginTop: 10,
               justifyContent: 'flex-start',
             },
+            week: {
+              marginBottom: 10,
+              marginTop: 8,
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'space-around',
+            },
           },
           'stylesheet.calendar.main': {
             week: {
@@ -144,7 +151,7 @@ export default function CalendarComponent({birthday}: Ibirthday) {
                 <Text
                   style={[
                     {
-                      color: randomColor(date.dateString, state), //colorDay(state),
+                      color: randomColor(date.dateString, state),
                       textAlign: 'center',
                     },
                   ]}>
@@ -189,7 +196,10 @@ export default function CalendarComponent({birthday}: Ibirthday) {
       </View>
 
       <View>
-        <CreateBirthday dateSelected={String(activeAdd)} />
+        <CreateBirthday
+          update_list={setUpdateList}
+          dateSelected={String(activeAdd)}
+        />
         {activeModal && birthdays.length > 0 && (
           <View>
             {birthdays.map((r: any) => (
@@ -206,13 +216,14 @@ export default function CalendarComponent({birthday}: Ibirthday) {
                 }}
                 key={r.id}>
                 <View style={[{backgroundColor: '#f34b56'}, styles.dot]} />
-                <Text style={styles.input}>{r.name}</Text>
 
                 <TouchableOpacity
                   onPress={() => deleteObj(r)}
                   style={[styles.input, {width: 30}]}>
                   <EvilIcons name={'trash'} size={28} color={'#ff6849'} />
                 </TouchableOpacity>
+
+                <Text style={styles.input}>{r.name}</Text>
 
                 <View
                   style={{
@@ -254,27 +265,22 @@ const styles = StyleSheet.create({
   calendarList: {
     padding: 0,
     margin: 0,
-    height: 330,
+    height: 340,
     marginBottom: 30,
   },
   calendar: {
-    width: 50,
+    width: 48,
     height: 48,
     margin: 0,
     padding: 0,
-    // borderWidth: 1,
-    // borderColor: '#fa2',
     textAlign: 'center',
-    //borderRadius: 50,
   },
   calendar__item: {
-    //flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     position: 'absolute',
     top: 0,
     right: 0,
-    //height: 50,
   },
   dot: {
     borderRadius: 50,
@@ -286,7 +292,6 @@ const styles = StyleSheet.create({
   input: {
     alignItems: 'center',
     justifyContent: 'center',
-    //height: 60,
     paddingTop: 8,
     fontSize: 20,
     width: 150,
@@ -294,27 +299,3 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
   },
 });
-/**
- * <View
-          style={{
-            borderTopLeftRadius: 100,
-            borderTopRightRadius: 100,
-            //backgroundColor: '#ff6849',
-            height: 20,
-          }}
-        />
-        {comp}
-
-        {/*<Svg
-          style={{height: 160, zIndex: 10, bottom: 0, left: 0, right: 0}}
-          viewBox="-1 50 375 087">
-          <Path
-            fill="#ff6849"
-            fillOpacity={1}
-            d={
-              'M380.279 107.377C380.279 107.377 295.739 13.1031 187.625 107.25C79.5108 201.397 -1.97128 107.125 -1.97128 107.125L-1.89778 1.07516e-06L380.353 0.252415L380.279 107.377Z'
-            }
-          />
-        </Svg>
-        </View>
- */

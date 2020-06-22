@@ -14,6 +14,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {useNetInfo} from '@react-native-community/netinfo';
 import GDrive from 'react-native-google-drive-api-wrapper';
 import {GoogleSignin} from '@react-native-community/google-signin';
+import {Path, Svg} from 'react-native-svg';
 
 import {ApplicationState} from './store';
 import GoogleSign from './components/GoogleSign';
@@ -120,7 +121,7 @@ function CustomDrawerContent() {
           justifyContent: 'center',
           alignItems: 'center',
           backgroundColor: '#f34b56',
-          height: 180,
+          height: 150,
         }}>
         {auth.signed ? (
           <>
@@ -139,6 +140,16 @@ function CustomDrawerContent() {
           <GoogleSign />
         )}
       </View>
+
+      <Svg style={{height: 80}} viewBox="-1 50 375 087">
+        <Path
+          fill="#f34b56"
+          fillOpacity={1}
+          d={
+            'M380.279 107.377C380.279 107.377 295.739 13.1031 187.625 107.25C79.5108 201.397 -1.97128 107.125 -1.97128 107.125L-1.89778 1.07516e-06L380.353 0.252415L380.279 107.377Z'
+          }
+        />
+      </Svg>
 
       <ScrollView>
         <View

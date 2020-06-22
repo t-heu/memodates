@@ -15,7 +15,10 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import {offList, create} from '../../services/realm';
 
-export default function CreateBirthdayComponent({dateSelected}: any) {
+export default function CreateBirthdayComponent({
+  dateSelected,
+  update_list,
+}: any) {
   const [name, setName] = useState('');
   const [date, setDate] = useState(new Date()); //(new Date() as object | Date);
   const [show, setShow] = useState(false);
@@ -67,6 +70,7 @@ export default function CreateBirthdayComponent({dateSelected}: any) {
         create([dataAge]);
         setName('');
         Alert.alert('Salvo com sucesso');
+        update_list(res.length + 1);
       })
       .catch((e) =>
         Alert.alert('Alguma coisa deu errado, \n tente novamente mais tarde'),
