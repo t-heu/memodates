@@ -1,15 +1,16 @@
 export default {
-    name: 'Birthday', 
-    primaryKey: 'id', 
-    properties: {
-    id: { 
-      type: 'string', 
-      indexed: true 
+  name: 'Birthday',
+  primaryKey: 'id',
+  properties: {
+    id: {
+      type: 'string',
+      indexed: true,
     },
     name: 'string',
-    date: 'string'
-  }
-}
+    date: 'date',
+    color: 'string',
+  },
+};
 //class BirthdaySchema {
 //   static schema = {
 //     name: 'Birthday',

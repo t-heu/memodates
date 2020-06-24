@@ -11,6 +11,7 @@ interface Ibirthday {
   string: {
     date: string;
     id: string;
+    color: string;
     name: string;
   };
 }
@@ -58,19 +59,8 @@ export default function Home() {
         onAdFailedToLoad={(error: any) => console.error(error)}
       />
 
-      {loadAds && (
-        <>
-          <Text>Hiii</Text>
-          {/*<AdMobBanner
-          adSize="fullBanner"
-          adUnitID="ca-app-pub-7158647172444246/3856987052"
-          testDevices={[AdMobBanner.simulatorId]}
-          onAdFailedToLoad={(error: any) => console.error(error)}
-          />*/}
-        </>
-      )}
+      {loadAds && <Text>true</Text>}
     </ScrollView>
   );
 }
 //'#0d6ec6'
-// teste ca-app-pub-3940256099942544/6300978111

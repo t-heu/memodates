@@ -24,6 +24,7 @@ interface Ibirthday {
       date: string;
       id: string;
       name: string;
+      color: string;
     };
   };
 }
@@ -34,13 +35,9 @@ export default function CalendarComponent({birthday}: Ibirthday) {
   const [activeAdd, setActiveAdd] = useState(new Date());
   const navigation = useNavigation();
   const [updateList, setUpdateList] = useState(0);
-  // const [dateChange, setDateChange] = useState(
-  //   format(new Date(), 'yyyy-MM-dd'),
-  // );
   const [comp, setComp] = useState(<RenderCalendar />);
 
   function modal(date: any) {
-    //setDateChange(date.dateString);
     setActiveModal(true);
     setActiveAdd(
       new Date(`${format(new Date(date.dateString), 'yyyy/MM')}/${date.day}`),
@@ -65,35 +62,30 @@ export default function CalendarComponent({birthday}: Ibirthday) {
     }, 100);
   }, [updateList]);
 
-  function randomColor(dat: string, types: string) {
-    const colors = ['#2ed573', '#ffa502', '#1e90ff', '#eccc68', '#9b59b6'];
-
-    function aa() {
-      return birthday.map((data: any) => {
-        if (
-          dat ===
-          `${format(new Date(), 'yyyy')}-${format(
-            new Date(data.date),
-            'MM-dd',
-          )}`
-        ) {
-          return true;
-        } else {
-          return false;
+  function getColor(dat: string, types: string) {
+    function setColor() {
+      if (birthday.length > 0) {
+        for (let i = 0; i < birthday.length; i++) {
+          if (
+            dat ===
+            `${format(new Date(), 'yyyy')}-${format(
+              new Date(birthday[i].date),
+              'MM-dd',
+            )}`
+          ) {
+            return birthday[i].color;
+          } else {
+            'transparent';
+          }
         }
-      });
+      }
+      return 'transparent';
     }
 
-    if (types === 'back') {
-      if (aa().indexOf(true) !== -1) {
-        return colors[Math.floor(Math.random() * Number(colors.length))];
-      } else {
-        return 'transparent';
-      }
+    if (types === 'backg') {
+      return setColor();
     } else {
-      if (aa().indexOf(true) !== -1) {
-        return '#fff';
-      } else if (types === 'today') {
+      if (types === 'today' || setColor() !== 'transparent') {
         return '#fff';
       } else if (types === 'disabled') {
         return '#c0c0c2';
@@ -135,23 +127,23 @@ export default function CalendarComponent({birthday}: Ibirthday) {
             },
           },
         }}
-        monthFormat={'MMMM yyyy'} //{"dddd 'de' MMMM 'de' yyyy"}
+        monthFormat={'MMMM yyyy'}
         style={styles.calendarList}
         dayComponent={({date, state}) => (
           <TouchableOpacity onPress={() => modal(date)}>
             <View
               style={[
                 styles.calendar,
-                date.dateString === format(new Date(), 'yyyy-MM-dd') //dateChange
+                date.dateString === format(new Date(), 'yyyy-MM-dd')
                   ? {backgroundColor: '#f34b56'}
-                  : {backgroundColor: randomColor(date.dateString, 'back')},
+                  : {backgroundColor: getColor(date.dateString, 'backg')},
                 ,
               ]}>
               <View>
                 <Text
                   style={[
                     {
-                      color: randomColor(date.dateString, state),
+                      color: getColor(date.dateString, state),
                       textAlign: 'center',
                     },
                   ]}>
@@ -169,7 +161,7 @@ export default function CalendarComponent({birthday}: Ibirthday) {
     <>
       {comp}
       <TouchableOpacity
-        style={{position: 'absolute', right: 20, top: 15}}
+        style={{position: 'absolute', right: 23, top: 15}}
         onPress={() => navigation.openDrawer()}>
         <Entypo name={'list'} size={30} color={'#f34b56'} />
       </TouchableOpacity>
@@ -219,7 +211,10 @@ export default function CalendarComponent({birthday}: Ibirthday) {
 
                 <TouchableOpacity
                   onPress={() => deleteObj(r)}
-                  style={[styles.input, {width: 30}]}>
+                  style={[
+                    styles.input,
+                    {width: 30, position: 'absolute', bottom: 2, right: 2},
+                  ]}>
                   <EvilIcons name={'trash'} size={28} color={'#ff6849'} />
                 </TouchableOpacity>
 

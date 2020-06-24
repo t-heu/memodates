@@ -8,6 +8,7 @@ import {
   Platform,
   Alert,
   KeyboardAvoidingView,
+  FlatList,
 } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import {format} from 'date-fns-tz';
@@ -22,6 +23,14 @@ export default function CreateBirthdayComponent({
   const [name, setName] = useState('');
   const [date, setDate] = useState(new Date()); //(new Date() as object | Date);
   const [show, setShow] = useState(false);
+  const [color, setColor] = useState('0');
+  const colors = [
+    {id: '0', color: '#2ed573'},
+    {id: '1', color: '#ffa502'},
+    {id: '2', color: '#1e90ff'},
+    {id: '3', color: '#eccc68'},
+    {id: '4', color: '#9b59b6'},
+  ];
 
   useEffect(() => {
     setDate(new Date(dateSelected));
@@ -59,8 +68,9 @@ export default function CreateBirthdayComponent({
       .then((res: any) => {
         const dataAge = {
           name,
-          date: String(date),
+          date: new Date(date),
           id: '1',
+          color: colors[Number(color)].color,
         };
         //console.log(res.length, res)// {} //0
         if (res.length > 0) {
@@ -88,8 +98,6 @@ export default function CreateBirthdayComponent({
             <Text
               style={{
                 fontSize: 24,
-                paddingLeft: 7,
-                paddingRight: 0,
                 color: '#f34b56',
               }}>
               {format(new Date(date), 'dd')}
@@ -97,11 +105,9 @@ export default function CreateBirthdayComponent({
             <Text
               style={{
                 fontSize: 12,
-                padding: 0,
-                paddingLeft: 0,
                 color: '#f34b56',
               }}>
-              {format(new Date(date), '/MM')}
+              {format(new Date(date), '/MMMM')}
             </Text>
           </TouchableOpacity>
 
@@ -116,25 +122,67 @@ export default function CreateBirthdayComponent({
               onChange={onChangeDate}
             />
           )}
+
+          <TextInput
+            style={styles.input}
+            placeholder="Tem algum evento em mente?"
+            onChangeText={setName}
+            value={name}
+            placeholderTextColor="#999"
+            blurOnSubmit={false}
+            multiline={true}
+            numberOfLines={5}
+            autoCompleteType="email"
+            autoCapitalize="words"
+            autoCorrect={false}
+          />
+
+          <TouchableOpacity
+            style={[
+              {
+                backgroundColor: colors[color].color,
+                width: 50,
+                height: 50,
+              },
+            ]}
+          />
         </View>
 
-        <TextInput
-          style={styles.input}
-          placeholder="Tem algum evento em mente?"
-          onChangeText={setName}
-          value={name}
-          placeholderTextColor="#999"
-          blurOnSubmit={false}
-          multiline={true}
-          numberOfLines={5}
-          autoCompleteType="email"
-          autoCapitalize="words"
-          autoCorrect={false}
-        />
+        <View
+          style={{
+            borderColor: '#eee',
+            borderTopWidth: 1,
+            width: '100%',
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'flex-end',
+          }}>
+          <TouchableOpacity
+            onPress={() => HandleSubmit()}
+            style={styles.btnAdd}>
+            <Text style={{paddingRight: 10, color: '#fff'}}>Salvar</Text>
+            <Ionicons name={'md-add'} size={28} color={'#fff'} />
+          </TouchableOpacity>
 
-        <TouchableOpacity onPress={() => HandleSubmit()} style={styles.btnAdd}>
-          <Ionicons name={'md-add'} size={28} color={'#f34b56'} />
-        </TouchableOpacity>
+          <FlatList
+            data={colors}
+            horizontal={true}
+            keyExtractor={(item) => item.id}
+            showsHorizontalScrollIndicator={false}
+            renderItem={(item) => (
+              <TouchableOpacity
+                onPress={() => setColor(item.item.id)}
+                style={[
+                  {
+                    backgroundColor: colors[item.item.id].color,
+                    width: 50,
+                    height: 50,
+                  },
+                ]}
+              />
+            )}
+          />
+        </View>
       </View>
     </KeyboardAvoidingView>
   );
@@ -143,48 +191,44 @@ export default function CreateBirthdayComponent({
 const styles = StyleSheet.create({
   form: {
     backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    flexDirection: 'row',
+    //alignItems: 'center',
+    //justifyContent: 'space-between',
+    flexDirection: 'column',
     borderTopWidth: 1,
     borderColor: '#eee',
-    height: 60,
   },
   date: {
     height: 60,
-    //borderRightWidth: 2,
-    //borderColor: '#ff6849',
+    flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'space-around',
   },
   input: {
     alignItems: 'center',
     justifyContent: 'center',
     padding: 5,
-    paddingLeft: 0,
     height: 70,
     color: '#222',
-    width: 200,
     backgroundColor: 'transparent',
   },
   btnDate: {
     height: 50,
-    padding: 10,
     borderStyle: 'solid',
     color: '#333',
-    backgroundColor: 'transparent', //'#4989f9',
+    backgroundColor: 'transparent',
     justifyContent: 'center',
+    alignItems: 'center',
     flexDirection: 'row',
-    marginTop: 2,
   },
   btnDateText: {
     color: '#f9ca24',
     fontSize: 12,
   },
   btnAdd: {
-    width: 50,
+    width: '35%',
     height: 50,
-    borderRadius: 50,
+    //borderRadius: 50,
+    backgroundColor: '#f34b56',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
