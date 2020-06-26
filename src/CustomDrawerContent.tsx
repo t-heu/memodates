@@ -50,15 +50,17 @@ function CustomDrawerContent() {
         try {
           if ((await initialized()) === 'success') {
             const response = await (
-              await GDrive.files.get(
-                await GDrive.files.getId('memodates-backup.json', ['root']),
-                {alt: 'json'},
-              )
-            ).text();
+              await GDrive.files.list({
+                q:
+                  "name = 'memodates/memodates-backup.json' and 'appDataFolder' in parents",
+                pageSize: 100,
+                spaces: 'appDataFolder',
+              })
+            ).json();
 
-            if (JSON.parse(response).id) {
+            if (response.files[0].id) {
               GDrive.files
-                .delete(JSON.parse(response).id)
+                .delete(response.files[0].id)
                 .then((r: any) => console.log(r))
                 .catch((e: any) => console.log(e));
             }
@@ -70,12 +72,13 @@ function CustomDrawerContent() {
                 content,
                 'application/json',
                 {
-                  parents: ['root'],
-                  name: 'memodates-backup.json',
+                  parents: ['appDataFolder'], //['root'],
+                  name: 'memodates/memodates-backup.json',
                 },
                 false,
               )
-              .then((r: any) => console.log(r, 'ok'))
+              .then((r: any) => r.json())
+              .then((ress: any) => console.log(ress))
               .catch((e: any) => console.log(e));
           }
         } catch (e) {
@@ -93,14 +96,20 @@ function CustomDrawerContent() {
       try {
         if ((await initialized()) === 'success') {
           const response = await (
-            await GDrive.files.get(
-              await GDrive.files.getId('memodates-backup.json', ['root']),
-              {alt: 'media'},
-            )
-          ).text();
+            await GDrive.files.list({
+              q:
+                "name = 'memodates/memodates-backup.json' and 'appDataFolder' in parents",
+              pageSize: 100,
+              spaces: 'appDataFolder',
+            })
+          ).json();
 
-          if (response) {
-            create(response);
+          if (response.files.length > 0) {
+            const data = await (
+              await GDrive.files.get(response.files[0].id, {alt: 'media'})
+            ).json();
+
+            create(data, true);
           }
           Alert.alert('Recuperado com sucesso');
         }

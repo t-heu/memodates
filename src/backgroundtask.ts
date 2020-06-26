@@ -15,7 +15,7 @@ export function TaskVerifyDate() {
         HoursBirthdayAge >= 7 &&
         HoursBirthdayAge <= 7
       ) {
-        callNoti(response.name);
+        callNoti(response.summary);
       }
     });
   });

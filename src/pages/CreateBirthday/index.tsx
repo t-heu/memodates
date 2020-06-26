@@ -20,7 +20,7 @@ export default function CreateBirthdayComponent({
   dateSelected,
   update_list,
 }: any) {
-  const [name, setName] = useState('');
+  const [summary, setSummary] = useState('');
   const [date, setDate] = useState(new Date()); //(new Date() as object | Date);
   const [show, setShow] = useState(false);
   const [color, setColor] = useState('0');
@@ -47,19 +47,19 @@ export default function CreateBirthdayComponent({
   };
 
   function HandleSubmit() {
-    if (!name) {
+    if (!summary) {
       Alert.alert('Error', 'Preencha o campo');
       return;
     }
 
     const regex = new RegExp('^[a-zA-Z]+', 'i');
 
-    if (!regex.test(name)) {
+    if (!regex.test(summary)) {
       Alert.alert('Error:', 'Ensira um nome válido!');
       return;
     }
 
-    if (name.split('').length <= 2) {
+    if (summary.split('').length <= 2) {
       Alert.alert('Error', 'Minímo 3 letras');
       return;
     }
@@ -67,7 +67,7 @@ export default function CreateBirthdayComponent({
     offList()
       .then((res: any) => {
         const dataAge = {
-          name,
+          summary,
           date: new Date(date),
           id: '1',
           color: colors[Number(color)].color,
@@ -78,7 +78,7 @@ export default function CreateBirthdayComponent({
         }
 
         create([dataAge]);
-        setName('');
+        setSummary('');
         Alert.alert('Salvo com sucesso');
         update_list(res.length + 1);
       })
@@ -126,8 +126,8 @@ export default function CreateBirthdayComponent({
           <TextInput
             style={styles.input}
             placeholder="Tem algum evento em mente?"
-            onChangeText={setName}
-            value={name}
+            onChangeText={setSummary}
+            value={summary}
             placeholderTextColor="#999"
             blurOnSubmit={false}
             multiline={true}

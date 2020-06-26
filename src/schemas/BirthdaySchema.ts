@@ -6,7 +6,7 @@ export default {
       type: 'string',
       indexed: true,
     },
-    name: 'string',
+    summary: 'string',
     date: 'date',
     color: 'string',
   },

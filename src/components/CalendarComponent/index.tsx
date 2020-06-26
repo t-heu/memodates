@@ -23,7 +23,7 @@ interface Ibirthday {
     string: {
       date: string;
       id: string;
-      name: string;
+      summary: string;
       color: string;
     };
   };
@@ -218,7 +218,7 @@ export default function CalendarComponent({birthday}: Ibirthday) {
                   <EvilIcons name={'trash'} size={28} color={'#ff6849'} />
                 </TouchableOpacity>
 
-                <Text style={styles.input}>{r.name}</Text>
+                <Text style={styles.input}>{r.summary}</Text>
 
                 <View
                   style={{
