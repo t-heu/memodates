@@ -1,56 +1,32 @@
-import React, {useState, useEffect} from 'react';
-import {View, ScrollView, Text} from 'react-native';
-import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
-import {AdMobBanner, AdMobInterstitial} from 'react-native-admob';
+import React from 'react';
+import {ScrollView} from 'react-native';
+import {AdMobBanner} from 'react-native-admob';
+import {useDispatch} from 'react-redux';
 
 import styles from './styles';
 import CalendarComponent from '../../components/CalendarComponent';
-import {offList} from '../../services/realm';
+import {show} from '../../services/realm';
+import {EventSuccess} from '../../store/ducks/events/action';
 
 interface Ibirthday {
-  string: {
-    date: string;
-    id: string;
-    color: string;
-    name: string;
-  };
+  start: Date;
+  end: Date;
+  date: Date;
+  id: string;
+  summary: string;
+  color: string;
 }
 
 export default function Home() {
-  const [birthday, setBirthday] = useState({} as Ibirthday);
-  const [load, setLoad] = useState(false);
-  const [loadAds, setLoadAds] = useState(false);
+  const dispatch = useDispatch();
 
-  useEffect(() => {
-    function loadAd() {
-      AdMobInterstitial.setAdUnitID('ca-app-pub-7158647172444246/3856987052');
-      AdMobInterstitial.setTestDevices([AdMobInterstitial.simulatorId]);
-      AdMobInterstitial.requestAd()
-        .then(() => {
-          AdMobInterstitial.showAd();
-          setLoadAds(true);
-        })
-        .catch((e: any) => console.log(e));
-    }
-    loadAd();
-
-    offList().then((res: any) => {
-      setBirthday(res);
-      setLoad(true);
-    });
-  }, []);
+  show().then((events: Ibirthday[]) => {
+    dispatch(EventSuccess({events}));
+  });
 
   return (
     <ScrollView style={styles.container}>
-      <View>
-        {load ? (
-          <CalendarComponent birthday={birthday} />
-        ) : (
-          <View style={styles.loading}>
-            <SimpleLineIcons name={'reload'} size={26} color={'#222'} />
-          </View>
-        )}
-      </View>
+      <CalendarComponent />
 
       <AdMobBanner
         adSize="fullBanner"
@@ -58,8 +34,6 @@ export default function Home() {
         testDevices={[AdMobBanner.simulatorId]}
         onAdFailedToLoad={(error: any) => console.error(error)}
       />
-
-      {loadAds && <Text>true</Text>}
     </ScrollView>
   );
 }

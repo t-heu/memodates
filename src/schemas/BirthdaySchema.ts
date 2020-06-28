@@ -9,6 +9,8 @@ export default {
     summary: 'string',
     date: 'date',
     color: 'string',
+    start: 'date',
+    end: 'date',
   },
 };
 //class BirthdaySchema {

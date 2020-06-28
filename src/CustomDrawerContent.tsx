@@ -19,7 +19,7 @@ import {Path, Svg} from 'react-native-svg';
 import {ApplicationState} from './store';
 import GoogleSign from './components/GoogleSign';
 import {SignOut} from './store/ducks/auth/action';
-import {create, offList} from './services/realm';
+import {create, show} from './services/realm';
 
 function CustomDrawerContent() {
   const {auth} = useSelector((state: ApplicationState) => state);
@@ -46,7 +46,7 @@ function CustomDrawerContent() {
     if (netinfo.isConnected) {
       // console.log(decoded.exp < Date.now() / 1000)
 
-      offList().then(async (res: any) => {
+      show().then(async (res: any) => {
         try {
           if ((await initialized()) === 'success') {
             const response = await (

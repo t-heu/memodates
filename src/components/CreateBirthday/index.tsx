@@ -5,7 +5,6 @@ import {
   View,
   StyleSheet,
   TouchableOpacity,
-  Platform,
   Alert,
   KeyboardAvoidingView,
   FlatList,
@@ -13,17 +12,26 @@ import {
 import DateTimePicker from '@react-native-community/datetimepicker';
 import {format} from 'date-fns-tz';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import {useDispatch} from 'react-redux';
 
-import {offList, create} from '../../services/realm';
+import {show, create} from '../../services/realm';
+import {EventSuccess} from '../../store/ducks/events/action';
 
-export default function CreateBirthdayComponent({
-  dateSelected,
-  update_list,
-}: any) {
+interface Props {
+  dateSelected: string;
+}
+
+export default function CreateBirthdayComponent({dateSelected}: Props) {
   const [summary, setSummary] = useState('');
-  const [date, setDate] = useState(new Date()); //(new Date() as object | Date);
-  const [show, setShow] = useState(false);
+  const [date, setDate] = useState(new Date());
+  const [timeStart, setTimeStart] = useState(
+    new Date(`${format(new Date(), 'yyyy-MM-dd')}T10:00:00.040Z`),
+  );
+  const [timeEnd, setTimeEnd] = useState(new Date('2020-06-27T10:01:00.040Z'));
+  const [Show, setShow] = useState('');
   const [color, setColor] = useState('0');
+  const dispatch = useDispatch();
   const colors = [
     {id: '0', color: '#2ed573'},
     {id: '1', color: '#ffa502'},
@@ -36,14 +44,27 @@ export default function CreateBirthdayComponent({
     setDate(new Date(dateSelected));
   }, [dateSelected]);
 
-  const onChangeDate = (event: any, selectedDate: any) => {
-    const currentDate: Date | object = selectedDate || date;
-    setShow(Platform.OS === 'ios');
-    setDate(new Date(String(currentDate)));
+  const onChangeTimeDate = (event: any, selectedDate: any) => {
+    const currentDate: Date | object = selectedDate;
+
+    //setShow(Platform.OS === 'ios');
+
+    if (Show === 'date') {
+      setShow('');
+      setDate(new Date(String(currentDate)));
+    } else {
+      setShow('');
+      setTimeStart(new Date(String(currentDate)));
+      setTimeEnd(new Date(String(currentDate)));
+    }
   };
 
   const showDatepicker = () => {
-    setShow(true);
+    setShow('date');
+  };
+
+  const showTimeStartpicker = () => {
+    setShow('time');
   };
 
   function HandleSubmit() {
@@ -64,23 +85,27 @@ export default function CreateBirthdayComponent({
       return;
     }
 
-    offList()
+    show()
       .then((res: any) => {
         const dataAge = {
           summary,
           date: new Date(date),
           id: '1',
           color: colors[Number(color)].color,
+          start: new Date(timeStart),
+          end: new Date(timeEnd),
         };
-        //console.log(res.length, res)// {} //0
+
         if (res.length > 0) {
-          dataAge.id = String(Number(res[0].id) + 1);
+          dataAge.id = String(Number(res[res.length - 1].id) + 1);
         }
 
         create([dataAge]);
         setSummary('');
         Alert.alert('Salvo com sucesso');
-        update_list(res.length + 1);
+        show().then((events: any) => {
+          dispatch(EventSuccess({events}));
+        });
       })
       .catch((e) =>
         Alert.alert('Alguma coisa deu errado, \n tente novamente mais tarde'),
@@ -93,42 +118,15 @@ export default function CreateBirthdayComponent({
       behavior={'padding'} /*keyboardVerticalOffset={100}*/
     >
       <View style={styles.form}>
-        <View style={styles.date}>
-          <TouchableOpacity onPress={showDatepicker} style={styles.btnDate}>
-            <Text
-              style={{
-                fontSize: 24,
-                color: '#f34b56',
-              }}>
-              {format(new Date(date), 'dd')}
-            </Text>
-            <Text
-              style={{
-                fontSize: 12,
-                color: '#f34b56',
-              }}>
-              {format(new Date(date), '/MMMM')}
-            </Text>
-          </TouchableOpacity>
-
-          {show && (
-            <DateTimePicker
-              testID="dateTimePicker"
-              timeZoneOffsetInMinutes={0}
-              value={date}
-              mode={'date'}
-              is24Hour={true}
-              display="default"
-              onChange={onChangeDate}
-            />
-          )}
-
+        <View
+          style={{flexDirection: 'row', alignItems: 'center', marginLeft: 10}}>
+          <FontAwesome name={'pencil-square-o'} size={22} color={'#222'} />
           <TextInput
             style={styles.input}
-            placeholder="Tem algum evento em mente?"
+            placeholder="Lembre-me..."
             onChangeText={setSummary}
             value={summary}
-            placeholderTextColor="#999"
+            placeholderTextColor="#555"
             blurOnSubmit={false}
             multiline={true}
             numberOfLines={5}
@@ -136,13 +134,62 @@ export default function CreateBirthdayComponent({
             autoCapitalize="words"
             autoCorrect={false}
           />
+        </View>
+
+        <View style={styles.date}>
+          <Ionicons name={'md-time'} size={24} color={'#222'} />
+          <TouchableOpacity onPress={showDatepicker} style={styles.btnDate}>
+            <Text
+              style={{
+                fontSize: 18,
+                color: '#222',
+              }}>
+              {format(new Date(date), "dd 'de' MMMM 'de' yyyy")}
+            </Text>
+          </TouchableOpacity>
 
           <TouchableOpacity
+            onPress={showTimeStartpicker}
+            style={styles.btnDate}>
+            <Text
+              style={{
+                fontSize: 22,
+                color: '#222',
+              }}>
+              {format(new Date(timeStart), 'HH:mm')}
+            </Text>
+          </TouchableOpacity>
+
+          {Show === 'date' && (
+            <DateTimePicker
+              testID="dateTimePicker"
+              timeZoneOffsetInMinutes={0}
+              value={date}
+              mode={'date'}
+              is24Hour={true}
+              display="default"
+              onChange={onChangeTimeDate}
+            />
+          )}
+
+          {Show === 'time' && (
+            <DateTimePicker
+              testID="dateTimePicker"
+              timeZoneOffsetInMinutes={0}
+              value={timeStart}
+              mode={'time'}
+              is24Hour={true}
+              display="default"
+              onChange={onChangeTimeDate}
+            />
+          )}
+
+          <View
             style={[
               {
                 backgroundColor: colors[color].color,
-                width: 50,
-                height: 50,
+                width: 40,
+                height: 40,
               },
             ]}
           />
@@ -191,8 +238,6 @@ export default function CreateBirthdayComponent({
 const styles = StyleSheet.create({
   form: {
     backgroundColor: '#fff',
-    //alignItems: 'center',
-    //justifyContent: 'space-between',
     flexDirection: 'column',
     borderTopWidth: 1,
     borderColor: '#eee',
@@ -202,19 +247,23 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-around',
+    borderTopWidth: 1,
+    borderColor: '#eee',
   },
   input: {
     alignItems: 'center',
     justifyContent: 'center',
+    marginLeft: 10,
     padding: 5,
-    height: 70,
-    color: '#222',
+    width: '90%',
+    fontSize: 18,
+    height: 60,
+    color: '#444',
     backgroundColor: 'transparent',
   },
   btnDate: {
     height: 50,
-    borderStyle: 'solid',
-    color: '#333',
+    color: '#444',
     backgroundColor: 'transparent',
     justifyContent: 'center',
     alignItems: 'center',
@@ -227,7 +276,6 @@ const styles = StyleSheet.create({
   btnAdd: {
     width: '35%',
     height: 50,
-    //borderRadius: 50,
     backgroundColor: '#f34b56',
     flexDirection: 'row',
     alignItems: 'center',

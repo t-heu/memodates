@@ -6,7 +6,7 @@ export function getRealm() {
   //Realm.clearTestState()
   return Realm.open({
     schema: [BirthdaySchema],
-    schemaVersion: 1,
+    schemaVersion: 2,
   });
 }
 
@@ -48,13 +48,25 @@ export async function deleteObj(data: any) {
   });
 }
 
-export async function offList() {
+export async function show() {
   try {
     const realm = await getRealm();
     const res = realm.objects('Birthday').sorted('id', true);
-    //res.map(r => console.log(r))
-    //const arr = Object.keys(res).map((r) => res[Number(r)])
-    return res;
+    const response = Object.keys(res)
+      .map((r) => res[Number(r)])
+      .sort((a, b) => {
+        if (Number(a.id) > Number(b.id)) {
+          return 1;
+        }
+
+        if (Number(a.id) < Number(b.id)) {
+          return -1;
+        }
+
+        return 0;
+      });
+    //console.log(response, '---------------');
+    return response;
   } catch (e) {
     console.log(e);
   }

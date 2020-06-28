@@ -5,10 +5,13 @@ import {format} from 'date-fns-tz';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import Entypo from 'react-native-vector-icons/Entypo';
 import {useNavigation} from '@react-navigation/native';
+import {useSelector, useDispatch} from 'react-redux';
 
-import CreateBirthday from '../../pages/CreateBirthday';
+import CreateBirthday from '../CreateBirthday';
 import configDate from '../../utils/configDate';
-import {deleteObj} from '../../services/realm';
+import {deleteObj, show} from '../../services/realm';
+import {ApplicationState} from '../../store';
+import {EventSuccess} from '../../store/ducks/events/action';
 
 LocaleConfig.locales.ptBR = {
   monthNames: configDate.monthNames,
@@ -18,24 +21,27 @@ LocaleConfig.locales.ptBR = {
 };
 LocaleConfig.defaultLocale = 'ptBR';
 
-interface Ibirthday {
-  birthday: {
-    string: {
-      date: string;
-      id: string;
-      summary: string;
-      color: string;
-    };
-  };
+// interface Props {
+//   birthday: IBirthday[];
+// }
+
+interface IBirthday {
+  start: Date;
+  end: Date;
+  date: Date;
+  id: string;
+  summary: string;
+  color: string;
 }
 
-export default function CalendarComponent({birthday}: Ibirthday) {
+export default function CalendarComponent() {
   const [activeModal, setActiveModal] = useState(false);
-  const [birthdays, setBirthday] = useState([] as Ibirthday[]);
+  const [birthdays, setBirthdays] = useState([] as IBirthday[]);
   const [activeAdd, setActiveAdd] = useState(new Date());
   const navigation = useNavigation();
-  const [updateList, setUpdateList] = useState(0);
   const [comp, setComp] = useState(<RenderCalendar />);
+  const {birthday} = useSelector((state: ApplicationState) => state.events);
+  const dispatch = useDispatch();
 
   function modal(date: any) {
     setActiveModal(true);
@@ -43,11 +49,11 @@ export default function CalendarComponent({birthday}: Ibirthday) {
       new Date(`${format(new Date(date.dateString), 'yyyy/MM')}/${date.day}`),
     );
 
-    const arr: Ibirthday[] = [];
+    const arr: IBirthday[] = [];
     birthday.map((info: any) => {
       if (date.dateString === `${format(new Date(info.date), 'yyyy-MM-dd')}`) {
         arr.push(info);
-        setBirthday(arr);
+        setBirthdays(arr);
       }
     });
 
@@ -60,7 +66,7 @@ export default function CalendarComponent({birthday}: Ibirthday) {
     setTimeout(() => {
       setComp(<RenderCalendar />);
     }, 100);
-  }, [updateList]);
+  }, [birthday]);
 
   function getColor(dat: string, types: string) {
     function setColor() {
@@ -93,6 +99,15 @@ export default function CalendarComponent({birthday}: Ibirthday) {
         return '#222';
       }
     }
+  }
+
+  function deletes(r: any, index: number) {
+    deleteObj(r).then(() => {
+      show().then((events: any) => {
+        dispatch(EventSuccess({events}));
+      });
+      birthdays.splice(index, 1);
+    });
   }
 
   function RenderCalendar() {
@@ -172,6 +187,7 @@ export default function CalendarComponent({birthday}: Ibirthday) {
           alignItems: 'center',
           justifyContent: 'flex-start',
           padding: 10,
+          paddingTop: 0,
         }}>
         <View
           style={[
@@ -188,65 +204,60 @@ export default function CalendarComponent({birthday}: Ibirthday) {
       </View>
 
       <View>
-        <CreateBirthday
-          update_list={setUpdateList}
-          dateSelected={String(activeAdd)}
-        />
+        <CreateBirthday dateSelected={String(activeAdd)} />
         {activeModal && birthdays.length > 0 && (
           <View>
-            {birthdays.map((r: any) => (
-              <View
-                style={{
-                  backgroundColor: '#fff',
-                  alignItems: 'center',
-                  justifyContent: 'space-around',
-                  flexDirection: 'row',
-                  borderTopWidth: 1,
-                  borderColor: '#eee',
-                  height: 100,
-                  padding: 5,
-                }}
-                key={r.id}>
-                <View style={[{backgroundColor: '#f34b56'}, styles.dot]} />
-
-                <TouchableOpacity
-                  onPress={() => deleteObj(r)}
-                  style={[
-                    styles.input,
-                    {width: 30, position: 'absolute', bottom: 2, right: 2},
-                  ]}>
-                  <EvilIcons name={'trash'} size={28} color={'#ff6849'} />
-                </TouchableOpacity>
-
-                <Text style={styles.input}>{r.summary}</Text>
-
+            {birthdays.map((r: any, index) => (
+              <View key={r.id}>
                 <View
                   style={{
-                    height: 60,
-                    width: 100,
+                    backgroundColor: '#fff',
                     alignItems: 'center',
-                    justifyContent: 'center',
+                    justifyContent: 'space-around',
                     flexDirection: 'row',
-                    padding: 10,
+                    borderTopWidth: 1,
+                    borderColor: '#eee',
+                    height: 100,
+                    padding: 5,
                   }}>
-                  <Text
+                  <View style={[{backgroundColor: '#f34b56'}, styles.dot]} />
+
+                  <Text style={styles.input}>{r.summary}</Text>
+
+                  <View
                     style={{
-                      fontSize: 48,
-                      //fontWeight: 'bold',
-                      fontFamily: 'OpenSans-Regular',
-                      color: '#f34b56',
+                      height: 60,
+                      width: 100,
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      flexDirection: 'row',
+                      padding: 10,
                     }}>
-                    {format(new Date(r.date), 'dd')}
-                  </Text>
-                  <Text
-                    style={{
-                      fontSize: 12,
-                      fontFamily: 'OpenSans-Regular',
-                      color: '#f34b56',
-                    }}>
-                    {format(new Date(r.date), 'MMMM')}
-                  </Text>
+                    <Text
+                      style={{
+                        fontSize: 30,
+                        //fontWeight: 'bold',
+                        fontFamily: 'OpenSans-Regular',
+                        color: '#f34b56',
+                      }}>
+                      {format(new Date(r.date), 'dd/MM')}
+                    </Text>
+                  </View>
                 </View>
+                <TouchableOpacity
+                  onPress={() => deletes(r, index)}
+                  style={[
+                    styles.input,
+                    {
+                      width: '100%',
+                      backgroundColor: '#ff6849',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      padding: 10,
+                    },
+                  ]}>
+                  <EvilIcons name={'trash'} size={28} color={'#fff'} />
+                </TouchableOpacity>
               </View>
             ))}
           </View>
