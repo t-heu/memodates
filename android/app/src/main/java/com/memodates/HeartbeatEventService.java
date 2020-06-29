@@ -12,10 +12,6 @@ public class HeartbeatEventService extends HeadlessJsTaskService {
     @Nullable
     protected HeadlessJsTaskConfig getTaskConfig(Intent intent) {
         Bundle extras = intent.getExtras();
-        return new HeadlessJsTaskConfig(
-                "Heartbeat",
-                extras != null ? Arguments.fromBundle(extras) : Arguments.createMap(),
-                5000,
-                true);
+        return new HeadlessJsTaskConfig("Heartbeat", extras != null ? Arguments.fromBundle(extras) : Arguments.createMap(), 5000, true);
     }
 }

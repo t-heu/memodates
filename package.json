@@ -24,7 +24,7 @@
     "react-native": "0.62.2",
     "react-native-admob": "^2.0.0-beta.6",
     "react-native-calendar-picker": "^6.1.2",
-    "react-native-calendars": "^1.269.0",
+    "react-native-calendars": "^1.300.0",
     "react-native-code-push": "^6.2.1",
     "react-native-fs": "^2.16.6",
     "react-native-gesture-handler": "~1.6.0",

@@ -30,7 +30,7 @@ export default function CreateBirthdayComponent({dateSelected}: Props) {
   );
   const [timeEnd, setTimeEnd] = useState(new Date('2020-06-27T10:01:00.040Z'));
   const [Show, setShow] = useState('');
-  const [color, setColor] = useState('0');
+  const [color, setColor] = useState('2');
   const dispatch = useDispatch();
   const colors = [
     {id: '0', color: '#2ed573'},
@@ -275,9 +275,12 @@ const styles = StyleSheet.create({
   },
   btnAdd: {
     width: '35%',
-    height: 50,
+    height: 45,
     backgroundColor: '#f34b56',
     flexDirection: 'row',
+    borderRadius: 50,
+    margin: 5,
+    marginBottom: 0,
     alignItems: 'center',
     justifyContent: 'center',
   },

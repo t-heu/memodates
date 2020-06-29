@@ -40,7 +40,7 @@ public class HeartbeatService extends Service {
             NotificationManager notificationManager = getSystemService(NotificationManager.class);
             notificationManager.createNotificationChannel(channel);
         }
-    }
+    };
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -50,7 +50,6 @@ public class HeartbeatService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-
     }
 
     @Override
@@ -65,14 +64,14 @@ public class HeartbeatService extends Service {
         createNotificationChannel();
         Intent notificationIntent = new Intent(this, MainActivity.class);
         PendingIntent contentIntent = PendingIntent.getActivity(this, 0, notificationIntent, PendingIntent.FLAG_CANCEL_CURRENT);
-        /*Notification notification = new NotificationCompat.Builder(this, CHANNEL_ID)
-                .setContentTitle("Heartbeat service")
+        Notification notification = new NotificationCompat.Builder(this, CHANNEL_ID)
+                .setContentTitle("Memodates service")
                 .setContentText("Running...")
-                .setSmallIcon(R.mipmap.icon)
+                .setSmallIcon(R.mipmap.icon_noti)
                 .setContentIntent(contentIntent)
                 .setOngoing(true)
-                .build();*/
-        //startForeground(SERVICE_NOTIFICATION_ID, notification);
+                .build();
+        startForeground(SERVICE_NOTIFICATION_ID, notification);
         return START_STICKY;
     }
 

@@ -1,4 +1,6 @@
 import Realm from 'realm';
+import compareAsc from 'date-fns/compareAsc';
+import {format} from 'date-fns-tz';
 
 import BirthdaySchema from '../schemas/BirthdaySchema';
 
@@ -66,7 +68,25 @@ export async function show() {
         return 0;
       });
     //console.log(response, '---------------');
+
     return response;
+  } catch (e) {
+    console.log(e);
+  }
+}
+
+export async function sorteds() {
+  try {
+    const realm = await getRealm();
+    const res = realm.objects('Birthday').sorted('date', true);
+    const x = res.map((r) => {
+      if (compareAsc(new Date(), new Date(r.date))) {
+        if (compareAsc(new Date(), new Date(r.start))) {
+          return r;
+        }
+      }
+    });
+    return x;
   } catch (e) {
     console.log(e);
   }

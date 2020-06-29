@@ -1,17 +1,26 @@
 import React, {useState, useEffect} from 'react';
-import {TouchableOpacity, Text, View, StyleSheet} from 'react-native';
-import {LocaleConfig, CalendarList} from 'react-native-calendars';
+import {
+  TouchableOpacity,
+  Text,
+  View,
+  StyleSheet,
+  Dimensions,
+} from 'react-native';
+import {LocaleConfig, Calendar, CalendarList} from 'react-native-calendars';
 import {format} from 'date-fns-tz';
+import addMonths from 'date-fns/addMonths';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
-import Entypo from 'react-native-vector-icons/Entypo';
-import {useNavigation} from '@react-navigation/native';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 import {useSelector, useDispatch} from 'react-redux';
+import {useNavigation} from '@react-navigation/native';
+import Entypo from 'react-native-vector-icons/Entypo';
 
 import CreateBirthday from '../CreateBirthday';
 import configDate from '../../utils/configDate';
 import {deleteObj, show} from '../../services/realm';
 import {ApplicationState} from '../../store';
 import {EventSuccess} from '../../store/ducks/events/action';
+import ListInOrder from '../ListInOrder';
 
 LocaleConfig.locales.ptBR = {
   monthNames: configDate.monthNames,
@@ -20,10 +29,6 @@ LocaleConfig.locales.ptBR = {
   dayNamesShort: configDate.dayNamesShort,
 };
 LocaleConfig.defaultLocale = 'ptBR';
-
-// interface Props {
-//   birthday: IBirthday[];
-// }
 
 interface IBirthday {
   start: Date;
@@ -38,10 +43,12 @@ export default function CalendarComponent() {
   const [activeModal, setActiveModal] = useState(false);
   const [birthdays, setBirthdays] = useState([] as IBirthday[]);
   const [activeAdd, setActiveAdd] = useState(new Date());
-  const navigation = useNavigation();
   const [comp, setComp] = useState(<RenderCalendar />);
   const {birthday} = useSelector((state: ApplicationState) => state.events);
   const dispatch = useDispatch();
+  const navigation = useNavigation();
+
+  const [month, setMonth] = useState(format(new Date(), 'yyyy-MM-dd'));
 
   function modal(date: any) {
     setActiveModal(true);
@@ -66,37 +73,24 @@ export default function CalendarComponent() {
     setTimeout(() => {
       setComp(<RenderCalendar />);
     }, 100);
-  }, [birthday]);
+  }, [birthday, activeAdd, month]);
 
-  function getColor(dat: string, types: string) {
-    function setColor() {
-      if (birthday.length > 0) {
-        for (let i = 0; i < birthday.length; i++) {
-          if (
-            dat ===
-            `${format(new Date(), 'yyyy')}-${format(
-              new Date(birthday[i].date),
-              'MM-dd',
-            )}`
-          ) {
-            return birthday[i].color;
-          } else {
-            'transparent';
-          }
-        }
-      }
-      return 'transparent';
-    }
-
-    if (types === 'backg') {
-      return setColor();
-    } else {
-      if (types === 'today' || setColor() !== 'transparent') {
+  function aa(state: string, types?: string) {
+    if (types === 'letter') {
+      if (state === 'today') {
         return '#fff';
-      } else if (types === 'disabled') {
-        return '#c0c0c2';
+      } else if (state === 'disabled') {
+        return '#8c9494';
       } else {
         return '#222';
+      }
+    } else {
+      if (state === 'today') {
+        return '#f34b56';
+      } else if (state === 'disabled') {
+        return '#f2f4f3';
+      } else {
+        return 'transparent';
       }
     }
   }
@@ -112,58 +106,144 @@ export default function CalendarComponent() {
 
   function RenderCalendar() {
     return (
-      <CalendarList
-        horizontal={true}
+      <Calendar
+        //horizontal={true}
+        /*renderArrow={(d) =>
+          d === 'left' ? (
+            <AntDesign name={'arrowleft'} size={22} color={'#f34b56'} />
+          ) : (
+            <AntDesign name={'arrowright'} size={22} color={'#f34b56'} />
+          )
+        }*/
+        hideArrows={true}
         theme={{
           calendarBackground: '#fff',
-          monthTextColor: '#2f3542',
-          textMonthFontWeight: '700',
-          textSectionTitleColor: '#f34b56',
+          //monthTextColor: '#f34b56', //'#2f3542',
+          //textMonthFontWeight: '700',
+          textSectionTitleColor: '#222',
           textDayHeaderFontFamily: 'OpenSans-Regular',
-          textDayHeaderFontWeight: 'bold',
+          //textDayHeaderFontWeight: 'bold'
           'stylesheet.calendar.header': {
+            week: {
+              margin: 0,
+              marginBottom: 5,
+              marginTop: 5,
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'space-around',
+            },
             header: {
               marginTop: 10,
-              justifyContent: 'flex-start',
-            },
-            week: {
-              marginBottom: 10,
-              marginTop: 8,
               flexDirection: 'row',
               alignItems: 'center',
               justifyContent: 'space-around',
             },
           },
           'stylesheet.calendar.main': {
+            container: {
+              margin: 0,
+              //flex: 1,
+            },
             week: {
               marginTop: 0,
+              margin: 0,
+              padding: 0,
               flexDirection: 'row',
-              justifyContent: 'space-around',
             },
           },
         }}
         monthFormat={'MMMM yyyy'}
+        current={month}
+        //onPressArrowRight={() => month.add(1, 'month')}
+        //onPressArrowLeft={() => month.add(-1, 'month')}
         style={styles.calendarList}
+        renderHeader={(date: string) => (
+          <View
+            style={{
+              padding: 10,
+              paddingTop: 5,
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'space-around',
+              width: '100%',
+            }}>
+            <TouchableOpacity
+              onPress={() => navigation.openDrawer()}
+              style={{paddingLeft: 10, paddingRight: 10}}>
+              <Entypo name={'list'} size={30} color={'#f34b56'} />
+            </TouchableOpacity>
+            <Text>{format(new Date(date), 'MMMM yyyy')}</Text>
+
+            <TouchableOpacity
+              onPress={() => setMonth(addMonths(month, -1))}
+              style={{paddingLeft: 10, paddingRight: 10}}>
+              <AntDesign name={'arrowleft'} size={22} color={'#f34b56'} />
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              onPress={() => setMonth(addMonths(month, 1))}
+              style={{paddingLeft: 10, paddingRight: 10}}>
+              <AntDesign name={'arrowright'} size={22} color={'#f34b56'} />
+            </TouchableOpacity>
+          </View>
+        )}
         dayComponent={({date, state}) => (
-          <TouchableOpacity onPress={() => modal(date)}>
+          <TouchableOpacity
+            style={[
+              {
+                borderWidth: 1,
+                borderColor:
+                  date.dateString === format(activeAdd, 'yyyy-MM-dd')
+                    ? '#f34b56'
+                    : '#eee',
+                flexDirection: 'row',
+                justifyContent: 'center',
+                backgroundColor: aa(state),
+                width: Dimensions.get('window').width / 7, //52,
+                height: 50,
+              },
+            ]}
+            onPress={() => modal(date)}>
             <View
-              style={[
-                styles.calendar,
-                date.dateString === format(new Date(), 'yyyy-MM-dd')
-                  ? {backgroundColor: '#f34b56'}
-                  : {backgroundColor: getColor(date.dateString, 'backg')},
-                ,
-              ]}>
-              <View>
-                <Text
-                  style={[
-                    {
-                      color: getColor(date.dateString, state),
-                      textAlign: 'center',
-                    },
-                  ]}>
-                  {date.day}
-                </Text>
+              style={{
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}>
+              <Text
+                style={[
+                  {
+                    color: aa(state, 'letter'),
+                    textAlign: 'center',
+                    fontFamily: 'OpenSans-Regular',
+                  },
+                ]}>
+                {date.day}
+              </Text>
+
+              <View
+                style={{
+                  alignItems: 'center',
+                  flexDirection: 'row',
+                  justifyContent: 'center',
+                  flexWrap: 'wrap',
+                }}>
+                {birthday.map((r: any) => {
+                  return date.dateString ===
+                    format(new Date(r.date), 'yyyy-MM-dd') ? (
+                    <View
+                      key={r.id}
+                      style={[
+                        {
+                          height: 6,
+                          width: 6,
+                          margin: 1,
+                          borderRadius: 100,
+                          backgroundColor: r.color,
+                        },
+                      ]}
+                    />
+                  ) : null;
+                })}
               </View>
             </View>
           </TouchableOpacity>
@@ -175,88 +255,45 @@ export default function CalendarComponent() {
   return (
     <>
       {comp}
-      <TouchableOpacity
-        style={{position: 'absolute', right: 23, top: 15}}
-        onPress={() => navigation.openDrawer()}>
-        <Entypo name={'list'} size={30} color={'#f34b56'} />
-      </TouchableOpacity>
+      {/*<ListInOrder />*/}
 
       <View
         style={{
-          flexDirection: 'row',
+          backgroundColor: '#fff',
           alignItems: 'center',
-          justifyContent: 'flex-start',
-          padding: 10,
-          paddingTop: 0,
+          justifyContent: 'center',
+          paddingTop: 20,
+          paddingBottom: 20,
         }}>
-        <View
-          style={[
-            styles.dot,
-            {backgroundColor: '#f34b56', height: 12, width: 12},
-          ]}
-        />
-        <Text
-          style={{
-            marginLeft: 10,
-            fontFamily: 'OpenSans-Regular',
-            paddingTop: 6,
-          }}>{`Hoje é ${configDate.dayNames[new Date().getDay()]}`}</Text>
+        <CreateBirthday dateSelected={String(activeAdd)} />
       </View>
 
       <View>
-        <CreateBirthday dateSelected={String(activeAdd)} />
         {activeModal && birthdays.length > 0 && (
           <View>
             {birthdays.map((r: any, index) => (
-              <View key={r.id}>
-                <View
-                  style={{
-                    backgroundColor: '#fff',
-                    alignItems: 'center',
-                    justifyContent: 'space-around',
-                    flexDirection: 'row',
-                    borderTopWidth: 1,
-                    borderColor: '#eee',
-                    height: 100,
-                    padding: 5,
-                  }}>
-                  <View style={[{backgroundColor: '#f34b56'}, styles.dot]} />
+              <View
+                key={r.id}
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  padding: 10,
+                }}>
+                <Text style={styles.input}>{r.summary}</Text>
 
-                  <Text style={styles.input}>{r.summary}</Text>
-
-                  <View
-                    style={{
-                      height: 60,
-                      width: 100,
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      flexDirection: 'row',
-                      padding: 10,
-                    }}>
-                    <Text
-                      style={{
-                        fontSize: 30,
-                        //fontWeight: 'bold',
-                        fontFamily: 'OpenSans-Regular',
-                        color: '#f34b56',
-                      }}>
-                      {format(new Date(r.date), 'dd/MM')}
-                    </Text>
-                  </View>
-                </View>
                 <TouchableOpacity
                   onPress={() => deletes(r, index)}
                   style={[
                     styles.input,
                     {
-                      width: '100%',
-                      backgroundColor: '#ff6849',
+                      width: 50,
                       alignItems: 'center',
                       justifyContent: 'center',
                       padding: 10,
                     },
                   ]}>
-                  <EvilIcons name={'trash'} size={28} color={'#fff'} />
+                  <EvilIcons name={'trash'} size={28} color={'#ff6849'} />
                 </TouchableOpacity>
               </View>
             ))}
@@ -272,14 +309,7 @@ const styles = StyleSheet.create({
     padding: 0,
     margin: 0,
     height: 340,
-    marginBottom: 30,
-  },
-  calendar: {
-    width: 48,
-    height: 48,
-    margin: 0,
-    padding: 0,
-    textAlign: 'center',
+    marginBottom: 5,
   },
   calendar__item: {
     alignItems: 'center',
