@@ -6,14 +6,11 @@ import {
   StyleSheet,
   Dimensions,
 } from 'react-native';
-import {LocaleConfig, Calendar, CalendarList} from 'react-native-calendars';
+import {LocaleConfig, Calendar} from 'react-native-calendars';
 import {format} from 'date-fns-tz';
-import addMonths from 'date-fns/addMonths';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import {useSelector, useDispatch} from 'react-redux';
-import {useNavigation} from '@react-navigation/native';
-import Entypo from 'react-native-vector-icons/Entypo';
 import LinearGradient from 'react-native-linear-gradient';
 
 import CreateBirthday from '../CreateBirthday';
@@ -47,9 +44,6 @@ export default function CalendarComponent() {
   const [comp, setComp] = useState(<RenderCalendar />);
   const {birthday} = useSelector((state: ApplicationState) => state.events);
   const dispatch = useDispatch();
-  const navigation = useNavigation();
-
-  const [month, setMonth] = useState(format(new Date(), 'yyyy-MM-dd'));
 
   function modal(date: any) {
     setActiveModal(true);
@@ -74,7 +68,7 @@ export default function CalendarComponent() {
     setTimeout(() => {
       setComp(<RenderCalendar />);
     }, 100);
-  }, [birthday, activeAdd, month]);
+  }, [birthday, activeAdd]);
 
   function aa(state: string, types?: string) {
     if (types === 'letter') {
@@ -109,18 +103,15 @@ export default function CalendarComponent() {
     return (
       <Calendar
         //horizontal={true}
-        /*renderArrow={(d) =>
+        renderArrow={(d) =>
           d === 'left' ? (
-            <AntDesign name={'arrowleft'} size={22} color={'#f34b56'} />
+            <AntDesign name={'arrowleft'} size={24} color={'#e14344'} />
           ) : (
-            <AntDesign name={'arrowright'} size={22} color={'#f34b56'} />
+            <AntDesign name={'arrowright'} size={24} color={'#e14344'} />
           )
-        }*/
-        hideArrows={true}
+        }
         theme={{
           calendarBackground: '#fff',
-          //monthTextColor: '#f34b56', //'#2f3542',
-          //textMonthFontWeight: '700',
           textSectionTitleColor: '#2f3542',
           textDayHeaderFontFamily: 'OpenSans-Regular',
           textDayHeaderFontWeight: '400',
@@ -154,42 +145,7 @@ export default function CalendarComponent() {
           },
         }}
         monthFormat={'MMMM yyyy'}
-        current={month}
-        //onPressArrowRight={() => month.add(1, 'month')}
-        //onPressArrowLeft={() => month.add(-1, 'month')}
         style={styles.calendarList}
-        renderHeader={(date: string) => (
-          <View
-            style={{
-              padding: 10,
-              paddingTop: 5,
-              flexDirection: 'row',
-              alignItems: 'center',
-              justifyContent: 'space-around',
-              width: '100%',
-            }}>
-            <TouchableOpacity
-              onPress={() => navigation.openDrawer()}
-              style={{paddingLeft: 10, paddingRight: 10}}>
-              <Entypo name={'list'} size={30} color={'#f34b56'} />
-            </TouchableOpacity>
-            <Text style={{fontSize: 18}}>
-              {format(new Date(date), 'MMMM yyyy')}
-            </Text>
-
-            <TouchableOpacity
-              onPress={() => setMonth(addMonths(month, -1))}
-              style={{paddingLeft: 10, paddingRight: 10}}>
-              <AntDesign name={'arrowleft'} size={22} color={'#f34b56'} />
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              onPress={() => setMonth(addMonths(month, 1))}
-              style={{paddingLeft: 10, paddingRight: 10}}>
-              <AntDesign name={'arrowright'} size={22} color={'#f34b56'} />
-            </TouchableOpacity>
-          </View>
-        )}
         dayComponent={({date, state}) => (
           <TouchableOpacity
             style={[
@@ -241,7 +197,11 @@ export default function CalendarComponent() {
                           width: 6,
                           margin: 1,
                           borderRadius: 100,
-                          backgroundColor: r.color,
+                          backgroundColor:
+                            format(new Date(), 'yyyy-MM-dd') ===
+                            format(new Date(r.date), 'yyyy-MM-dd')
+                              ? '#fff'
+                              : r.color,
                         },
                       ]}
                     />
@@ -259,16 +219,7 @@ export default function CalendarComponent() {
     <>
       {comp}
 
-      <View
-        style={{
-          backgroundColor: '#fff',
-          alignItems: 'center',
-          justifyContent: 'center',
-          paddingTop: 0,
-          paddingBottom: 0,
-        }}>
-        <CreateBirthday dateSelected={String(activeAdd)} />
-      </View>
+      <CreateBirthday dateSelected={String(activeAdd)} />
 
       <View>
         {activeModal && birthdays.length > 0 ? (
@@ -344,7 +295,7 @@ const styles = StyleSheet.create({
     padding: 0,
     margin: 0,
     height: 340,
-    marginBottom: 3,
+    marginBottom: 1,
   },
   calendar__item: {
     alignItems: 'center',
