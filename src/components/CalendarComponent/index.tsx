@@ -105,9 +105,27 @@ export default function CalendarComponent() {
         //horizontal={true}
         renderArrow={(d) =>
           d === 'left' ? (
-            <AntDesign name={'arrowleft'} size={24} color={'#e14344'} />
+            <View
+              style={{
+                borderRadius: 40,
+                backgroundColor: '#e14344',
+                width: 50,
+                justifyContent: 'center',
+                flexDirection: 'row',
+              }}>
+              <AntDesign name={'arrowleft'} size={24} color={'#fff'} />
+            </View>
           ) : (
-            <AntDesign name={'arrowright'} size={24} color={'#e14344'} />
+            <View
+              style={{
+                borderRadius: 40,
+                backgroundColor: '#e14344',
+                width: 50,
+                justifyContent: 'center',
+                flexDirection: 'row',
+              }}>
+              <AntDesign name={'arrowright'} size={24} color={'#fff'} />
+            </View>
           )
         }
         theme={{
@@ -221,71 +239,76 @@ export default function CalendarComponent() {
 
       <CreateBirthday dateSelected={String(activeAdd)} />
 
-      <View>
-        {activeModal && birthdays.length > 0 ? (
-          <View>
-            {birthdays.map((r: any, index) => (
-              <LinearGradient
-                key={r.id}
-                /*start={{x: 0, y: 0}}
-                end={{x: 1, y: 0}}*/
-                colors={['#fff', '#eef0ef']}
+      {activeModal && birthdays.length > 0 ? (
+        <View>
+          {birthdays.map((r: any, index) => (
+            <LinearGradient
+              start={{x: 0, y: 0}}
+              end={{x: 0.5, y: 0}}
+              key={r.id}
+              colors={['#f5f5f5', 'rgba(255, 255, 255, 0.8)']}
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'space-around',
+                borderColor: '#eee',
+                borderWidth: 0.5,
+                height: 110,
+                padding: 10,
+              }}>
+              <View
                 style={{
                   flexDirection: 'row',
                   alignItems: 'center',
                   justifyContent: 'space-around',
-                  borderColor: '#eee',
-                  borderWidth: 0.5,
-                  height: 110,
-                  padding: 10,
                 }}>
-                <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                  <LinearGradient
-                    colors={['#cf8774', '#c1624e']}
-                    start={{x: 0, y: 0}}
-                    end={{x: 1, y: 0}}>
-                    <Text style={styles.input}>
-                      {format(new Date(r.start), 'HH:mm')}
-                    </Text>
-                  </LinearGradient>
-                  <Text
-                    style={{
-                      marginLeft: 4,
-                      color: '#728083',
-                      fontFamily: 'OpenSans-SemiBold',
-                    }}>
-                    Horas
+                <LinearGradient
+                  colors={['#cf8774', '#c1624e']}
+                  start={{x: 0, y: 0}}
+                  end={{x: 1, y: 0}}>
+                  <Text style={styles.input}>
+                    {format(new Date(r.start), 'HH:mm')}
                   </Text>
-                </View>
-
+                </LinearGradient>
                 <Text
                   style={{
-                    fontFamily: 'OpenSans-SemiBold',
-                    fontSize: 18,
+                    marginLeft: 4,
+                    marginRight: 14,
                     color: '#728083',
+                    fontSize: 12,
+                    fontFamily: 'OpenSans-SemiBold',
                   }}>
-                  {r.summary}
+                  HORAS
                 </Text>
+              </View>
 
-                <TouchableOpacity
-                  onPress={() => deletes(r, index)}
-                  style={[
-                    {
-                      width: 50,
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      padding: 10,
-                    },
-                  ]}>
-                  <EvilIcons name={'trash'} size={28} color={'#ff6849'} />
-                </TouchableOpacity>
-              </LinearGradient>
-            ))}
-          </View>
-        ) : (
-          <ListInOrder />
-        )}
-      </View>
+              <Text
+                style={{
+                  fontFamily: 'OpenSans-SemiBold',
+                  fontSize: 19,
+                  color: '#728083',
+                }}>
+                {r.summary}
+              </Text>
+
+              <TouchableOpacity
+                onPress={() => deletes(r, index)}
+                style={[
+                  {
+                    width: 50,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    padding: 10,
+                  },
+                ]}>
+                <EvilIcons name={'trash'} size={28} color={'#f34b56'} />
+              </TouchableOpacity>
+            </LinearGradient>
+          ))}
+        </View>
+      ) : (
+        <ListInOrder />
+      )}
     </>
   );
 }
@@ -316,7 +339,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     fontSize: 20,
     color: '#fff',
-    fontFamily: 'OpenSans-Regular',
+    fontFamily: 'OpenSans-Light',
     padding: 4,
   },
 });

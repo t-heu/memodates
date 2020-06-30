@@ -42,6 +42,7 @@ export default function CreateBirthdayComponent({dateSelected}: Props) {
     {id: '2', color: '#1e90ff'},
     {id: '3', color: '#eccc68'},
     {id: '4', color: '#9b59b6'},
+    {id: '5', color: '#f34b56'},
   ];
 
   useEffect(() => {
@@ -119,7 +120,7 @@ export default function CreateBirthdayComponent({dateSelected}: Props) {
   return (
     <KeyboardAvoidingView
       enabled
-      behavior={'padding'} /*keyboardVerticalOffset={100}*/
+      //behavior={'padding'} /*keyboardVerticalOffset={100}*/
     >
       <View style={styles.form}>
         <View
@@ -316,6 +317,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     borderRadius: 50,
     margin: 5,
+    marginTop: 0,
     marginBottom: 0,
     alignItems: 'center',
     justifyContent: 'center',

@@ -1,5 +1,5 @@
 import Realm from 'realm';
-import compareAsc from 'date-fns/compareAsc';
+import isBefore from 'date-fns/isBefore';
 import {format} from 'date-fns-tz';
 
 import BirthdaySchema from '../schemas/BirthdaySchema';
@@ -79,13 +79,21 @@ export async function sorteds() {
   try {
     const realm = await getRealm();
     const res = realm.objects('Birthday').sorted('date', true);
-    const x = res.map((r) => {
-      if (compareAsc(new Date(), new Date(r.date))) {
-        if (compareAsc(new Date(), new Date(r.start))) {
+    const x = res
+      .filter((r) => {
+        if (
+          format(new Date(), 'yyyy-MM-dd') ===
+          format(new Date(r.date), 'yyyy-MM-dd')
+        ) {
           return r;
+        } else {
+          if (isBefore(new Date(), new Date(r.date))) {
+            return r;
+          }
         }
-      }
-    });
+      })
+      .reverse();
+
     return x;
   } catch (e) {
     console.log(e);
