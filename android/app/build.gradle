@@ -219,8 +219,7 @@ dependencies {
     implementation project(':realm')
     implementation 'androidx.appcompat:appcompat:1.1.0-rc01'
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0-alpha02'
-    //implementation(project(":react-native-google-signin"))
-    //compile project(':RNAdMob')
+    implementation project(":react-native-linear-gradient")
 
     debugImplementation("com.facebook.flipper:flipper:${FLIPPER_VERSION}") {
       exclude group:'com.facebook.fbjni'

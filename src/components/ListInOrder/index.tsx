@@ -1,12 +1,9 @@
 import React, {useState, useEffect} from 'react';
-import {TouchableOpacity, Text, View, StyleSheet} from 'react-native';
+import {Text, View, StyleSheet} from 'react-native';
 import {format} from 'date-fns-tz';
+import LinearGradient from 'react-native-linear-gradient';
 
 import {sorteds} from '../../services/realm';
-
-interface Props {
-  date: string;
-}
 
 export default function ListInOrder() {
   const [orderDate, setOrder] = useState([]);
@@ -22,27 +19,34 @@ export default function ListInOrder() {
   return (
     <View>
       {orderDate.map((r) => (
-        <View
+        <LinearGradient
+          colors={
+            format(new Date(), 'yyyy-MM-dd') ===
+            format(new Date(r.date), 'yyyy-MM-dd')
+              ? ['#f99e0f', '#fdb707']
+              : ['#e14344', '#f34b56']
+          }
           key={r.id}
           style={{
             flexDirection: 'row',
             alignItems: 'center',
-            justifyContent: 'space-between',
-            borderColor: '#eee',
-            borderWidth: 1,
+            height: 100,
             padding: 10,
-            backgroundColor: '#fff',
           }}>
           <View style={{width: '50%'}}>
-            <Text style={{fontSize: 18, color: '#f34b56'}}>
-              {format(new Date(r.date), 'dd/MM/yyyy')}
+            {format(new Date(), 'yyyy-MM-dd') ===
+            format(new Date(r.date), 'yyyy-MM-dd') ? (
+              <Text style={{fontSize: 12, color: '#eee'}}>Hoje</Text>
+            ) : null}
+            <Text style={{fontSize: 30, color: '#eee'}}>
+              {format(new Date(r.date), 'dd')}
             </Text>
-            <Text style={{color: '#333'}}>
+            <Text style={{color: '#eee'}}>
               {format(new Date(r.start), 'HH:mm')}
             </Text>
           </View>
-          <Text style={{fontSize: 18, color: '#555'}}>{r.summary}</Text>
-        </View>
+          <Text style={{fontSize: 25, color: '#eee'}}>{r.summary}</Text>
+        </LinearGradient>
       ))}
     </View>
   );

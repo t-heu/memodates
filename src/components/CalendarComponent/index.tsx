@@ -14,6 +14,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import {useSelector, useDispatch} from 'react-redux';
 import {useNavigation} from '@react-navigation/native';
 import Entypo from 'react-native-vector-icons/Entypo';
+import LinearGradient from 'react-native-linear-gradient';
 
 import CreateBirthday from '../CreateBirthday';
 import configDate from '../../utils/configDate';
@@ -88,7 +89,7 @@ export default function CalendarComponent() {
       if (state === 'today') {
         return '#f34b56';
       } else if (state === 'disabled') {
-        return '#f2f4f3';
+        return '#f6f6f6'; //'#f2f4f3';
       } else {
         return 'transparent';
       }
@@ -120,9 +121,9 @@ export default function CalendarComponent() {
           calendarBackground: '#fff',
           //monthTextColor: '#f34b56', //'#2f3542',
           //textMonthFontWeight: '700',
-          textSectionTitleColor: '#222',
+          textSectionTitleColor: '#2f3542',
           textDayHeaderFontFamily: 'OpenSans-Regular',
-          //textDayHeaderFontWeight: 'bold'
+          textDayHeaderFontWeight: '400',
           'stylesheet.calendar.header': {
             week: {
               margin: 0,
@@ -172,7 +173,9 @@ export default function CalendarComponent() {
               style={{paddingLeft: 10, paddingRight: 10}}>
               <Entypo name={'list'} size={30} color={'#f34b56'} />
             </TouchableOpacity>
-            <Text>{format(new Date(date), 'MMMM yyyy')}</Text>
+            <Text style={{fontSize: 18}}>
+              {format(new Date(date), 'MMMM yyyy')}
+            </Text>
 
             <TouchableOpacity
               onPress={() => setMonth(addMonths(month, -1))}
@@ -191,7 +194,7 @@ export default function CalendarComponent() {
           <TouchableOpacity
             style={[
               {
-                borderWidth: 1,
+                borderWidth: 0.5,
                 borderColor:
                   date.dateString === format(activeAdd, 'yyyy-MM-dd')
                     ? '#f34b56'
@@ -255,37 +258,67 @@ export default function CalendarComponent() {
   return (
     <>
       {comp}
-      {/*<ListInOrder />*/}
 
       <View
         style={{
           backgroundColor: '#fff',
           alignItems: 'center',
           justifyContent: 'center',
-          paddingTop: 20,
-          paddingBottom: 20,
+          paddingTop: 0,
+          paddingBottom: 0,
         }}>
         <CreateBirthday dateSelected={String(activeAdd)} />
       </View>
 
       <View>
-        {activeModal && birthdays.length > 0 && (
+        {activeModal && birthdays.length > 0 ? (
           <View>
             {birthdays.map((r: any, index) => (
-              <View
+              <LinearGradient
                 key={r.id}
+                /*start={{x: 0, y: 0}}
+                end={{x: 1, y: 0}}*/
+                colors={['#fff', '#eef0ef']}
                 style={{
                   flexDirection: 'row',
                   alignItems: 'center',
-                  justifyContent: 'center',
+                  justifyContent: 'space-around',
+                  borderColor: '#eee',
+                  borderWidth: 0.5,
+                  height: 110,
                   padding: 10,
                 }}>
-                <Text style={styles.input}>{r.summary}</Text>
+                <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                  <LinearGradient
+                    colors={['#cf8774', '#c1624e']}
+                    start={{x: 0, y: 0}}
+                    end={{x: 1, y: 0}}>
+                    <Text style={styles.input}>
+                      {format(new Date(r.start), 'HH:mm')}
+                    </Text>
+                  </LinearGradient>
+                  <Text
+                    style={{
+                      marginLeft: 4,
+                      color: '#728083',
+                      fontFamily: 'OpenSans-SemiBold',
+                    }}>
+                    Horas
+                  </Text>
+                </View>
+
+                <Text
+                  style={{
+                    fontFamily: 'OpenSans-SemiBold',
+                    fontSize: 18,
+                    color: '#728083',
+                  }}>
+                  {r.summary}
+                </Text>
 
                 <TouchableOpacity
                   onPress={() => deletes(r, index)}
                   style={[
-                    styles.input,
                     {
                       width: 50,
                       alignItems: 'center',
@@ -295,9 +328,11 @@ export default function CalendarComponent() {
                   ]}>
                   <EvilIcons name={'trash'} size={28} color={'#ff6849'} />
                 </TouchableOpacity>
-              </View>
+              </LinearGradient>
             ))}
           </View>
+        ) : (
+          <ListInOrder />
         )}
       </View>
     </>
@@ -309,7 +344,7 @@ const styles = StyleSheet.create({
     padding: 0,
     margin: 0,
     height: 340,
-    marginBottom: 5,
+    marginBottom: 3,
   },
   calendar__item: {
     alignItems: 'center',
@@ -328,10 +363,9 @@ const styles = StyleSheet.create({
   input: {
     alignItems: 'center',
     justifyContent: 'center',
-    paddingTop: 8,
     fontSize: 20,
-    width: 150,
-    color: '#666',
-    backgroundColor: 'transparent',
+    color: '#fff',
+    fontFamily: 'OpenSans-Regular',
+    padding: 4,
   },
 });

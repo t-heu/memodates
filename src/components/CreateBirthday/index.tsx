@@ -32,6 +32,7 @@ export default function CreateBirthdayComponent({dateSelected}: Props) {
   const [Show, setShow] = useState('');
   const [color, setColor] = useState('2');
   const dispatch = useDispatch();
+  const [showDots, setShowDots] = useState(false);
   const colors = [
     {id: '0', color: '#2ed573'},
     {id: '1', color: '#ffa502'},
@@ -120,13 +121,13 @@ export default function CreateBirthdayComponent({dateSelected}: Props) {
       <View style={styles.form}>
         <View
           style={{flexDirection: 'row', alignItems: 'center', marginLeft: 10}}>
-          <FontAwesome name={'pencil-square-o'} size={22} color={'#222'} />
+          <FontAwesome name={'pencil-square-o'} size={22} color={'#555'} />
           <TextInput
             style={styles.input}
             placeholder="Lembre-me..."
             onChangeText={setSummary}
             value={summary}
-            placeholderTextColor="#555"
+            placeholderTextColor="#777"
             blurOnSubmit={false}
             multiline={true}
             numberOfLines={5}
@@ -137,12 +138,12 @@ export default function CreateBirthdayComponent({dateSelected}: Props) {
         </View>
 
         <View style={styles.date}>
-          <Ionicons name={'md-time'} size={24} color={'#222'} />
+          <Ionicons name={'md-time'} size={24} color={'#444'} />
           <TouchableOpacity onPress={showDatepicker} style={styles.btnDate}>
             <Text
               style={{
                 fontSize: 18,
-                color: '#222',
+                color: '#444',
               }}>
               {format(new Date(date), "dd 'de' MMMM 'de' yyyy")}
             </Text>
@@ -154,7 +155,7 @@ export default function CreateBirthdayComponent({dateSelected}: Props) {
             <Text
               style={{
                 fontSize: 22,
-                color: '#222',
+                color: '#444',
               }}>
               {format(new Date(timeStart), 'HH:mm')}
             </Text>
@@ -184,12 +185,52 @@ export default function CreateBirthdayComponent({dateSelected}: Props) {
             />
           )}
 
-          <View
+          {showDots && (
+            <FlatList
+              style={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                width: '80%',
+                padding: 9.5,
+                backgroundColor: '#fff',
+                borderRightWidth: 1,
+                borderColor: '#eee',
+              }}
+              data={colors}
+              horizontal={true}
+              keyExtractor={(item) => item.id}
+              showsHorizontalScrollIndicator={false}
+              renderItem={(item) => (
+                <TouchableOpacity
+                  onPress={() => {
+                    setColor(item.item.id);
+                    setShowDots(!showDots);
+                  }}
+                  style={[
+                    {
+                      borderRadius: 100,
+                      borderWidth: 5,
+                      borderColor: colors[item.item.id].color,
+                      marginLeft: 5,
+                      width: 40,
+                      height: 40,
+                    },
+                  ]}
+                />
+              )}
+            />
+          )}
+
+          <TouchableOpacity
+            onPress={() => setShowDots(!showDots)}
             style={[
               {
-                backgroundColor: colors[color].color,
+                borderColor: colors[color].color,
+                borderWidth: 5,
                 width: 40,
                 height: 40,
+                borderRadius: 100,
               },
             ]}
           />
@@ -202,33 +243,23 @@ export default function CreateBirthdayComponent({dateSelected}: Props) {
             width: '100%',
             flexDirection: 'row',
             alignItems: 'center',
-            justifyContent: 'flex-end',
+            padding: 10,
+            justifyContent: 'center',
           }}>
           <TouchableOpacity
             onPress={() => HandleSubmit()}
             style={styles.btnAdd}>
-            <Text style={{paddingRight: 10, color: '#fff'}}>Salvar</Text>
-            <Ionicons name={'md-add'} size={28} color={'#fff'} />
+            <Text
+              style={{
+                paddingRight: 10,
+                color: '#f34b56',
+                fontSize: 16,
+                fontWeight: 'bold',
+              }}>
+              Salvar
+            </Text>
+            <Ionicons name={'md-add'} size={28} color={'#f34b56'} />
           </TouchableOpacity>
-
-          <FlatList
-            data={colors}
-            horizontal={true}
-            keyExtractor={(item) => item.id}
-            showsHorizontalScrollIndicator={false}
-            renderItem={(item) => (
-              <TouchableOpacity
-                onPress={() => setColor(item.item.id)}
-                style={[
-                  {
-                    backgroundColor: colors[item.item.id].color,
-                    width: 50,
-                    height: 50,
-                  },
-                ]}
-              />
-            )}
-          />
         </View>
       </View>
     </KeyboardAvoidingView>
@@ -269,14 +300,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'row',
   },
-  btnDateText: {
-    color: '#f9ca24',
-    fontSize: 12,
-  },
   btnAdd: {
-    width: '35%',
+    width: '45%',
     height: 45,
-    backgroundColor: '#f34b56',
+    backgroundColor: 'rgba(243, 75, 86, 0.4)',
     flexDirection: 'row',
     borderRadius: 50,
     margin: 5,
