@@ -14,8 +14,6 @@ import {format} from 'date-fns-tz';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import {useDispatch} from 'react-redux';
-import {useNavigation} from '@react-navigation/native';
-import Entypo from 'react-native-vector-icons/Entypo';
 
 import {show, create} from '../../services/realm';
 import {EventSuccess} from '../../store/ducks/events/action';
@@ -34,7 +32,6 @@ export default function CreateBirthdayComponent({dateSelected}: Props) {
   const [Show, setShow] = useState('');
   const [color, setColor] = useState('2');
   const dispatch = useDispatch();
-  const navigation = useNavigation();
   const [showDots, setShowDots] = useState(false);
   const colors = [
     {id: '0', color: '#2ed573'},
@@ -250,12 +247,6 @@ export default function CreateBirthdayComponent({dateSelected}: Props) {
             padding: 10,
             justifyContent: 'space-around',
           }}>
-          <TouchableOpacity
-            onPress={() => navigation.openDrawer()}
-            style={{paddingLeft: 10, paddingRight: 10}}>
-            <Entypo name={'list'} size={30} color={'#f34b56'} />
-          </TouchableOpacity>
-
           <TouchableOpacity
             onPress={() => HandleSubmit()}
             style={styles.btnAdd}>

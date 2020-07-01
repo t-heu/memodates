@@ -1,15 +1,12 @@
 import PushNotification from 'react-native-push-notification';
 import {format} from 'date-fns-tz';
-//import {useState} from 'react';
 
 import {show} from './services/realm';
 
 function Notification(name?: string) {
   PushNotification.localNotification({
-    title: 'Chegou o dia!!',
-    message: `Deseje os parábens ao seu amigo(a)/familia/namorado(a) ${
-      name || ''
-    }`,
+    title: 'Lembrete',
+    message: `${name || ''}`,
     largeIcon: 'icon',
     smallIcon: 'icon_noti',
     //repeatType: 'minute',

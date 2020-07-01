@@ -1,24 +1,19 @@
 import React, {useState, useEffect} from 'react';
-import {
-  TouchableOpacity,
-  Text,
-  View,
-  StyleSheet,
-  Dimensions,
-} from 'react-native';
+import {TouchableOpacity, Text, View} from 'react-native';
 import {LocaleConfig, Calendar} from 'react-native-calendars';
 import {format} from 'date-fns-tz';
-import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import {useSelector, useDispatch} from 'react-redux';
-import LinearGradient from 'react-native-linear-gradient';
+import {useSelector} from 'react-redux';
+import {useNavigation} from '@react-navigation/native';
+import Entypo from 'react-native-vector-icons/Entypo';
+import moment from 'moment';
 
+import {styles} from './styles';
 import CreateBirthday from '../CreateBirthday';
 import configDate from '../../utils/configDate';
-import {deleteObj, show} from '../../services/realm';
 import {ApplicationState} from '../../store';
-import {EventSuccess} from '../../store/ducks/events/action';
 import ListInOrder from '../ListInOrder';
+import DetailsEvent from '../DetailsEvent';
 
 LocaleConfig.locales.ptBR = {
   monthNames: configDate.monthNames,
@@ -43,7 +38,8 @@ export default function CalendarComponent() {
   const [activeAdd, setActiveAdd] = useState(new Date());
   const [comp, setComp] = useState(<RenderCalendar />);
   const {birthday} = useSelector((state: ApplicationState) => state.events);
-  const dispatch = useDispatch();
+  const [month, setMonth] = useState(new Date());
+  const navigation = useNavigation();
 
   function modal(date: any) {
     setActiveModal(true);
@@ -68,9 +64,9 @@ export default function CalendarComponent() {
     setTimeout(() => {
       setComp(<RenderCalendar />);
     }, 100);
-  }, [birthday, activeAdd]);
+  }, [birthday, activeAdd, month]);
 
-  function aa(state: string, types?: string) {
+  function colorAplication(state: string, types?: string) {
     if (types === 'letter') {
       if (state === 'today') {
         return '#fff';
@@ -83,51 +79,65 @@ export default function CalendarComponent() {
       if (state === 'today') {
         return '#f34b56';
       } else if (state === 'disabled') {
-        return '#f6f6f6'; //'#f2f4f3';
+        return '#f6f6f6';
       } else {
         return 'transparent';
       }
     }
   }
 
-  function deletes(r: any, index: number) {
-    deleteObj(r).then(() => {
-      show().then((events: any) => {
-        dispatch(EventSuccess({events}));
-      });
-      birthdays.splice(index, 1);
-    });
-  }
-
   function RenderCalendar() {
     return (
       <Calendar
-        //horizontal={true}
-        renderArrow={(d) =>
-          d === 'left' ? (
-            <View
-              style={{
-                borderRadius: 40,
-                backgroundColor: '#e14344',
-                width: 50,
-                justifyContent: 'center',
-                flexDirection: 'row',
-              }}>
+        current={month}
+        hideArrows={true}
+        renderHeader={() => (
+          <View style={styles.header}>
+            <TouchableOpacity onPress={() => navigation.openDrawer()}>
+              <Entypo name={'list'} size={30} color={'#e14344'} />
+            </TouchableOpacity>
+
+            <Text style={styles.header__month}>
+              {configDate.monthNames[month.getMonth()]} {month.getFullYear()}
+            </Text>
+
+            <TouchableOpacity
+              onPress={() => {
+                moment.addRealMonth = function addRealMonth(d) {
+                  const fm = moment(d).add(-1, 'month');
+                  const fmEnd = moment(fm).endOf('month');
+                  return d.date() != fm.date() &&
+                    fm.isSame(fmEnd.format('YYYY-MM-DD'))
+                    ? fm.add(1, 'd')
+                    : fm;
+                };
+
+                const nextMonth = moment.addRealMonth(moment(month));
+                setMonth(new Date(nextMonth));
+              }}
+              style={styles.header__arrow}>
               <AntDesign name={'arrowleft'} size={24} color={'#fff'} />
-            </View>
-          ) : (
-            <View
-              style={{
-                borderRadius: 40,
-                backgroundColor: '#e14344',
-                width: 50,
-                justifyContent: 'center',
-                flexDirection: 'row',
-              }}>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              onPress={() => {
+                moment.addRealMonth = function addRealMonth(d) {
+                  const fm = moment(d).add(1, 'month');
+                  const fmEnd = moment(fm).endOf('month');
+                  return d.date() != fm.date() &&
+                    fm.isSame(fmEnd.format('YYYY-MM-DD'))
+                    ? fm.add(1, 'd')
+                    : fm;
+                };
+
+                const nextMonth = moment.addRealMonth(moment(month));
+                setMonth(new Date(nextMonth));
+              }}
+              style={styles.header__arrow}>
               <AntDesign name={'arrowright'} size={24} color={'#fff'} />
-            </View>
-          )
-        }
+            </TouchableOpacity>
+          </View>
+        )}
         theme={{
           calendarBackground: '#fff',
           textSectionTitleColor: '#2f3542',
@@ -152,7 +162,6 @@ export default function CalendarComponent() {
           'stylesheet.calendar.main': {
             container: {
               margin: 0,
-              //flex: 1,
             },
             week: {
               marginTop: 0,
@@ -162,34 +171,25 @@ export default function CalendarComponent() {
             },
           },
         }}
-        monthFormat={'MMMM yyyy'}
         style={styles.calendarList}
         dayComponent={({date, state}) => (
           <TouchableOpacity
             style={[
+              styles.day,
               {
-                borderWidth: 0.5,
+                backgroundColor: colorAplication(state),
                 borderColor:
                   date.dateString === format(activeAdd, 'yyyy-MM-dd')
                     ? '#f34b56'
                     : '#eee',
-                flexDirection: 'row',
-                justifyContent: 'center',
-                backgroundColor: aa(state),
-                width: Dimensions.get('window').width / 7, //52,
-                height: 50,
               },
             ]}
             onPress={() => modal(date)}>
-            <View
-              style={{
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}>
+            <View>
               <Text
                 style={[
                   {
-                    color: aa(state, 'letter'),
+                    color: colorAplication(state, 'letter'),
                     textAlign: 'center',
                     fontFamily: 'OpenSans-Regular',
                   },
@@ -197,32 +197,34 @@ export default function CalendarComponent() {
                 {date.day}
               </Text>
 
-              <View
-                style={{
-                  alignItems: 'center',
-                  flexDirection: 'row',
-                  justifyContent: 'center',
-                  flexWrap: 'wrap',
-                }}>
+              <View style={styles.events}>
                 {birthday.map((r: any) => {
-                  return date.dateString ===
-                    format(new Date(r.date), 'yyyy-MM-dd') ? (
+                  return `${date.month}-${date.day}` ===
+                    format(new Date(r.date), 'M-d') ? (
                     <View
                       key={r.id}
                       style={[
+                        styles.events__item,
                         {
-                          height: 6,
-                          width: 6,
-                          margin: 1,
-                          borderRadius: 100,
                           backgroundColor:
-                            format(new Date(), 'yyyy-MM-dd') ===
-                            format(new Date(r.date), 'yyyy-MM-dd')
+                            format(new Date(), 'MM-dd') ===
+                            format(new Date(r.date), 'MM-dd')
                               ? '#fff'
                               : r.color,
                         },
-                      ]}
-                    />
+                      ]}>
+                      <Text
+                        style={{
+                          color:
+                            format(new Date(), 'MM-dd') ===
+                            format(new Date(r.date), 'MM-dd')
+                              ? '#222'
+                              : '#fff',
+                          fontSize: 10,
+                        }}>
+                        {r.summary}
+                      </Text>
+                    </View>
                   ) : null;
                 })}
               </View>
@@ -240,106 +242,10 @@ export default function CalendarComponent() {
       <CreateBirthday dateSelected={String(activeAdd)} />
 
       {activeModal && birthdays.length > 0 ? (
-        <View>
-          {birthdays.map((r: any, index) => (
-            <LinearGradient
-              start={{x: 0, y: 0}}
-              end={{x: 0.5, y: 0}}
-              key={r.id}
-              colors={['#f5f5f5', 'rgba(255, 255, 255, 0.8)']}
-              style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                justifyContent: 'space-around',
-                borderColor: '#eee',
-                borderWidth: 0.5,
-                height: 110,
-                padding: 10,
-              }}>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  justifyContent: 'space-around',
-                }}>
-                <LinearGradient
-                  colors={['#cf8774', '#c1624e']}
-                  start={{x: 0, y: 0}}
-                  end={{x: 1, y: 0}}>
-                  <Text style={styles.input}>
-                    {format(new Date(r.start), 'HH:mm')}
-                  </Text>
-                </LinearGradient>
-                <Text
-                  style={{
-                    marginLeft: 4,
-                    marginRight: 14,
-                    color: '#728083',
-                    fontSize: 12,
-                    fontFamily: 'OpenSans-SemiBold',
-                  }}>
-                  HORAS
-                </Text>
-              </View>
-
-              <Text
-                style={{
-                  fontFamily: 'OpenSans-SemiBold',
-                  fontSize: 19,
-                  color: '#728083',
-                }}>
-                {r.summary}
-              </Text>
-
-              <TouchableOpacity
-                onPress={() => deletes(r, index)}
-                style={[
-                  {
-                    width: 50,
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    padding: 10,
-                  },
-                ]}>
-                <EvilIcons name={'trash'} size={28} color={'#f34b56'} />
-              </TouchableOpacity>
-            </LinearGradient>
-          ))}
-        </View>
+        <DetailsEvent events={birthdays} />
       ) : (
         <ListInOrder />
       )}
     </>
   );
 }
-
-const styles = StyleSheet.create({
-  calendarList: {
-    padding: 0,
-    margin: 0,
-    height: 340,
-    marginBottom: 1,
-  },
-  calendar__item: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    position: 'absolute',
-    top: 0,
-    right: 0,
-  },
-  dot: {
-    borderRadius: 50,
-    height: 8,
-    width: 8,
-    margin: 1,
-    marginTop: 9,
-  },
-  input: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    fontSize: 20,
-    color: '#fff',
-    fontFamily: 'OpenSans-Light',
-    padding: 4,
-  },
-});
