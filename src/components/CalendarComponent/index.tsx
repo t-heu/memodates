@@ -7,13 +7,12 @@ import {useSelector} from 'react-redux';
 import {useNavigation} from '@react-navigation/native';
 import Entypo from 'react-native-vector-icons/Entypo';
 import moment from 'moment';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import {styles} from './styles';
-import CreateBirthday from '../CreateBirthday';
 import configDate from '../../utils/configDate';
 import {ApplicationState} from '../../store';
 import ListInOrder from '../ListInOrder';
-import DetailsEvent from '../DetailsEvent';
 
 LocaleConfig.locales.ptBR = {
   monthNames: configDate.monthNames,
@@ -33,31 +32,23 @@ interface IBirthday {
 }
 
 export default function CalendarComponent() {
-  const [activeModal, setActiveModal] = useState(false);
-  const [birthdays, setBirthdays] = useState([] as IBirthday[]);
   const [activeAdd, setActiveAdd] = useState(new Date());
   const [comp, setComp] = useState(<RenderCalendar />);
   const {birthday} = useSelector((state: ApplicationState) => state.events);
   const [month, setMonth] = useState(new Date());
   const navigation = useNavigation();
 
-  function modal(date: any) {
-    setActiveModal(true);
-    setActiveAdd(
-      new Date(`${format(new Date(date.dateString), 'yyyy/MM')}/${date.day}`),
+  function PressDay(date: any) {
+    //setActiveModal(true);
+    const attDate = new Date(
+      `${format(new Date(date.dateString), 'yyyy/MM')}/${date.day}`,
     );
+    setActiveAdd(attDate);
 
-    const arr: IBirthday[] = [];
-    birthday.map((info: any) => {
-      if (date.dateString === `${format(new Date(info.date), 'yyyy-MM-dd')}`) {
-        arr.push(info);
-        setBirthdays(arr);
-      }
+    navigation.navigate('Events', {
+      dateSelected: String(attDate),
+      dateOfCalendar: date.dateString,
     });
-
-    if (arr.length < 1) {
-      setActiveModal(false);
-    }
   }
 
   useEffect(() => {
@@ -136,6 +127,17 @@ export default function CalendarComponent() {
               style={styles.header__arrow}>
               <AntDesign name={'arrowright'} size={24} color={'#fff'} />
             </TouchableOpacity>
+
+            <TouchableOpacity
+              style={{padding: 10}}
+              onPress={() =>
+                navigation.navigate('Events', {
+                  dateSelected: String(new Date()),
+                  dateOfCalendar: '',
+                })
+              }>
+              <Ionicons name={'md-add'} size={28} color={'#e14344'} />
+            </TouchableOpacity>
           </View>
         )}
         theme={{
@@ -184,7 +186,7 @@ export default function CalendarComponent() {
                     : '#eee',
               },
             ]}
-            onPress={() => modal(date)}>
+            onPress={() => PressDay(date)}>
             <View>
               <Text
                 style={[
@@ -238,14 +240,7 @@ export default function CalendarComponent() {
   return (
     <>
       {comp}
-
-      <CreateBirthday dateSelected={String(activeAdd)} />
-
-      {activeModal && birthdays.length > 0 ? (
-        <DetailsEvent events={birthdays} />
-      ) : (
-        <ListInOrder />
-      )}
+      <ListInOrder />
     </>
   );
 }

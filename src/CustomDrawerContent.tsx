@@ -21,7 +21,7 @@ import GoogleSign from './components/GoogleSign';
 import {SignOut} from './store/ducks/auth/action';
 import {create, show} from './services/realm';
 
-function CustomDrawerContent() {
+export default function CustomDrawerContent() {
   const {auth} = useSelector((state: ApplicationState) => state);
   const netinfo = useNetInfo();
   const dispatch = useDispatch();
@@ -246,5 +246,3 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 });
-
-export default CustomDrawerContent;

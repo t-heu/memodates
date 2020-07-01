@@ -19,7 +19,7 @@ import {show, create} from '../../services/realm';
 import {EventSuccess} from '../../store/ducks/events/action';
 
 interface Props {
-  dateSelected: string;
+  dateSelected: Date;
 }
 
 export default function CreateBirthdayComponent({dateSelected}: Props) {
@@ -119,6 +119,46 @@ export default function CreateBirthdayComponent({dateSelected}: Props) {
       enabled
       //behavior={'padding'} /*keyboardVerticalOffset={100}*/
     >
+      {showDots && (
+        <FlatList
+          style={{
+            position: 'absolute',
+            top: 0,
+            zIndex: 20,
+            right: 0,
+            //width: '80%',
+            height: 209,
+            padding: 9.5,
+            backgroundColor: '#fff',
+            borderWidth: 1,
+            borderColor: '#eee',
+          }}
+          data={colors}
+          horizontal={false}
+          keyExtractor={(item) => item.id}
+          showsHorizontalScrollIndicator={false}
+          renderItem={(item) => (
+            <TouchableOpacity
+              onPress={() => {
+                setColor(item.item.id);
+                setShowDots(!showDots);
+              }}
+              style={[
+                {
+                  borderRadius: 100,
+                  borderWidth: 5,
+                  borderColor: colors[item.item.id].color,
+                  margin: 5,
+                  backgroundColor: '#fff',
+                  width: 40,
+                  height: 40,
+                },
+              ]}
+            />
+          )}
+        />
+      )}
+
       <View style={styles.form}>
         <View
           style={{flexDirection: 'row', alignItems: 'center', marginLeft: 10}}>
@@ -186,43 +226,6 @@ export default function CreateBirthdayComponent({dateSelected}: Props) {
             />
           )}
 
-          {showDots && (
-            <FlatList
-              style={{
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                width: '80%',
-                padding: 9.5,
-                backgroundColor: '#fff',
-                borderRightWidth: 1,
-                borderColor: '#eee',
-              }}
-              data={colors}
-              horizontal={true}
-              keyExtractor={(item) => item.id}
-              showsHorizontalScrollIndicator={false}
-              renderItem={(item) => (
-                <TouchableOpacity
-                  onPress={() => {
-                    setColor(item.item.id);
-                    setShowDots(!showDots);
-                  }}
-                  style={[
-                    {
-                      borderRadius: 100,
-                      borderWidth: 5,
-                      borderColor: colors[item.item.id].color,
-                      marginLeft: 5,
-                      width: 40,
-                      height: 40,
-                    },
-                  ]}
-                />
-              )}
-            />
-          )}
-
           <TouchableOpacity
             onPress={() => setShowDots(!showDots)}
             style={[
@@ -271,8 +274,9 @@ const styles = StyleSheet.create({
   form: {
     backgroundColor: '#fff',
     flexDirection: 'column',
-    borderTopWidth: 1,
-    borderColor: '#eee',
+    marginTop: 20,
+    //borderTopWidth: 1,
+    //borderColor: '#eee',
   },
   date: {
     height: 60,

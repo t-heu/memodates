@@ -23,7 +23,6 @@ const App: React.FC = () => {
       // onRegister: function(token) {
       //   //console.log("TOKEN:", token);
       // },
-
       permissions: {
         alert: true,
         badge: true,
