@@ -129,7 +129,7 @@ export default function CustomDrawerContent() {
           padding: 20,
           justifyContent: 'center',
           alignItems: 'center',
-          backgroundColor: '#e14344',
+          backgroundColor: '#4e8af7',
           height: 150,
         }}>
         {auth.signed ? (
@@ -152,7 +152,7 @@ export default function CustomDrawerContent() {
 
       <Svg style={{height: 80}} viewBox="-1 50 375 087">
         <Path
-          fill="#e14344"
+          fill="#4e8af7"
           fillOpacity={1}
           d={
             'M380.279 107.377C380.279 107.377 295.739 13.1031 187.625 107.25C79.5108 201.397 -1.97128 107.125 -1.97128 107.125L-1.89778 1.07516e-06L380.353 0.252415L380.279 107.377Z'

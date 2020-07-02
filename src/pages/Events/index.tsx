@@ -1,15 +1,15 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import {TouchableOpacity, Text, View, StyleSheet} from 'react-native';
 import {useSelector} from 'react-redux';
 import {format} from 'date-fns-tz';
-import LinearGradient from 'react-native-linear-gradient';
 import {useDispatch} from 'react-redux';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import {useNavigation} from '@react-navigation/native';
+import RNCalendarEvents from 'react-native-calendar-events';
 
-import {deleteObj, show} from '../../services/realm';
-import {EventSuccess} from '../../store/ducks/events/action';
+import {deleteObj} from '../../services/realm';
+import {EventUpdate} from '../../store/ducks/events/action';
 
 import CreateBirthday from '../../components/CreateBirthday';
 import {ApplicationState} from '../../store';
@@ -19,13 +19,14 @@ export default function Events({route}: any) {
   const dispatch = useDispatch();
   const navigation = useNavigation();
 
-  function deletes(r: any, index: number) {
-    deleteObj(r).then(() => {
-      show().then((events: any) => {
-        dispatch(EventSuccess({events}));
-      });
-      //birthdays.splice(index, 1);  || route.params?.dateDayCalendar, || route.params?.dateSelected,
-    });
+  async function deletes(r: any) {
+    try {
+      await RNCalendarEvents.removeEvent(r.id);
+      dispatch(EventUpdate());
+      await deleteObj(r);
+    } catch (e) {
+      console.log(e);
+    }
   }
 
   return (
@@ -38,7 +39,7 @@ export default function Events({route}: any) {
           <Text style={{marginLeft: 8}}>Voltar</Text>
         </TouchableOpacity>
       </View>
-      <CreateBirthday dateSelected={route.params.dateSelected || new Date()} />
+      <CreateBirthday dateSelected={route.params.dateSelected} />
 
       <Text
         style={{
@@ -47,12 +48,13 @@ export default function Events({route}: any) {
           marginBottom: 10,
           fontFamily: 'OpenSans-Regular',
         }}>
-        {format(new Date(route.params.dateSelected), 'dd/MM') || ''}
+        {format(new Date(route.params.dateSelected), 'dd/MM')}
       </Text>
+
       {birthday.map((r) => (
         <View key={r.id}>
-          {(route.params.dateOfCalendar || '') ===
-            `${format(new Date(r.date), 'yyyy-MM-dd')}` && (
+          {route.params.dateOfCalendar ===
+            `${format(new Date(r.startDate), 'yyyy-MM-dd')}` && (
             <View
               style={{
                 flexDirection: 'row',
@@ -70,7 +72,7 @@ export default function Events({route}: any) {
                   justifyContent: 'space-around',
                 }}>
                 <Text style={styles.input}>
-                  {format(new Date(r.start), 'HH:mm')}
+                  {format(new Date(r.startDate), 'HH:mm')}
                 </Text>
 
                 <Text
@@ -94,21 +96,14 @@ export default function Events({route}: any) {
                   paddingLeft: 8,
                   paddingRight: 8,
                   borderRadius: 50,
-                  backgroundColor: r.color,
+                  backgroundColor: r.color ? r.color : r.calendar.color,
                 }}>
-                {r.summary}
+                {r.title}
               </Text>
 
               <TouchableOpacity
-                onPress={() => deletes(r, index)}
-                style={[
-                  {
-                    width: 50,
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    padding: 10,
-                  },
-                ]}>
+                onPress={() => deletes(r)}
+                style={styles.deleteBtn}>
                 <EvilIcons name={'trash'} size={28} color={'#f34b56'} />
               </TouchableOpacity>
             </View>
@@ -127,5 +122,11 @@ const styles = StyleSheet.create({
     color: '#222',
     fontFamily: 'OpenSans-Light',
     padding: 4,
+  },
+  deleteBtn: {
+    width: 50,
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 10,
   },
 });

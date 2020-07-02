@@ -16,6 +16,10 @@ const reducer: Reducer<EventState> = (state = INITIAL_STATE, action) => {
         break;
       }
       case EventTypes.EVENT_FAILURE: {
+        draft.error = true;
+        break;
+      }
+      case EventTypes.EVENT_UPDATE: {
         draft.error = false;
         break;
       }

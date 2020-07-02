@@ -12,7 +12,6 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import {styles} from './styles';
 import configDate from '../../utils/configDate';
 import {ApplicationState} from '../../store';
-import ListInOrder from '../ListInOrder';
 
 LocaleConfig.locales.ptBR = {
   monthNames: configDate.monthNames,
@@ -22,28 +21,16 @@ LocaleConfig.locales.ptBR = {
 };
 LocaleConfig.defaultLocale = 'ptBR';
 
-interface IBirthday {
-  start: Date;
-  end: Date;
-  date: Date;
-  id: string;
-  summary: string;
-  color: string;
-}
-
 export default function CalendarComponent() {
-  const [activeAdd, setActiveAdd] = useState(new Date());
   const [comp, setComp] = useState(<RenderCalendar />);
   const {birthday} = useSelector((state: ApplicationState) => state.events);
   const [month, setMonth] = useState(new Date());
   const navigation = useNavigation();
 
   function PressDay(date: any) {
-    //setActiveModal(true);
     const attDate = new Date(
       `${format(new Date(date.dateString), 'yyyy/MM')}/${date.day}`,
     );
-    setActiveAdd(attDate);
 
     navigation.navigate('Events', {
       dateSelected: String(attDate),
@@ -55,7 +42,7 @@ export default function CalendarComponent() {
     setTimeout(() => {
       setComp(<RenderCalendar />);
     }, 100);
-  }, [birthday, activeAdd, month]);
+  }, [birthday, month]);
 
   function colorAplication(state: string, types?: string) {
     if (types === 'letter') {
@@ -68,7 +55,7 @@ export default function CalendarComponent() {
       }
     } else {
       if (state === 'today') {
-        return '#f34b56';
+        return '#4e8af7';
       } else if (state === 'disabled') {
         return '#f6f6f6';
       } else {
@@ -85,7 +72,7 @@ export default function CalendarComponent() {
         renderHeader={() => (
           <View style={styles.header}>
             <TouchableOpacity onPress={() => navigation.openDrawer()}>
-              <Entypo name={'list'} size={30} color={'#e14344'} />
+              <Entypo name={'list'} size={30} color={'#111'} />
             </TouchableOpacity>
 
             <Text style={styles.header__month}>
@@ -105,9 +92,8 @@ export default function CalendarComponent() {
 
                 const nextMonth = moment.addRealMonth(moment(month));
                 setMonth(new Date(nextMonth));
-              }}
-              style={styles.header__arrow}>
-              <AntDesign name={'arrowleft'} size={24} color={'#fff'} />
+              }}>
+              <AntDesign name={'arrowleft'} size={24} color={'#111'} />
             </TouchableOpacity>
 
             <TouchableOpacity
@@ -123,9 +109,8 @@ export default function CalendarComponent() {
 
                 const nextMonth = moment.addRealMonth(moment(month));
                 setMonth(new Date(nextMonth));
-              }}
-              style={styles.header__arrow}>
-              <AntDesign name={'arrowright'} size={24} color={'#fff'} />
+              }}>
+              <AntDesign name={'arrowright'} size={24} color={'#111'} />
             </TouchableOpacity>
 
             <TouchableOpacity
@@ -136,7 +121,7 @@ export default function CalendarComponent() {
                   dateOfCalendar: '',
                 })
               }>
-              <Ionicons name={'md-add'} size={28} color={'#e14344'} />
+              <Ionicons name={'md-add'} size={28} color={'#111'} />
             </TouchableOpacity>
           </View>
         )}
@@ -180,56 +165,55 @@ export default function CalendarComponent() {
               styles.day,
               {
                 backgroundColor: colorAplication(state),
-                borderColor:
-                  date.dateString === format(activeAdd, 'yyyy-MM-dd')
-                    ? '#f34b56'
-                    : '#eee',
+                borderColor: state === 'today' ? '#4e8af7' : '#eee',
               },
             ]}
             onPress={() => PressDay(date)}>
-            <View>
-              <Text
-                style={[
-                  {
-                    color: colorAplication(state, 'letter'),
-                    textAlign: 'center',
-                    fontFamily: 'OpenSans-Regular',
-                  },
-                ]}>
-                {date.day}
-              </Text>
+            <Text
+              style={[
+                {
+                  color: colorAplication(state, 'letter'),
+                  textAlign: 'center',
+                  fontFamily: 'OpenSans-Regular',
+                },
+              ]}>
+              {date.day}
+            </Text>
 
-              <View style={styles.events}>
-                {birthday.map((r: any) => {
-                  return `${date.month}-${date.day}` ===
-                    format(new Date(r.date), 'M-d') ? (
-                    <View
-                      key={r.id}
-                      style={[
-                        styles.events__item,
-                        {
-                          backgroundColor:
-                            format(new Date(), 'MM-dd') ===
-                            format(new Date(r.date), 'MM-dd')
-                              ? '#fff'
-                              : r.color,
-                        },
-                      ]}>
-                      <Text
-                        style={{
-                          color:
-                            format(new Date(), 'MM-dd') ===
-                            format(new Date(r.date), 'MM-dd')
-                              ? '#222'
-                              : '#fff',
-                          fontSize: 10,
-                        }}>
-                        {r.summary}
-                      </Text>
-                    </View>
-                  ) : null;
-                })}
-              </View>
+            <View style={styles.events}>
+              {birthday.map((r: any) => {
+                return r.startDate &&
+                  `${date.month}-${date.day}` ===
+                    format(new Date(r.startDate), 'M-d') ? (
+                  <View
+                    key={r.id}
+                    style={[
+                      styles.events__item,
+                      {
+                        backgroundColor:
+                          format(new Date(), 'MM-dd') ===
+                          format(new Date(r.startDate), 'MM-dd')
+                            ? '#fff'
+                            : r.color
+                            ? r.color
+                            : r.calendar.color,
+                      },
+                    ]}>
+                    <Text
+                      style={{
+                        color:
+                          format(new Date(), 'MM-dd') ===
+                          format(new Date(r.startDate), 'MM-dd')
+                            ? '#222'
+                            : '#fff',
+                        fontSize: 10,
+                        width: 300,
+                      }}>
+                      {r.title}
+                    </Text>
+                  </View>
+                ) : null;
+              })}
             </View>
           </TouchableOpacity>
         )}
@@ -237,10 +221,5 @@ export default function CalendarComponent() {
     );
   }
 
-  return (
-    <>
-      {comp}
-      <ListInOrder />
-    </>
-  );
+  return <>{comp}</>;
 }

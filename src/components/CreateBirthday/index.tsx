@@ -8,27 +8,32 @@ import {
   Alert,
   KeyboardAvoidingView,
   FlatList,
+  Platform,
 } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import {format} from 'date-fns-tz';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import {useDispatch} from 'react-redux';
+import RNCalendarEvents from 'react-native-calendar-events';
+import moment from 'moment';
 
 import {show, create} from '../../services/realm';
-import {EventSuccess} from '../../store/ducks/events/action';
+import {EventUpdate} from '../../store/ducks/events/action';
 
 interface Props {
   dateSelected: Date;
 }
 
 export default function CreateBirthdayComponent({dateSelected}: Props) {
-  const [summary, setSummary] = useState('');
+  const [title, setTitle] = useState('');
   const [date, setDate] = useState(new Date());
   const [timeStart, setTimeStart] = useState(
-    new Date(`${format(new Date(), 'yyyy-MM-dd')}T10:00:00.040Z`),
+    new Date(`${format(new Date(), 'yyyy-MM-dd')}T10:00:00.000Z`),
   );
-  const [timeEnd, setTimeEnd] = useState(new Date('2020-06-27T10:01:00.040Z'));
+  const [timeEnd, setTimeEnd] = useState(
+    new Date(`${format(new Date(), 'yyyy-MM-dd')}T10:00:00.000Z`),
+  );
   const [Show, setShow] = useState('');
   const [color, setColor] = useState('2');
   const dispatch = useDispatch();
@@ -49,8 +54,6 @@ export default function CreateBirthdayComponent({dateSelected}: Props) {
   const onChangeTimeDate = (event: any, selectedDate: any) => {
     const currentDate: Date | object = selectedDate;
 
-    //setShow(Platform.OS === 'ios');
-
     if (Show === 'date') {
       setShow('');
       setDate(new Date(String(currentDate)));
@@ -69,56 +72,63 @@ export default function CreateBirthdayComponent({dateSelected}: Props) {
     setShow('time');
   };
 
-  function HandleSubmit() {
-    if (!summary) {
-      Alert.alert('Error', 'Preencha o campo');
-      return;
-    }
+  async function HandleSubmit() {
+    try {
+      if (!title) {
+        Alert.alert('Error', 'Preencha o campo');
+        return;
+      }
 
-    const regex = new RegExp('^[a-zA-Z]+', 'i');
+      const regex = new RegExp('^[a-zA-Z]+', 'i');
 
-    if (!regex.test(summary)) {
-      Alert.alert('Error:', 'Ensira um nome válido!');
-      return;
-    }
+      if (!regex.test(title)) {
+        Alert.alert('Error:', 'Ensira um nome válido!');
+        return;
+      }
 
-    if (summary.split('').length <= 2) {
-      Alert.alert('Error', 'Minímo 3 letras');
-      return;
-    }
+      if (title.split('').length <= 2) {
+        Alert.alert('Error', 'Minímo 3 letras');
+        return;
+      }
 
-    show()
-      .then((res: any) => {
-        const dataAge = {
-          summary,
-          date: new Date(date),
-          id: '1',
-          color: colors[Number(color)].color,
-          start: new Date(timeStart),
-          end: new Date(timeEnd),
-        };
+      const res = await RNCalendarEvents.saveEvent(title, {
+        //calendarId: '6',
+        startDate:
+          moment.utc(new Date(date)).format('YYYY-MM-DD') +
+          moment.utc(new Date(timeStart)).format('THH:mm:ss.SSS[Z]'),
+        endDate: moment
+          .utc(new Date(timeEnd))
+          .format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
+      });
 
-        if (res.length > 0) {
-          dataAge.id = String(Number(res[res.length - 1].id) + 1);
-        }
+      /*const showDbLocal = await show();
+      const dataAge = {
+        title,
+        // date: new Date(date),
+        id: '1',
+        color: colors[Number(color)].color,
+        startDate: new Date(timeStart),
+        endDate: new Date(timeEnd),
+      };
 
-        create([dataAge]);
-        setSummary('');
+      if (showDbLocal.length > 0) {
+        dataAge.id = String(Number(showDbLocal[showDbLocal.length - 1].id) + 1);
+      }
+
+      create([dataAge]);*/
+      if (res) {
+        setTitle('');
         Alert.alert('Salvo com sucesso');
-        show().then((events: any) => {
-          dispatch(EventSuccess({events}));
-        });
-      })
-      .catch((e) =>
-        Alert.alert('Alguma coisa deu errado, \n tente novamente mais tarde'),
-      );
+        dispatch(EventUpdate());
+      }
+    } catch (e) {
+      console.log(e);
+      Alert.alert('Alguma coisa deu errado, \n tente novamente mais tarde');
+    }
   }
 
   return (
-    <KeyboardAvoidingView
-      enabled
-      //behavior={'padding'} /*keyboardVerticalOffset={100}*/
-    >
+    <KeyboardAvoidingView enabled>
       {showDots && (
         <FlatList
           style={{
@@ -166,8 +176,8 @@ export default function CreateBirthdayComponent({dateSelected}: Props) {
           <TextInput
             style={styles.input}
             placeholder="Lembre-me..."
-            onChangeText={setSummary}
-            value={summary}
+            onChangeText={setTitle}
+            value={title}
             placeholderTextColor="#777"
             blurOnSubmit={false}
             multiline={true}
@@ -256,13 +266,13 @@ export default function CreateBirthdayComponent({dateSelected}: Props) {
             <Text
               style={{
                 paddingRight: 10,
-                color: '#e14344',
+                color: '#4e8af7',
                 fontSize: 16,
                 fontWeight: 'bold',
               }}>
               Salvar
             </Text>
-            <Ionicons name={'md-add'} size={28} color={'#e14344'} />
+            <Ionicons name={'md-add'} size={28} color={'#4e8af7'} />
           </TouchableOpacity>
         </View>
       </View>
@@ -306,9 +316,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   btnAdd: {
-    width: '45%',
+    width: '100%',
     height: 45,
-    backgroundColor: 'rgba(243, 75, 86, 0.3)',
+    backgroundColor: '#e1ebfe',
     flexDirection: 'row',
     borderRadius: 50,
     margin: 5,

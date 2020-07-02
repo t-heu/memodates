@@ -8,13 +8,6 @@ export const styles = StyleSheet.create({
     height: 50,
     width: '100%',
   },
-  header__arrow: {
-    borderRadius: 40,
-    backgroundColor: '#e14344',
-    width: 50,
-    justifyContent: 'center',
-    flexDirection: 'row',
-  },
   header__month: {
     fontSize: 16,
   },
@@ -25,7 +18,7 @@ export const styles = StyleSheet.create({
   },
   day: {
     borderWidth: 0.5,
-    flexDirection: 'row',
+    //flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
     overflow: 'hidden',
@@ -33,17 +26,20 @@ export const styles = StyleSheet.create({
     width: Dimensions.get('window').width / 7,
   },
   events: {
-    flexDirection: 'row',
+    //flexDirection: 'row',
     justifyContent: 'flex-start',
     flexWrap: 'wrap',
     overflow: 'hidden',
   },
   events__item: {
-    width: 90,
-    padding: 2,
-    paddingLeft: 4,
+    width: Dimensions.get('window').width / 7.6,
+    padding: 1,
+    paddingLeft: 3,
+    justifyContent: 'center',
+    paddingRight: 3,
     margin: 1,
+    marginLeft: 0,
     overflow: 'hidden',
-    borderRadius: 100,
+    borderRadius: 4,
   },
 });

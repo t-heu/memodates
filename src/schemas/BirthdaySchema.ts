@@ -6,11 +6,13 @@ export default {
       type: 'string',
       indexed: true,
     },
-    summary: 'string',
-    date: 'date',
-    color: 'string',
-    start: 'date',
-    end: 'date',
+    title: 'string',
+    //date: 'date',
+    //color: 'string',
+    location: 'string',
+    description: 'string',
+    startDate: 'date',
+    endDate: 'date',
   },
 };
 //class BirthdaySchema {
