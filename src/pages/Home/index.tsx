@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {ScrollView, Button} from 'react-native';
 import {AdMobBanner} from 'react-native-admob';
 import {useDispatch} from 'react-redux';
@@ -9,7 +9,7 @@ import CalendarComponent from '../../components/CalendarComponent';
 import {EventUpdate} from '../../store/ducks/events/action';
 
 export default function Home() {
-  const [statusP, setStatusP] = useState(true);
+  const [statusP, setStatusP] = useState(false);
   const dispatch = useDispatch();
 
   async function PermissionAgenda() {
@@ -21,6 +21,7 @@ export default function Home() {
       }
 
       if (status !== 'authorized') {
+        setStatusP(true);
         const statusStore = await RNCalendarEvents.authorizeEventStore();
         if (statusStore === 'authorized') {
           const res = await RNCalendarEvents.saveCalendar({
@@ -45,10 +46,8 @@ export default function Home() {
     }
   }
 
-  useEffect(() => {
-    PermissionAgenda();
-    dispatch(EventUpdate());
-  }, [dispatch]);
+  PermissionAgenda();
+  dispatch(EventUpdate());
 
   async function aaa() {
     try {
@@ -64,7 +63,7 @@ export default function Home() {
 
   return (
     <ScrollView style={styles.container}>
-      {/*<Button title="aaa" onPress={() => aaa()} />*/}
+      {/* <Button title="aaa" onPress={() => aaa()} />*/}
       {statusP ? (
         <Button
           title="Conceder Permissão a Agenda"

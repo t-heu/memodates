@@ -8,6 +8,7 @@ import {useNavigation} from '@react-navigation/native';
 import Entypo from 'react-native-vector-icons/Entypo';
 import moment from 'moment';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import {styles} from './styles';
 import configDate from '../../utils/configDate';
@@ -51,13 +52,13 @@ export default function CalendarComponent() {
       } else if (state === 'disabled') {
         return '#8c9494';
       } else {
-        return '#222';
+        return '#fff';
       }
     } else {
       if (state === 'today') {
-        return '#4e8af7';
+        return '#297070';
       } else if (state === 'disabled') {
-        return '#f6f6f6';
+        return '#111'; ///'#f6f6f6';
       } else {
         return 'transparent';
       }
@@ -72,7 +73,7 @@ export default function CalendarComponent() {
         renderHeader={() => (
           <View style={styles.header}>
             <TouchableOpacity onPress={() => navigation.openDrawer()}>
-              <Entypo name={'list'} size={30} color={'#111'} />
+              <Entypo name={'list'} size={30} color={'#eee'} />
             </TouchableOpacity>
 
             <Text style={styles.header__month}>
@@ -93,7 +94,7 @@ export default function CalendarComponent() {
                 const nextMonth = moment.addRealMonth(moment(month));
                 setMonth(new Date(nextMonth));
               }}>
-              <AntDesign name={'arrowleft'} size={24} color={'#111'} />
+              <AntDesign name={'arrowleft'} size={24} color={'#ccc'} />
             </TouchableOpacity>
 
             <TouchableOpacity
@@ -110,7 +111,15 @@ export default function CalendarComponent() {
                 const nextMonth = moment.addRealMonth(moment(month));
                 setMonth(new Date(nextMonth));
               }}>
-              <AntDesign name={'arrowright'} size={24} color={'#111'} />
+              <AntDesign name={'arrowright'} size={24} color={'#ccc'} />
+            </TouchableOpacity>
+
+            <TouchableOpacity onPress={() => setMonth(new Date())}>
+              <MaterialCommunityIcons
+                name={'calendar'}
+                size={30}
+                color={'#eee'}
+              />
             </TouchableOpacity>
 
             <TouchableOpacity
@@ -121,13 +130,13 @@ export default function CalendarComponent() {
                   dateOfCalendar: '',
                 })
               }>
-              <Ionicons name={'md-add'} size={28} color={'#111'} />
+              <Ionicons name={'md-add'} size={30} color={'#ddd'} />
             </TouchableOpacity>
           </View>
         )}
         theme={{
-          calendarBackground: '#fff',
-          textSectionTitleColor: '#2f3542',
+          calendarBackground: '#202124',
+          textSectionTitleColor: '#fff',
           textDayHeaderFontFamily: 'OpenSans-Regular',
           textDayHeaderFontWeight: '400',
           'stylesheet.calendar.header': {
@@ -165,7 +174,7 @@ export default function CalendarComponent() {
               styles.day,
               {
                 backgroundColor: colorAplication(state),
-                borderColor: state === 'today' ? '#4e8af7' : '#eee',
+                borderColor: state === 'today' ? '#297070' : '#444',
               },
             ]}
             onPress={() => PressDay(date)}>
@@ -193,7 +202,7 @@ export default function CalendarComponent() {
                         backgroundColor:
                           format(new Date(), 'MM-dd') ===
                           format(new Date(r.startDate), 'MM-dd')
-                            ? '#fff'
+                            ? '#eee'
                             : r.color
                             ? r.color
                             : r.calendar.color,
@@ -205,7 +214,7 @@ export default function CalendarComponent() {
                           format(new Date(), 'MM-dd') ===
                           format(new Date(r.startDate), 'MM-dd')
                             ? '#222'
-                            : '#fff',
+                            : '#222',
                         fontSize: 10,
                         width: 300,
                       }}>

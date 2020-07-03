@@ -57,7 +57,7 @@ export default function GoogleSign() {
       size={GoogleSigninButton.Size.Wide}
       color={GoogleSigninButton.Color.Light}
       onPress={signIn}
-      disabled={isSigninInProgress}
+      disabled={true /*isSigninInProgress*/}
     />
   );
 }

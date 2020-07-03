@@ -9,7 +9,8 @@ export const styles = StyleSheet.create({
     width: '100%',
   },
   header__month: {
-    fontSize: 16,
+    fontSize: 19,
+    color: '#eee',
   },
   calendarList: {
     padding: 0,
@@ -17,7 +18,7 @@ export const styles = StyleSheet.create({
     marginBottom: 1,
   },
   day: {
-    borderWidth: 0.5,
+    borderWidth: 0.4,
     //flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',

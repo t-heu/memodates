@@ -14,12 +14,12 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {useNetInfo} from '@react-native-community/netinfo';
 import GDrive from 'react-native-google-drive-api-wrapper';
 import {GoogleSignin} from '@react-native-community/google-signin';
-import {Path, Svg} from 'react-native-svg';
 
 import {ApplicationState} from './store';
 import GoogleSign from './components/GoogleSign';
 import {SignOut} from './store/ducks/auth/action';
 import {create, show} from './services/realm';
+import ListInOrder from './components/ListInOrder';
 
 export default function CustomDrawerContent() {
   const {auth} = useSelector((state: ApplicationState) => state);
@@ -123,48 +123,44 @@ export default function CustomDrawerContent() {
   }
 
   return (
-    <View style={{justifyContent: 'center', backgroundColor: '#fff'}}>
+    <View style={{justifyContent: 'center', backgroundColor: '#202124'}}>
       <View
         style={{
           padding: 20,
           justifyContent: 'center',
-          alignItems: 'center',
-          backgroundColor: '#4e8af7',
-          height: 150,
+          backgroundColor: '#202124',
+          height: 130,
         }}>
         {auth.signed ? (
-          <>
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              width: '40%',
+            }}>
             <Image
               source={{uri: auth.user.photo}}
               style={{
                 borderRadius: 100,
-                width: 70,
-                height: 70,
-                marginBottom: 20,
+                borderColor: '#eee',
+                borderWidth: 1,
+                width: 50,
+                height: 50,
               }}
             />
             <Text style={{color: '#fff', fontSize: 18}}>{auth.user.name}</Text>
-          </>
+          </View>
         ) : (
           <GoogleSign />
         )}
       </View>
 
-      <Svg style={{height: 80}} viewBox="-1 50 375 087">
-        <Path
-          fill="#4e8af7"
-          fillOpacity={1}
-          d={
-            'M380.279 107.377C380.279 107.377 295.739 13.1031 187.625 107.25C79.5108 201.397 -1.97128 107.125 -1.97128 107.125L-1.89778 1.07516e-06L380.353 0.252415L380.279 107.377Z'
-          }
-        />
-      </Svg>
-
       <ScrollView>
         <View
           style={{
             padding: 5,
-            paddingTop: 15,
+            paddingTop: 0,
           }}>
           {auth.signed ? (
             <>
@@ -172,13 +168,13 @@ export default function CustomDrawerContent() {
                 <TouchableOpacity
                   onPress={() => backup()}
                   style={styles.btnSigned}>
-                  <MaterialIcons name={'backup'} size={26} color={'#e14344'} />
+                  <MaterialIcons name={'backup'} size={26} color={'#eee'} />
                   <Text
                     style={{
                       fontSize: 16,
                       marginLeft: 20,
                       fontFamily: 'OpenSans-Regular',
-                      color: '#333',
+                      color: '#eee',
                     }}>
                     Backup
                   </Text>
@@ -192,14 +188,14 @@ export default function CustomDrawerContent() {
                   <MaterialIcons
                     name={'file-download'}
                     size={26}
-                    color={'#e14344'}
+                    color={'#eee'}
                   />
                   <Text
                     style={{
                       fontSize: 16,
                       marginLeft: 20,
                       fontFamily: 'OpenSans-Regular',
-                      color: '#333',
+                      color: '#eee',
                     }}>
                     Restaurar
                   </Text>
@@ -215,7 +211,7 @@ export default function CustomDrawerContent() {
                   <Ionicons
                     name={'md-exit'}
                     size={26}
-                    color={'#e14344'}
+                    color={'#eee'}
                     style={{marginLeft: 5}}
                   />
                   <Text
@@ -223,7 +219,7 @@ export default function CustomDrawerContent() {
                       fontSize: 16,
                       marginLeft: 20,
                       fontFamily: 'OpenSans-Regular',
-                      color: '#333',
+                      color: '#eee',
                     }}>
                     Sair
                   </Text>
@@ -232,6 +228,7 @@ export default function CustomDrawerContent() {
             </>
           ) : null}
         </View>
+        <ListInOrder />
       </ScrollView>
     </View>
   );

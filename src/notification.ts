@@ -1,38 +1,27 @@
 import PushNotification from 'react-native-push-notification';
 import {format} from 'date-fns-tz';
 
-import {show} from './services/realm';
+import {store} from './store';
 
-function Notification(name?: string) {
+function Notification(name: string, date: string) {
   PushNotification.localNotification({
-    title: 'Lembrete',
-    message: `${name || ''}`,
+    title: `${name || ''}`,
+    message: `${format(new Date(date), 'HH:mm') || 'null'} ${
+      Number(format(new Date(), 'HH')) <= 12 ? 'PM' : 'AM'
+    }`,
     largeIcon: 'icon',
     smallIcon: 'icon_noti',
-    //repeatType: 'minute',
-    //repeatTime: 100
   });
 }
 
 export async function TaskVerifyDate() {
-  const res = await show();
+  const {birthday} = store.getState().events;
 
-  res.map((response) => {
-    const dateAge = format(new Date(), 'yyyy-MM-dd');
-    const dateBirthday = new Date(response.date);
-    const StartHoursMark = format(new Date(response.start), 'HH:mm');
+  birthday.map((response) => {
+    const dateAge = format(new Date(), 'yyyy-MM-dd:HH:mm');
 
-    const HoursAge = format(new Date(), 'HH:mm');
-
-    if (format(dateBirthday, 'yyyy-MM-dd') === dateAge) {
-      if (HoursAge === StartHoursMark) {
-        Notification(response.summary);
-      }
-
-      /*if (HoursAge !== StartHoursMark && !exe) {
-        //setExe(true);
-        exe = true;
-      }*/
+    if (format(new Date(response.startDate), 'yyyy-MM-dd:HH:mm') === dateAge) {
+      Notification(response.title, response.startDate);
     }
   });
 }

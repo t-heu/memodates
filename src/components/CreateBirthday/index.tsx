@@ -8,7 +8,6 @@ import {
   Alert,
   KeyboardAvoidingView,
   FlatList,
-  Platform,
 } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import {format} from 'date-fns-tz';
@@ -53,14 +52,15 @@ export default function CreateBirthdayComponent({dateSelected}: Props) {
 
   const onChangeTimeDate = (event: any, selectedDate: any) => {
     const currentDate: Date | object = selectedDate;
-
-    if (Show === 'date') {
-      setShow('');
-      setDate(new Date(String(currentDate)));
-    } else {
-      setShow('');
-      setTimeStart(new Date(String(currentDate)));
-      setTimeEnd(new Date(String(currentDate)));
+    if (currentDate) {
+      if (Show === 'date') {
+        setShow('');
+        setDate(new Date(String(currentDate)));
+      } else {
+        setShow('');
+        setTimeStart(new Date(String(currentDate)));
+        setTimeEnd(new Date(String(currentDate)));
+      }
     }
   };
 
@@ -86,11 +86,6 @@ export default function CreateBirthdayComponent({dateSelected}: Props) {
         return;
       }
 
-      if (title.split('').length <= 2) {
-        Alert.alert('Error', 'Minímo 3 letras');
-        return;
-      }
-
       const res = await RNCalendarEvents.saveEvent(title, {
         //calendarId: '6',
         startDate:
@@ -99,6 +94,13 @@ export default function CreateBirthdayComponent({dateSelected}: Props) {
         endDate: moment
           .utc(new Date(timeEnd))
           .format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
+        alarms: [
+          {
+            date:
+              moment.utc(new Date(date)).format('YYYY-MM-DD') +
+              moment.utc(new Date(timeStart)).format('THH:mm:ss.SSS[Z]'),
+          },
+        ],
       });
 
       /*const showDbLocal = await show();
@@ -139,7 +141,7 @@ export default function CreateBirthdayComponent({dateSelected}: Props) {
             //width: '80%',
             height: 209,
             padding: 9.5,
-            backgroundColor: '#fff',
+            backgroundColor: '#202124',
             borderWidth: 1,
             borderColor: '#eee',
           }}
@@ -159,7 +161,7 @@ export default function CreateBirthdayComponent({dateSelected}: Props) {
                   borderWidth: 5,
                   borderColor: colors[item.item.id].color,
                   margin: 5,
-                  backgroundColor: '#fff',
+                  backgroundColor: '#202124',
                   width: 40,
                   height: 40,
                 },
@@ -172,13 +174,13 @@ export default function CreateBirthdayComponent({dateSelected}: Props) {
       <View style={styles.form}>
         <View
           style={{flexDirection: 'row', alignItems: 'center', marginLeft: 10}}>
-          <FontAwesome name={'pencil-square-o'} size={22} color={'#777'} />
+          <FontAwesome name={'pencil-square-o'} size={22} color={'#eee'} />
           <TextInput
             style={styles.input}
             placeholder="Lembre-me..."
             onChangeText={setTitle}
             value={title}
-            placeholderTextColor="#777"
+            placeholderTextColor="#eee"
             blurOnSubmit={false}
             multiline={true}
             numberOfLines={5}
@@ -189,12 +191,12 @@ export default function CreateBirthdayComponent({dateSelected}: Props) {
         </View>
 
         <View style={styles.date}>
-          <Ionicons name={'md-time'} size={24} color={'#777'} />
+          <Ionicons name={'md-time'} size={24} color={'#eee'} />
           <TouchableOpacity onPress={showDatepicker} style={styles.btnDate}>
             <Text
               style={{
                 fontSize: 18,
-                color: '#444',
+                color: '#fff',
               }}>
               {format(new Date(date), "dd 'de' MMMM 'de' yyyy")}
             </Text>
@@ -206,7 +208,7 @@ export default function CreateBirthdayComponent({dateSelected}: Props) {
             <Text
               style={{
                 fontSize: 22,
-                color: '#444',
+                color: '#fff',
               }}>
               {format(new Date(timeStart), 'HH:mm')}
             </Text>
@@ -252,7 +254,7 @@ export default function CreateBirthdayComponent({dateSelected}: Props) {
 
         <View
           style={{
-            borderColor: '#eee',
+            borderColor: '#444',
             borderTopWidth: 1,
             width: '100%',
             flexDirection: 'row',
@@ -266,13 +268,13 @@ export default function CreateBirthdayComponent({dateSelected}: Props) {
             <Text
               style={{
                 paddingRight: 10,
-                color: '#4e8af7',
+                color: '#eee',
                 fontSize: 16,
                 fontWeight: 'bold',
               }}>
               Salvar
             </Text>
-            <Ionicons name={'md-add'} size={28} color={'#4e8af7'} />
+            <Ionicons name={'md-add'} size={25} color={'#eee'} />
           </TouchableOpacity>
         </View>
       </View>
@@ -282,11 +284,9 @@ export default function CreateBirthdayComponent({dateSelected}: Props) {
 
 const styles = StyleSheet.create({
   form: {
-    backgroundColor: '#fff',
+    backgroundColor: '#202124',
     flexDirection: 'column',
     marginTop: 20,
-    //borderTopWidth: 1,
-    //borderColor: '#eee',
   },
   date: {
     height: 60,
@@ -294,7 +294,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-around',
     borderTopWidth: 1,
-    borderColor: '#eee',
+    borderColor: '#444',
   },
   input: {
     alignItems: 'center',
@@ -304,7 +304,7 @@ const styles = StyleSheet.create({
     width: '90%',
     fontSize: 18,
     height: 60,
-    color: '#444',
+    color: '#fff',
     backgroundColor: 'transparent',
   },
   btnDate: {
@@ -318,7 +318,8 @@ const styles = StyleSheet.create({
   btnAdd: {
     width: '100%',
     height: 45,
-    backgroundColor: '#e1ebfe',
+    backgroundColor: '#297070',
+    opacity: 1,
     flexDirection: 'row',
     borderRadius: 50,
     margin: 5,

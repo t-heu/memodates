@@ -10,7 +10,7 @@ const Drawer = createDrawerNavigator();
 export default function Routes() {
   return (
     <Drawer.Navigator
-      drawerStyle={{backgroundColor: '#fff', width: 305}}
+      drawerStyle={{backgroundColor: '#202124', width: 305}}
       drawerContent={() => <CustomDrawerContent />}>
       <Drawer.Screen name="Home" component={Home} />
       <Drawer.Screen name="Events" component={Events} />

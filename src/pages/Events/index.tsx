@@ -1,5 +1,5 @@
 import React from 'react';
-import {TouchableOpacity, Text, View, StyleSheet} from 'react-native';
+import {TouchableOpacity, Text, View, StyleSheet, Alert} from 'react-native';
 import {useSelector} from 'react-redux';
 import {format} from 'date-fns-tz';
 import {useDispatch} from 'react-redux';
@@ -8,7 +8,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import {useNavigation} from '@react-navigation/native';
 import RNCalendarEvents from 'react-native-calendar-events';
 
-import {deleteObj} from '../../services/realm';
+//import {deleteObj} from '../../services/realm';
 import {EventUpdate} from '../../store/ducks/events/action';
 
 import CreateBirthday from '../../components/CreateBirthday';
@@ -23,20 +23,21 @@ export default function Events({route}: any) {
     try {
       await RNCalendarEvents.removeEvent(r.id);
       dispatch(EventUpdate());
-      await deleteObj(r);
+      //await deleteObj(r);
     } catch (e) {
       console.log(e);
+      Alert.alert('Alguma coisa deu errado, \n tente novamente mais tarde');
     }
   }
 
   return (
-    <View style={{flex: 1, backgroundColor: '#fff'}}>
+    <View style={{flex: 1, backgroundColor: '#202124'}}>
       <View style={{padding: 20}}>
         <TouchableOpacity
           style={{flexDirection: 'row', alignItems: 'center'}}
           onPress={() => navigation.goBack()}>
-          <AntDesign name={'arrowleft'} size={24} color={'#222'} />
-          <Text style={{marginLeft: 8}}>Voltar</Text>
+          <AntDesign name={'arrowleft'} size={24} color={'#fff'} />
+          <Text style={{marginLeft: 8, color: '#fff'}}>Voltar</Text>
         </TouchableOpacity>
       </View>
       <CreateBirthday dateSelected={route.params.dateSelected} />
@@ -46,6 +47,8 @@ export default function Events({route}: any) {
           marginLeft: 8,
           fontSize: 18,
           marginBottom: 10,
+          marginTop: 20,
+          color: '#fff',
           fontFamily: 'OpenSans-Regular',
         }}>
         {format(new Date(route.params.dateSelected), 'dd/MM')}
@@ -61,7 +64,8 @@ export default function Events({route}: any) {
                 alignItems: 'center',
                 justifyContent: 'space-around',
                 borderColor: '#eee',
-                borderWidth: 0.5,
+                borderTopWidth: 0.5,
+                borderBottomWidth: 0.5,
                 height: 50,
                 padding: 10,
               }}>
@@ -69,7 +73,7 @@ export default function Events({route}: any) {
                 style={{
                   flexDirection: 'row',
                   alignItems: 'center',
-                  justifyContent: 'space-around',
+                  justifyContent: 'center',
                 }}>
                 <Text style={styles.input}>
                   {format(new Date(r.startDate), 'HH:mm')}
@@ -79,7 +83,7 @@ export default function Events({route}: any) {
                   style={{
                     marginLeft: 4,
                     marginRight: 14,
-                    color: '#728083',
+                    color: '#999',
                     fontSize: 12,
                     fontFamily: 'OpenSans-SemiBold',
                   }}>
@@ -119,7 +123,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     fontSize: 20,
-    color: '#222',
+    color: '#fff',
     fontFamily: 'OpenSans-Light',
     padding: 4,
   },
@@ -127,6 +131,5 @@ const styles = StyleSheet.create({
     width: 50,
     alignItems: 'center',
     justifyContent: 'center',
-    padding: 10,
   },
 });
