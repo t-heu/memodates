@@ -5,11 +5,17 @@ export enum EventTypes {
   EVENT_SUCCESS = '@event/EVENT_SUCCESS',
   EVENT_FAILURE = '@event/EVENT_FAILURE',
   EVENT_UPDATE = '@event/EVENT_UPDATE',
+  EVENT_SAVE = '@event/EVENT_SAVE',
+  EVENT_CREATE = '@event/EVENT_CREATE',
 }
 /**
  * Data Types
  */
 export interface Event {
+  event: IEvent;
+}
+
+export interface Events {
   events: Ievents[];
 }
 
@@ -17,8 +23,9 @@ export interface Event {
  * State Types
  */
 export interface EventState {
-  readonly birthday: any[] | Ievents[];
+  readonly events: any[] | Ievents[];
   readonly error: boolean;
+  readonly event: IEvent;
 }
 /*
 {
@@ -46,6 +53,14 @@ export interface EventState {
     "title": "EUEU"
   }
 */
+export interface IEvent {
+  title?: string;
+  startDate?: Date;
+  endDate?: Date;
+  date?: Date;
+  id?: string;
+}
+
 interface Ievents {
   description: string;
   endDate: string;

@@ -2,15 +2,15 @@ import React, {useState, useEffect} from 'react';
 import {TouchableOpacity, Text, View} from 'react-native';
 import {LocaleConfig, Calendar} from 'react-native-calendars';
 import {format} from 'date-fns-tz';
-import AntDesign from 'react-native-vector-icons/AntDesign';
-import {useSelector} from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
 import {useNavigation} from '@react-navigation/native';
-import Entypo from 'react-native-vector-icons/Entypo';
+import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import moment from 'moment';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import {styles} from './styles';
+import {EventSave} from '../../store/ducks/events/action';
 import configDate from '../../utils/configDate';
 import {ApplicationState} from '../../store';
 
@@ -24,18 +24,19 @@ LocaleConfig.defaultLocale = 'ptBR';
 
 export default function CalendarComponent() {
   const [comp, setComp] = useState(<RenderCalendar />);
-  const {birthday} = useSelector((state: ApplicationState) => state.events);
+  const {events} = useSelector((state: ApplicationState) => state.events);
   const [month, setMonth] = useState(new Date());
   const navigation = useNavigation();
+  const dispatch = useDispatch();
 
   function PressDay(date: any) {
     const attDate = new Date(
       `${format(new Date(date.dateString), 'yyyy/MM')}/${date.day}`,
     );
 
+    dispatch(EventSave({event: {date: attDate}}));
     navigation.navigate('Events', {
-      dateSelected: String(attDate),
-      dateOfCalendar: date.dateString,
+      day: date.dateString,
     });
   }
 
@@ -43,7 +44,7 @@ export default function CalendarComponent() {
     setTimeout(() => {
       setComp(<RenderCalendar />);
     }, 100);
-  }, [birthday, month]);
+  }, [events, month]);
 
   function colorAplication(state: string, types?: string) {
     if (types === 'letter') {
@@ -73,65 +74,80 @@ export default function CalendarComponent() {
         renderHeader={() => (
           <View style={styles.header}>
             <TouchableOpacity onPress={() => navigation.openDrawer()}>
-              <Entypo name={'list'} size={30} color={'#eee'} />
+              <SimpleLineIcons name={'menu'} size={24} color={'#eee'} />
             </TouchableOpacity>
 
             <Text style={styles.header__month}>
               {configDate.monthNames[month.getMonth()]} {month.getFullYear()}
             </Text>
 
-            <TouchableOpacity
-              onPress={() => {
-                moment.addRealMonth = function addRealMonth(d) {
-                  const fm = moment(d).add(-1, 'month');
-                  const fmEnd = moment(fm).endOf('month');
-                  return d.date() != fm.date() &&
-                    fm.isSame(fmEnd.format('YYYY-MM-DD'))
-                    ? fm.add(1, 'd')
-                    : fm;
-                };
-
-                const nextMonth = moment.addRealMonth(moment(month));
-                setMonth(new Date(nextMonth));
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                width: '50%',
               }}>
-              <AntDesign name={'arrowleft'} size={24} color={'#ccc'} />
-            </TouchableOpacity>
+              <TouchableOpacity onPress={() => setMonth(new Date())}>
+                <MaterialCommunityIcons
+                  name={'calendar'}
+                  size={28}
+                  color={'#eee'}
+                />
+              </TouchableOpacity>
 
-            <TouchableOpacity
-              onPress={() => {
-                moment.addRealMonth = function addRealMonth(d) {
-                  const fm = moment(d).add(1, 'month');
-                  const fmEnd = moment(fm).endOf('month');
-                  return d.date() != fm.date() &&
-                    fm.isSame(fmEnd.format('YYYY-MM-DD'))
-                    ? fm.add(1, 'd')
-                    : fm;
-                };
+              <TouchableOpacity
+                onPress={() => {
+                  moment.addRealMonth = function addRealMonth(d) {
+                    const fm = moment(d).add(-1, 'month');
+                    const fmEnd = moment(fm).endOf('month');
+                    return d.date() !== fm.date() &&
+                      fm.isSame(fmEnd.format('YYYY-MM-DD'))
+                      ? fm.add(1, 'd')
+                      : fm;
+                  };
 
-                const nextMonth = moment.addRealMonth(moment(month));
-                setMonth(new Date(nextMonth));
-              }}>
-              <AntDesign name={'arrowright'} size={24} color={'#ccc'} />
-            </TouchableOpacity>
+                  const nextMonth = moment.addRealMonth(moment(month));
+                  setMonth(new Date(nextMonth));
+                }}>
+                <MaterialCommunityIcons
+                  name={'arrow-left-box'}
+                  size={28}
+                  color={'#297f7f'}
+                />
+              </TouchableOpacity>
 
-            <TouchableOpacity onPress={() => setMonth(new Date())}>
-              <MaterialCommunityIcons
-                name={'calendar'}
-                size={30}
-                color={'#eee'}
-              />
-            </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => {
+                  moment.addRealMonth = function addRealMonth(d) {
+                    const fm = moment(d).add(1, 'month');
+                    const fmEnd = moment(fm).endOf('month');
+                    return d.date() !== fm.date() &&
+                      fm.isSame(fmEnd.format('YYYY-MM-DD'))
+                      ? fm.add(1, 'd')
+                      : fm;
+                  };
 
-            <TouchableOpacity
-              style={{padding: 10}}
-              onPress={() =>
-                navigation.navigate('Events', {
-                  dateSelected: String(new Date()),
-                  dateOfCalendar: '',
-                })
-              }>
-              <Ionicons name={'md-add'} size={30} color={'#ddd'} />
-            </TouchableOpacity>
+                  const nextMonth = moment.addRealMonth(moment(month));
+                  setMonth(new Date(nextMonth));
+                }}>
+                <MaterialCommunityIcons
+                  name={'arrow-right-box'}
+                  size={28}
+                  color={'#297f7f'}
+                />
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                style={{padding: 10}}
+                onPress={() =>
+                  navigation.navigate('Events', {
+                    day: format(new Date(), 'yyyy-MM-dd'),
+                  })
+                }>
+                <Ionicons name={'md-add'} size={30} color={'#eee'} />
+              </TouchableOpacity>
+            </View>
           </View>
         )}
         theme={{
@@ -190,7 +206,7 @@ export default function CalendarComponent() {
             </Text>
 
             <View style={styles.events}>
-              {birthday.map((r: any) => {
+              {events.map((r: any) => {
                 return r.startDate &&
                   `${date.month}-${date.day}` ===
                     format(new Date(r.startDate), 'M-d') ? (
@@ -216,6 +232,7 @@ export default function CalendarComponent() {
                             ? '#222'
                             : '#222',
                         fontSize: 10,
+                        fontFamily: 'OpenSans-SemiBold',
                         width: 300,
                       }}>
                       {r.title}

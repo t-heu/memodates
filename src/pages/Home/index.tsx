@@ -9,14 +9,38 @@ import CalendarComponent from '../../components/CalendarComponent';
 import {EventUpdate} from '../../store/ducks/events/action';
 
 export default function Home() {
-  const [statusP, setStatusP] = useState(false);
+  const [statusP, setStatusP] = useState(true);
   const dispatch = useDispatch();
+
+  async function addCalendars() {
+    try {
+      const res = await RNCalendarEvents.findCalendars();
+      //const find = findAll.filter((r) => r.type === 'com.memodates');
+
+      /*const res = await RNCalendarEvents.saveCalendar({
+        title: 'Memodates C',
+        color: '#30a8e3',
+        name: 'teuzin375@gmail.com',
+        entityType: 'event',
+        accessLevel: 'read',
+        ownerAccount: 'theu',
+        source: {
+          name: 'teuzin375@gmail.com',
+          type: 'com.google',
+        },
+      });*/
+      console.log(res);
+    } catch (e) {
+      console.log(e);
+    }
+  }
 
   async function PermissionAgenda() {
     try {
       const status = await RNCalendarEvents.authorizationStatus();
 
       if (status === 'authorized') {
+        dispatch(EventUpdate());
         setStatusP(false);
       }
 
@@ -24,21 +48,9 @@ export default function Home() {
         setStatusP(true);
         const statusStore = await RNCalendarEvents.authorizeEventStore();
         if (statusStore === 'authorized') {
-          const res = await RNCalendarEvents.saveCalendar({
-            title: 'Memodates C',
-            color: '#4e8af7',
-            name: 'Memodates',
-            entityType: 'event',
-            accessLevel: 'root',
-            ownerAccount: 'theu',
-            source: {
-              name: 'teuzin375@gmail.com',
-              type: 'com.memodates',
-            },
-          });
-
-          console.log(res);
+          await addCalendars();
           setStatusP(false);
+          dispatch(EventUpdate());
         }
       }
     } catch (e) {
@@ -47,23 +59,10 @@ export default function Home() {
   }
 
   PermissionAgenda();
-  dispatch(EventUpdate());
-
-  async function aaa() {
-    try {
-      // Buscar todos os Calendarios
-      const res = await RNCalendarEvents.findCalendars();
-      console.log(res);
-      const find = res.filter((r) => r.type === 'com.memodates');
-      console.log(find);
-    } catch (e) {
-      console.log(e);
-    }
-  }
 
   return (
     <ScrollView style={styles.container}>
-      {/* <Button title="aaa" onPress={() => aaa()} />*/}
+      {/*<Button title="ca" onPress={() => addCalendars()} />*/}
       {statusP ? (
         <Button
           title="Conceder Permissão a Agenda"

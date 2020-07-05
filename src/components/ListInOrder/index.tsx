@@ -6,15 +6,15 @@ import {useSelector} from 'react-redux';
 import {ApplicationState} from '../../store';
 
 export default function ListInOrder() {
-  const {birthday} = useSelector((state: ApplicationState) => state.events);
+  const {events} = useSelector((state: ApplicationState) => state.events);
 
   return (
-    <View>
+    <View style={{marginBottom: 100}}>
       <Text
         style={{color: '#2c8c84', fontSize: 16, marginLeft: 8, marginTop: 10}}>
         Todos seus eventos
       </Text>
-      {birthday.map((r: any) => (
+      {events.map((r: any) => (
         <View
           key={r.id}
           style={{
@@ -23,14 +23,14 @@ export default function ListInOrder() {
             height: 100,
             padding: 10,
           }}>
-          <View style={{width: '30%'}}>
+          <View style={{width: '50%'}}>
             <Text
               style={{
                 fontSize: 30,
                 color: '#eee',
                 fontFamily: 'OpenSans-Light',
               }}>
-              {format(new Date(r.startDate), 'dd')}
+              {format(new Date(r.startDate), 'dd/MM')}
             </Text>
             <Text style={{color: '#eee'}}>
               {format(new Date(r.startDate), 'HH:mm')}

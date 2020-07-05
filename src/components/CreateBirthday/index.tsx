@@ -13,53 +13,60 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import {format} from 'date-fns-tz';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import {useDispatch} from 'react-redux';
-import RNCalendarEvents from 'react-native-calendar-events';
-import moment from 'moment';
+import {useDispatch, useSelector} from 'react-redux';
 
-import {show, create} from '../../services/realm';
-import {EventUpdate} from '../../store/ducks/events/action';
+import {ApplicationState} from '../../store';
+import {EventCreate, EventSave} from '../../store/ducks/events/action';
 
-interface Props {
-  dateSelected: Date;
-}
-
-export default function CreateBirthdayComponent({dateSelected}: Props) {
+export default function CreateBirthdayComponent() {
+  const {event} = useSelector((state: ApplicationState) => state.events);
+  const dispatch = useDispatch();
   const [title, setTitle] = useState('');
   const [date, setDate] = useState(new Date());
-  const [timeStart, setTimeStart] = useState(
+  const [startDate, setStartDate] = useState(
     new Date(`${format(new Date(), 'yyyy-MM-dd')}T10:00:00.000Z`),
   );
-  const [timeEnd, setTimeEnd] = useState(
+  const [endDate, setEndDate] = useState(
     new Date(`${format(new Date(), 'yyyy-MM-dd')}T10:00:00.000Z`),
   );
+
   const [Show, setShow] = useState('');
   const [color, setColor] = useState('2');
-  const dispatch = useDispatch();
   const [showDots, setShowDots] = useState(false);
   const colors = [
     {id: '0', color: '#2ed573'},
     {id: '1', color: '#ffa502'},
-    {id: '2', color: '#1e90ff'},
+    {id: '2', color: '#30a8e3'},
     {id: '3', color: '#eccc68'},
-    {id: '4', color: '#9b59b6'},
-    {id: '5', color: '#f34b56'},
+    {id: '4', color: '#f34b56'},
   ];
 
   useEffect(() => {
-    setDate(new Date(dateSelected));
-  }, [dateSelected]);
+    if (event.date) {
+      setDate(event.date);
+    }
+    if (event.title) {
+      setTitle(event.title);
+    }
+    if (event.endDate) {
+      setEndDate(new Date(event.endDate));
+    }
+    if (event.startDate) {
+      setStartDate(new Date(event.startDate));
+    }
+  }, [event]);
 
-  const onChangeTimeDate = (event: any, selectedDate: any) => {
+  const onChangeTimeDate = (eventt: any, selectedDate: any) => {
     const currentDate: Date | object = selectedDate;
+
     if (currentDate) {
       if (Show === 'date') {
         setShow('');
         setDate(new Date(String(currentDate)));
       } else {
         setShow('');
-        setTimeStart(new Date(String(currentDate)));
-        setTimeEnd(new Date(String(currentDate)));
+        setStartDate(new Date(String(currentDate)));
+        setEndDate(new Date(String(currentDate)));
       }
     }
   };
@@ -79,53 +86,24 @@ export default function CreateBirthdayComponent({dateSelected}: Props) {
         return;
       }
 
-      const regex = new RegExp('^[a-zA-Z]+', 'i');
-
-      if (!regex.test(title)) {
+      if (!new RegExp('^[a-zA-Z]+', 'i').test(title)) {
         Alert.alert('Error:', 'Ensira um nome válido!');
         return;
       }
 
-      const res = await RNCalendarEvents.saveEvent(title, {
-        //calendarId: '6',
-        startDate:
-          moment.utc(new Date(date)).format('YYYY-MM-DD') +
-          moment.utc(new Date(timeStart)).format('THH:mm:ss.SSS[Z]'),
-        endDate: moment
-          .utc(new Date(timeEnd))
-          .format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
-        alarms: [
-          {
-            date:
-              moment.utc(new Date(date)).format('YYYY-MM-DD') +
-              moment.utc(new Date(timeStart)).format('THH:mm:ss.SSS[Z]'),
-          },
-        ],
-      });
-
-      /*const showDbLocal = await show();
-      const dataAge = {
-        title,
-        // date: new Date(date),
-        id: '1',
-        color: colors[Number(color)].color,
-        startDate: new Date(timeStart),
-        endDate: new Date(timeEnd),
-      };
-
-      if (showDbLocal.length > 0) {
-        dataAge.id = String(Number(showDbLocal[showDbLocal.length - 1].id) + 1);
-      }
-
-      create([dataAge]);*/
-      if (res) {
-        setTitle('');
-        Alert.alert('Salvo com sucesso');
-        dispatch(EventUpdate());
-      }
+      dispatch(
+        EventCreate({
+          event: {title, date, startDate, endDate, id: event.id},
+        }),
+      );
     } catch (e) {
       console.log(e);
       Alert.alert('Alguma coisa deu errado, \n tente novamente mais tarde');
+    } finally {
+      setTitle('');
+      if (event.id) {
+        dispatch(EventSave({event: {id: ''}}));
+      }
     }
   }
 
@@ -138,7 +116,6 @@ export default function CreateBirthdayComponent({dateSelected}: Props) {
             top: 0,
             zIndex: 20,
             right: 0,
-            //width: '80%',
             height: 209,
             padding: 9.5,
             backgroundColor: '#202124',
@@ -162,8 +139,8 @@ export default function CreateBirthdayComponent({dateSelected}: Props) {
                   borderColor: colors[item.item.id].color,
                   margin: 5,
                   backgroundColor: '#202124',
-                  width: 40,
-                  height: 40,
+                  width: 45,
+                  height: 45,
                 },
               ]}
             />
@@ -173,7 +150,7 @@ export default function CreateBirthdayComponent({dateSelected}: Props) {
 
       <View style={styles.form}>
         <View
-          style={{flexDirection: 'row', alignItems: 'center', marginLeft: 10}}>
+          style={{flexDirection: 'row', alignItems: 'center', marginLeft: 12}}>
           <FontAwesome name={'pencil-square-o'} size={22} color={'#eee'} />
           <TextInput
             style={styles.input}
@@ -210,7 +187,7 @@ export default function CreateBirthdayComponent({dateSelected}: Props) {
                 fontSize: 22,
                 color: '#fff',
               }}>
-              {format(new Date(timeStart), 'HH:mm')}
+              {format(new Date(startDate), 'HH:mm')}
             </Text>
           </TouchableOpacity>
 
@@ -230,7 +207,7 @@ export default function CreateBirthdayComponent({dateSelected}: Props) {
             <DateTimePicker
               testID="dateTimePicker"
               timeZoneOffsetInMinutes={0}
-              value={timeStart}
+              value={startDate}
               mode={'time'}
               is24Hour={true}
               display="default"
@@ -243,9 +220,9 @@ export default function CreateBirthdayComponent({dateSelected}: Props) {
             style={[
               {
                 borderColor: colors[color].color,
-                borderWidth: 5,
-                width: 40,
-                height: 40,
+                borderWidth: 4,
+                width: 30,
+                height: 30,
                 borderRadius: 100,
               },
             ]}
@@ -254,8 +231,8 @@ export default function CreateBirthdayComponent({dateSelected}: Props) {
 
         <View
           style={{
-            borderColor: '#444',
-            borderTopWidth: 1,
+            //borderColor: '#444',
+            //borderTopWidth: 1,
             width: '100%',
             flexDirection: 'row',
             alignItems: 'center',
@@ -274,7 +251,6 @@ export default function CreateBirthdayComponent({dateSelected}: Props) {
               }}>
               Salvar
             </Text>
-            <Ionicons name={'md-add'} size={25} color={'#eee'} />
           </TouchableOpacity>
         </View>
       </View>
@@ -293,8 +269,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-around',
-    borderTopWidth: 1,
-    borderColor: '#444',
+    // borderTopWidth: 1,
+    // borderColor: '#444',
   },
   input: {
     alignItems: 'center',

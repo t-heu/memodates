@@ -10,6 +10,7 @@ export const styles = StyleSheet.create({
   },
   header__month: {
     fontSize: 19,
+    fontFamily: 'OpenSans-SemiBold',
     color: '#eee',
   },
   calendarList: {
@@ -23,7 +24,7 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     overflow: 'hidden',
-    height: 95,
+    height: Dimensions.get('window').height / 6.2, //95,
     width: Dimensions.get('window').width / 7,
   },
   events: {
