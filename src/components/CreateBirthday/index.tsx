@@ -118,7 +118,7 @@ export default function CreateBirthdayComponent() {
             right: 0,
             height: 209,
             padding: 9.5,
-            backgroundColor: '#202124',
+            backgroundColor: '#fff',
             borderWidth: 1,
             borderColor: '#eee',
           }}
@@ -138,7 +138,7 @@ export default function CreateBirthdayComponent() {
                   borderWidth: 5,
                   borderColor: colors[item.item.id].color,
                   margin: 5,
-                  backgroundColor: '#202124',
+                  backgroundColor: '#fff',
                   width: 45,
                   height: 45,
                 },
@@ -151,13 +151,13 @@ export default function CreateBirthdayComponent() {
       <View style={styles.form}>
         <View
           style={{flexDirection: 'row', alignItems: 'center', marginLeft: 12}}>
-          <FontAwesome name={'pencil-square-o'} size={22} color={'#eee'} />
+          <FontAwesome name={'pencil-square-o'} size={22} color={'#222'} />
           <TextInput
             style={styles.input}
             placeholder="Lembre-me..."
             onChangeText={setTitle}
             value={title}
-            placeholderTextColor="#eee"
+            placeholderTextColor="#777"
             blurOnSubmit={false}
             multiline={true}
             numberOfLines={5}
@@ -168,12 +168,12 @@ export default function CreateBirthdayComponent() {
         </View>
 
         <View style={styles.date}>
-          <Ionicons name={'md-time'} size={24} color={'#eee'} />
+          <Ionicons name={'md-time'} size={24} color={'#222'} />
           <TouchableOpacity onPress={showDatepicker} style={styles.btnDate}>
             <Text
               style={{
                 fontSize: 18,
-                color: '#fff',
+                color: '#222',
               }}>
               {format(new Date(date), "dd 'de' MMMM 'de' yyyy")}
             </Text>
@@ -185,7 +185,7 @@ export default function CreateBirthdayComponent() {
             <Text
               style={{
                 fontSize: 22,
-                color: '#fff',
+                color: '#222',
               }}>
               {format(new Date(startDate), 'HH:mm')}
             </Text>
@@ -215,7 +215,7 @@ export default function CreateBirthdayComponent() {
             />
           )}
 
-          <TouchableOpacity
+          {/*<TouchableOpacity
             onPress={() => setShowDots(!showDots)}
             style={[
               {
@@ -226,13 +226,11 @@ export default function CreateBirthdayComponent() {
                 borderRadius: 100,
               },
             ]}
-          />
+          />*/}
         </View>
 
         <View
           style={{
-            //borderColor: '#444',
-            //borderTopWidth: 1,
             width: '100%',
             flexDirection: 'row',
             alignItems: 'center',
@@ -260,7 +258,7 @@ export default function CreateBirthdayComponent() {
 
 const styles = StyleSheet.create({
   form: {
-    backgroundColor: '#202124',
+    backgroundColor: '#fff',
     flexDirection: 'column',
     marginTop: 20,
   },
@@ -268,9 +266,8 @@ const styles = StyleSheet.create({
     height: 60,
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-around',
-    // borderTopWidth: 1,
-    // borderColor: '#444',
+    justifyContent: 'flex-start',
+    marginLeft: 12,
   },
   input: {
     alignItems: 'center',
@@ -280,12 +277,13 @@ const styles = StyleSheet.create({
     width: '90%',
     fontSize: 18,
     height: 60,
-    color: '#fff',
+    color: '#222',
     backgroundColor: 'transparent',
   },
   btnDate: {
     height: 50,
     color: '#444',
+    marginLeft: 25,
     backgroundColor: 'transparent',
     justifyContent: 'center',
     alignItems: 'center',
@@ -294,7 +292,7 @@ const styles = StyleSheet.create({
   btnAdd: {
     width: '100%',
     height: 45,
-    backgroundColor: '#297070',
+    backgroundColor: '#f34b56',
     opacity: 1,
     flexDirection: 'row',
     borderRadius: 50,

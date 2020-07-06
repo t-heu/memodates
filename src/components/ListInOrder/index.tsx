@@ -11,28 +11,37 @@ export default function ListInOrder() {
   return (
     <View style={{marginBottom: 100}}>
       <Text
-        style={{color: '#2c8c84', fontSize: 16, marginLeft: 8, marginTop: 10}}>
+        style={{
+          color: '#222',
+          fontSize: 16,
+          marginLeft: 8,
+          marginTop: 10,
+          fontFamily: 'OpenSans-SemiBold',
+        }}>
         Todos seus eventos
       </Text>
       {events.map((r: any) => (
         <View
           key={r.id}
           style={{
+            margin: 5,
             flexDirection: 'row',
             alignItems: 'center',
-            height: 100,
+            backgroundColor: r.calendar.color,
+            borderRadius: 6,
             padding: 10,
+            overflow: 'hidden',
           }}>
-          <View style={{width: '50%'}}>
+          <View style={{marginRight: 15}}>
             <Text
               style={{
-                fontSize: 30,
-                color: '#eee',
+                fontSize: 20,
+                color: '#222',
                 fontFamily: 'OpenSans-Light',
               }}>
               {format(new Date(r.startDate), 'dd/MM')}
             </Text>
-            <Text style={{color: '#eee'}}>
+            <Text style={{color: '#222'}}>
               {format(new Date(r.startDate), 'HH:mm')}
             </Text>
           </View>
@@ -55,10 +64,10 @@ export default function ListInOrder() {
 const styles = StyleSheet.create({
   summary: {
     fontSize: 17,
-    color: '#eee',
+    color: '#222',
   },
   eventPrevision: {
     fontSize: 12,
-    color: '#eee',
+    color: '#222',
   },
 });

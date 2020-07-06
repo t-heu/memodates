@@ -70,6 +70,7 @@ public class HeartbeatService extends Service {
                 .setSmallIcon(R.mipmap.icon_noti)
                 .setContentIntent(contentIntent)
                 .setOngoing(true)
+                .setVibrate(new long[]{0L})
                 .build();
         startForeground(SERVICE_NOTIFICATION_ID, notification);
         return START_STICKY;

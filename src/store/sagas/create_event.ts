@@ -36,10 +36,11 @@ async function save(
 
 export default function* createEvents({payload}: any) {
   try {
+    console.log(payload);
     const {title, date, startDate, endDate} = payload.event;
     const response = yield call(findAll);
 
-    const find = response.filter((r: any) => r.type === 'com.memodates');
+    const find = response.filter((r) => r.source === 'memodates event');
 
     const res = yield call(
       save,

@@ -36,7 +36,7 @@ const configDate = {
     'Nov',
     'Dez',
   ],
-  dayNamesShort: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab'],
+  dayNamesShort: ['D', 'S', 'T', 'Q', 'Q', 'S', 'S'], //['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab'],
 };
 
 export default configDate;

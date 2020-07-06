@@ -14,22 +14,24 @@ export default function Home() {
 
   async function addCalendars() {
     try {
-      const res = await RNCalendarEvents.findCalendars();
-      //const find = findAll.filter((r) => r.type === 'com.memodates');
+      const findAll = await RNCalendarEvents.findCalendars();
+      const find = findAll.filter((r) => r.source === 'memodates event');
 
-      /*const res = await RNCalendarEvents.saveCalendar({
-        title: 'Memodates C',
-        color: '#30a8e3',
-        name: 'teuzin375@gmail.com',
-        entityType: 'event',
-        accessLevel: 'read',
-        ownerAccount: 'theu',
-        source: {
-          name: 'teuzin375@gmail.com',
-          type: 'com.google',
-        },
-      });*/
-      console.log(res);
+      if (find.length <= 0) {
+        const res = await RNCalendarEvents.saveCalendar({
+          title: 'event_c',
+          color: '#30a8e3',
+          name: 'memodates',
+          entityType: 'event',
+          accessLevel: 'read',
+          ownerAccount: 'theu',
+          source: {
+            name: 'memodates event',
+            type: 'com.google',
+          },
+        });
+        console.log(res);
+      }
     } catch (e) {
       console.log(e);
     }

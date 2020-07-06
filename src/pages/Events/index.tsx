@@ -49,8 +49,8 @@ export default function Events({route}) {
   }
 
   return (
-    <View style={{flex: 1, backgroundColor: '#202124'}}>
-      <View style={{padding: 20}}>
+    <View style={{flex: 1, backgroundColor: '#fff'}}>
+      <View style={{padding: 20, backgroundColor: '#f34b56', height: 160}}>
         <TouchableOpacity
           style={{flexDirection: 'row', alignItems: 'center'}}
           onPress={() => {
@@ -72,7 +72,7 @@ export default function Events({route}) {
           fontSize: 18,
           marginBottom: 10,
           marginTop: 20,
-          color: '#fff',
+          color: '#222',
           fontFamily: 'OpenSans-Regular',
         }}>
         {format(new Date(event.date), 'dd/MM')}

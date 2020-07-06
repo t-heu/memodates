@@ -20,6 +20,7 @@ async function load() {
 export default function* updateEvents() {
   try {
     const response = yield call(load);
+    //console.log(response);
 
     yield put(EventSuccess({events: response}));
   } catch (e) {

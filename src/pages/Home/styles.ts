@@ -3,7 +3,7 @@ import {StyleSheet} from 'react-native';
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#202124', //'#f5f5f5', //'#f5f3f4',
+    backgroundColor: '#fff', //'#f5f5f5', //'#f5f3f4',
     width: '100%',
   },
   header: {
@@ -19,7 +19,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   titleDay: {
-    color: '#eee',
+    color: '#222',
     fontSize: 18,
     fontFamily: 'OpenSans-Regular',
     fontWeight: '300',

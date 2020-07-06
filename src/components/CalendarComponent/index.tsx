@@ -4,7 +4,7 @@ import {LocaleConfig, Calendar} from 'react-native-calendars';
 import {format} from 'date-fns-tz';
 import {useSelector, useDispatch} from 'react-redux';
 import {useNavigation} from '@react-navigation/native';
-import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 import moment from 'moment';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -53,13 +53,13 @@ export default function CalendarComponent() {
       } else if (state === 'disabled') {
         return '#8c9494';
       } else {
-        return '#fff';
+        return '#222';
       }
     } else {
       if (state === 'today') {
-        return '#297070';
+        return '#f34b56';
       } else if (state === 'disabled') {
-        return '#111'; ///'#f6f6f6';
+        return 'transparent'; //'#f6f6f6';
       } else {
         return 'transparent';
       }
@@ -72,100 +72,119 @@ export default function CalendarComponent() {
         current={month}
         hideArrows={true}
         renderHeader={() => (
-          <View style={styles.header}>
-            <TouchableOpacity onPress={() => navigation.openDrawer()}>
-              <SimpleLineIcons name={'menu'} size={24} color={'#eee'} />
-            </TouchableOpacity>
-
-            <Text style={styles.header__month}>
-              {configDate.monthNames[month.getMonth()]} {month.getFullYear()}
-            </Text>
-
-            <View
-              style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                width: '50%',
-              }}>
-              <TouchableOpacity onPress={() => setMonth(new Date())}>
+          <View
+            style={{
+              width: '100%',
+              overflow: 'hidden',
+              paddingBottom: 5,
+            }}>
+            <View style={styles.header}>
+              <TouchableOpacity
+                onPress={() => navigation.openDrawer()}
+                style={{borderRadius: 100}}>
                 <MaterialCommunityIcons
-                  name={'calendar'}
-                  size={28}
-                  color={'#eee'}
+                  name={'menu'}
+                  size={24}
+                  color={'#222'}
                 />
               </TouchableOpacity>
 
-              <TouchableOpacity
-                onPress={() => {
-                  moment.addRealMonth = function addRealMonth(d) {
-                    const fm = moment(d).add(-1, 'month');
-                    const fmEnd = moment(fm).endOf('month');
-                    return d.date() !== fm.date() &&
-                      fm.isSame(fmEnd.format('YYYY-MM-DD'))
-                      ? fm.add(1, 'd')
-                      : fm;
-                  };
+              <Text style={styles.header__month}>
+                {configDate.monthNames[month.getMonth()]}{' '}
+                {month.getFullYear() === new Date().getFullYear()
+                  ? null
+                  : month.getFullYear()}
+              </Text>
 
-                  const nextMonth = moment.addRealMonth(moment(month));
-                  setMonth(new Date(nextMonth));
+              <View
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  width: '50%',
                 }}>
-                <MaterialCommunityIcons
-                  name={'arrow-left-box'}
-                  size={28}
-                  color={'#297f7f'}
-                />
-              </TouchableOpacity>
+                <TouchableOpacity
+                  style={{
+                    borderRadius: 4,
+                    borderWidth: 2,
+                    borderColor: '#999',
+                    width: 25,
+                  }}
+                  onPress={() => setMonth(new Date())}>
+                  <Text
+                    style={{textAlign: 'center', fontSize: 16, color: '#999'}}>
+                    {new Date().getUTCDate()}
+                  </Text>
+                </TouchableOpacity>
 
-              <TouchableOpacity
-                onPress={() => {
-                  moment.addRealMonth = function addRealMonth(d) {
-                    const fm = moment(d).add(1, 'month');
-                    const fmEnd = moment(fm).endOf('month');
-                    return d.date() !== fm.date() &&
-                      fm.isSame(fmEnd.format('YYYY-MM-DD'))
-                      ? fm.add(1, 'd')
-                      : fm;
-                  };
+                <TouchableOpacity
+                  onPress={() => {
+                    moment.addRealMonth = function addRealMonth(d) {
+                      const fm = moment(d).add(-1, 'month');
+                      const fmEnd = moment(fm).endOf('month');
+                      return d.date() !== fm.date() &&
+                        fm.isSame(fmEnd.format('YYYY-MM-DD'))
+                        ? fm.add(1, 'd')
+                        : fm;
+                    };
 
-                  const nextMonth = moment.addRealMonth(moment(month));
-                  setMonth(new Date(nextMonth));
-                }}>
-                <MaterialCommunityIcons
-                  name={'arrow-right-box'}
-                  size={28}
-                  color={'#297f7f'}
-                />
-              </TouchableOpacity>
+                    const nextMonth = moment.addRealMonth(moment(month));
+                    setMonth(new Date(nextMonth));
+                  }}>
+                  <AntDesign name={'arrowleft'} size={28} color={'#222'} />
+                </TouchableOpacity>
 
-              <TouchableOpacity
-                style={{padding: 10}}
-                onPress={() =>
-                  navigation.navigate('Events', {
-                    day: format(new Date(), 'yyyy-MM-dd'),
-                  })
-                }>
-                <Ionicons name={'md-add'} size={30} color={'#eee'} />
-              </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => {
+                    moment.addRealMonth = function addRealMonth(d) {
+                      const fm = moment(d).add(1, 'month');
+                      const fmEnd = moment(fm).endOf('month');
+                      return d.date() !== fm.date() &&
+                        fm.isSame(fmEnd.format('YYYY-MM-DD'))
+                        ? fm.add(1, 'd')
+                        : fm;
+                    };
+
+                    const nextMonth = moment.addRealMonth(moment(month));
+                    setMonth(new Date(nextMonth));
+                  }}>
+                  <AntDesign name={'arrowright'} size={28} color={'#222'} />
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  style={{
+                    height: 35,
+                    width: 35,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    backgroundColor: '#f34b56',
+                    borderRadius: 100,
+                  }}
+                  onPress={() =>
+                    navigation.navigate('Events', {
+                      day: format(new Date(), 'yyyy-MM-dd'),
+                    })
+                  }>
+                  <Ionicons name={'md-add'} size={24} color={'#fff'} />
+                </TouchableOpacity>
+              </View>
             </View>
           </View>
         )}
         theme={{
-          calendarBackground: '#202124',
-          textSectionTitleColor: '#fff',
+          calendarBackground: '#fff', //'#202124',
+          textSectionTitleColor: '#666',
           textDayHeaderFontFamily: 'OpenSans-Regular',
-          textDayHeaderFontWeight: '400',
+          textDayHeaderFontWeight: 'bold',
           'stylesheet.calendar.header': {
             week: {
               margin: 0,
-              marginBottom: 5,
-              marginTop: 5,
+              marginBottom: 4,
               flexDirection: 'row',
               alignItems: 'center',
               justifyContent: 'space-around',
             },
             header: {
-              marginTop: 10,
               flexDirection: 'row',
               alignItems: 'center',
               justifyContent: 'space-around',
@@ -185,21 +204,16 @@ export default function CalendarComponent() {
         }}
         style={styles.calendarList}
         dayComponent={({date, state}) => (
-          <TouchableOpacity
-            style={[
-              styles.day,
-              {
-                backgroundColor: colorAplication(state),
-                borderColor: state === 'today' ? '#297070' : '#444',
-              },
-            ]}
-            onPress={() => PressDay(date)}>
+          <TouchableOpacity style={styles.day} onPress={() => PressDay(date)}>
             <Text
               style={[
                 {
                   color: colorAplication(state, 'letter'),
                   textAlign: 'center',
-                  fontFamily: 'OpenSans-Regular',
+                  backgroundColor: colorAplication(state),
+                  borderRadius: 100,
+                  height: 20,
+                  width: 20,
                 },
               ]}>
               {date.day}
@@ -218,9 +232,9 @@ export default function CalendarComponent() {
                         backgroundColor:
                           format(new Date(), 'MM-dd') ===
                           format(new Date(r.startDate), 'MM-dd')
-                            ? '#eee'
-                            : r.color
                             ? r.color
+                              ? r.color
+                              : r.calendar.color
                             : r.calendar.color,
                       },
                     ]}>

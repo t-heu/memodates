@@ -35,7 +35,7 @@ const App: React.FC = () => {
 
   return (
     <NavigationContainer>
-      <StatusBar backgroundColor="#202124" barStyle="light-content" />
+      <StatusBar backgroundColor="#f5f5f5" barStyle="dark-content" />
       <Provider store={store}>
         <PersistGate persistor={persistor}>
           <Routes />
