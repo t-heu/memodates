@@ -27,7 +27,7 @@ public class HeartbeatService extends Service {
             Intent myIntent = new Intent(context, HeartbeatEventService.class);
             context.startService(myIntent);
             HeadlessJsTaskService.acquireWakeLockNow(context);
-            handler.postDelayed(this, 2000);//2000
+            handler.postDelayed(this, 60000);//2000
         }
     };
     private void createNotificationChannel() {
@@ -65,12 +65,12 @@ public class HeartbeatService extends Service {
         Intent notificationIntent = new Intent(this, MainActivity.class);
         PendingIntent contentIntent = PendingIntent.getActivity(this, 0, notificationIntent, PendingIntent.FLAG_CANCEL_CURRENT);
         Notification notification = new NotificationCompat.Builder(this, CHANNEL_ID)
-                .setContentTitle("Memodates service")
-                .setContentText("Running...")
+                .setContentTitle("Analisando eventos futuros")
+                .setContentText("Procurando...")
                 .setSmallIcon(R.mipmap.icon_noti)
                 .setContentIntent(contentIntent)
                 .setOngoing(true)
-                .setVibrate(new long[]{0L})
+                .setVibrate(null)//(new long[]{0L})
                 .build();
         startForeground(SERVICE_NOTIFICATION_ID, notification);
         return START_STICKY;

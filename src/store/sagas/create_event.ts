@@ -2,6 +2,7 @@ import {call, put} from 'redux-saga/effects';
 import {Alert} from 'react-native';
 import RNCalendarEvents from 'react-native-calendar-events';
 import moment from 'moment';
+import uuid from 'react-native-uuid';
 
 import {EventUpdate} from '../ducks/events/action';
 
@@ -31,6 +32,7 @@ async function save(
           moment.utc(startDate).format('THH:mm:ss.SSS[Z]'),
       },
     ],
+    //location: '',
   });
 }
 
@@ -40,7 +42,7 @@ export default function* createEvents({payload}: any) {
     const {title, date, startDate, endDate} = payload.event;
     const response = yield call(findAll);
 
-    const find = response.filter((r) => r.source === 'memodates event');
+    const find = response.filter((r) => r.title === 'events_c');
 
     const res = yield call(
       save,
@@ -52,6 +54,18 @@ export default function* createEvents({payload}: any) {
       payload.event.id,
     );
 
+    /*
+      const dataAge = {
+        title,
+        date: new Date(date),
+        id: uuid.v4(), //'1',
+        color: colors[Number(color)].color,
+        startDate: new Date(timeStart),
+        endDate: new Date(timeEnd),
+      };
+
+      create([dataAge]);*/
+
     if (res) {
       Alert.alert('Salvo com sucesso');
       yield put(EventUpdate());
@@ -60,18 +74,3 @@ export default function* createEvents({payload}: any) {
     console.log(e);
   }
 }
-/*const showDbLocal = await show();
-      const dataAge = {
-        title,
-        // date: new Date(date),
-        id: '1',
-        color: colors[Number(color)].color,
-        startDate: new Date(timeStart),
-        endDate: new Date(timeEnd),
-      };
-
-      if (showDbLocal.length > 0) {
-        dataAge.id = String(Number(showDbLocal[showDbLocal.length - 1].id) + 1);
-      }
-
-      create([dataAge]);*/

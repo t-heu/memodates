@@ -30,9 +30,10 @@ export default function CreateBirthdayComponent() {
     new Date(`${format(new Date(), 'yyyy-MM-dd')}T10:00:00.000Z`),
   );
 
-  const [Show, setShow] = useState('');
+  //const [Show, setShow] = useState('');
   const [color, setColor] = useState('2');
-  const [showDots, setShowDots] = useState(false);
+  const [ShowDate, setShowDate] = useState(false);
+  const [ShowHours, setShowHours] = useState(false);
   const colors = [
     {id: '0', color: '#2ed573'},
     {id: '1', color: '#ffa502'},
@@ -56,27 +57,31 @@ export default function CreateBirthdayComponent() {
     }
   }, [event]);
 
-  const onChangeTimeDate = (eventt: any, selectedDate: any) => {
+  const onChangeDate = (eventt: any, selectedDate: any) => {
     const currentDate: Date | object = selectedDate;
 
+    setShowDate(false);
     if (currentDate) {
-      if (Show === 'date') {
-        setShow('');
-        setDate(new Date(String(currentDate)));
-      } else {
-        setShow('');
-        setStartDate(new Date(String(currentDate)));
-        setEndDate(new Date(String(currentDate)));
-      }
+      setDate(new Date(String(currentDate)));
     }
   };
 
   const showDatepicker = () => {
-    setShow('date');
+    setShowDate(true);
+  };
+
+  const onChangeHours = (eventt: any, selectedDate: any) => {
+    const currentDate: Date | object = selectedDate;
+
+    setShowHours(false);
+    if (currentDate) {
+      setStartDate(new Date(String(currentDate)));
+      setEndDate(new Date(String(currentDate)));
+    }
   };
 
   const showTimeStartpicker = () => {
-    setShow('time');
+    setShowHours(true);
   };
 
   async function HandleSubmit() {
@@ -109,7 +114,7 @@ export default function CreateBirthdayComponent() {
 
   return (
     <KeyboardAvoidingView enabled>
-      {showDots && (
+      {/*showDots && (
         <FlatList
           style={{
             position: 'absolute',
@@ -146,7 +151,7 @@ export default function CreateBirthdayComponent() {
             />
           )}
         />
-      )}
+      )*/}
 
       <View style={styles.form}>
         <View
@@ -191,7 +196,7 @@ export default function CreateBirthdayComponent() {
             </Text>
           </TouchableOpacity>
 
-          {Show === 'date' && (
+          {ShowDate && (
             <DateTimePicker
               testID="dateTimePicker"
               timeZoneOffsetInMinutes={0}
@@ -199,11 +204,11 @@ export default function CreateBirthdayComponent() {
               mode={'date'}
               is24Hour={true}
               display="default"
-              onChange={onChangeTimeDate}
+              onChange={onChangeDate}
             />
           )}
 
-          {Show === 'time' && (
+          {ShowHours && (
             <DateTimePicker
               testID="dateTimePicker"
               timeZoneOffsetInMinutes={0}
@@ -211,7 +216,7 @@ export default function CreateBirthdayComponent() {
               mode={'time'}
               is24Hour={true}
               display="default"
-              onChange={onChangeTimeDate}
+              onChange={onChangeHours}
             />
           )}
 

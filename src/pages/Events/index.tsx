@@ -9,9 +9,9 @@ import RNCalendarEvents from 'react-native-calendar-events';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 import {EventUpdate, EventSave} from '../../store/ducks/events/action';
-
 import CreateBirthday from '../../components/CreateBirthday';
 import {ApplicationState} from '../../store';
+import configDate from '../../utils/configDate';
 
 export default function Events({route}) {
   const {events, event} = useSelector(
@@ -63,6 +63,18 @@ export default function Events({route}) {
           <AntDesign name={'arrowleft'} size={24} color={'#fff'} />
           <Text style={{marginLeft: 8, color: '#fff'}}>Voltar</Text>
         </TouchableOpacity>
+
+        <Text
+          style={{
+            fontSize: 18,
+            marginBottom: 10,
+            marginTop: 20,
+            color: '#fff',
+            textAlign: 'center',
+            fontFamily: 'OpenSans-SemiBold',
+          }}>
+          {configDate.dayNames[new Date(event.date).getUTCDay()]}
+        </Text>
       </View>
       <CreateBirthday />
 

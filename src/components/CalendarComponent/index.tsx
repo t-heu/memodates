@@ -4,7 +4,7 @@ import {LocaleConfig, Calendar} from 'react-native-calendars';
 import {format} from 'date-fns-tz';
 import {useSelector, useDispatch} from 'react-redux';
 import {useNavigation} from '@react-navigation/native';
-import AntDesign from 'react-native-vector-icons/AntDesign';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import moment from 'moment';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -105,15 +105,24 @@ export default function CalendarComponent() {
                 }}>
                 <TouchableOpacity
                   style={{
-                    borderRadius: 4,
+                    borderRadius: 6,
                     borderWidth: 2,
-                    borderColor: '#999',
-                    width: 25,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    borderColor: '#8395a7',
+                    padding: 5,
+                    paddingBottom: 3,
+                    paddingTop: 3,
                   }}
                   onPress={() => setMonth(new Date())}>
                   <Text
-                    style={{textAlign: 'center', fontSize: 16, color: '#999'}}>
-                    {new Date().getUTCDate()}
+                    style={{
+                      textAlign: 'center',
+                      fontSize: 15,
+                      fontFamily: 'OpenSans-SemiBold',
+                      color: '#8395a7',
+                    }}>
+                    Hoje
                   </Text>
                 </TouchableOpacity>
 
@@ -131,7 +140,11 @@ export default function CalendarComponent() {
                     const nextMonth = moment.addRealMonth(moment(month));
                     setMonth(new Date(nextMonth));
                   }}>
-                  <AntDesign name={'arrowleft'} size={28} color={'#222'} />
+                  <MaterialIcons
+                    name={'keyboard-arrow-left'}
+                    size={28}
+                    color={'#222'}
+                  />
                 </TouchableOpacity>
 
                 <TouchableOpacity
@@ -148,7 +161,11 @@ export default function CalendarComponent() {
                     const nextMonth = moment.addRealMonth(moment(month));
                     setMonth(new Date(nextMonth));
                   }}>
-                  <AntDesign name={'arrowright'} size={28} color={'#222'} />
+                  <MaterialIcons
+                    name={'keyboard-arrow-right'}
+                    size={28}
+                    color={'#222'}
+                  />
                 </TouchableOpacity>
 
                 <TouchableOpacity
@@ -159,6 +176,14 @@ export default function CalendarComponent() {
                     justifyContent: 'center',
                     backgroundColor: '#f34b56',
                     borderRadius: 100,
+                    shadowColor: '#000',
+                    shadowOpacity: 0.1,
+                    shadowOffset: {
+                      height: 4,
+                      width: 4,
+                    },
+                    elevation: 3,
+                    shadowRadius: 3,
                   }}
                   onPress={() =>
                     navigation.navigate('Events', {

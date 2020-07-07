@@ -18,12 +18,9 @@ export async function TaskVerifyDate() {
   const {events} = store.getState().events;
 
   events.map((response) => {
-    const dateAge = format(new Date(), 'yyyy-MM-dd:HH:mm:ss');
+    const dateAge = format(new Date(), 'yyyy-MM-dd:HH:mm');
 
-    if (
-      format(new Date(response.startDate), 'yyyy-MM-dd:HH:mm:ss') === dateAge
-    ) {
-      console.log('aa');
+    if (format(new Date(response.startDate), 'yyyy-MM-dd:HH:mm') === dateAge) {
       Notification(response.title, response.startDate);
     }
   });

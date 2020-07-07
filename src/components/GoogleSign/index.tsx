@@ -13,13 +13,13 @@ import {
 } from '../../store/ducks/auth/action';
 
 GoogleSignin.configure({
-  scopes: ['https://www.googleapis.com/auth/drive.appdata'], //['https://www.googleapis.com/auth/drive'], //https://www.googleapis.com/auth/drive.readonly
+  scopes: ['https://www.googleapis.com/auth/drive.appdata'],
   webClientId:
     '544070490320-86b9dkrqn7bpvfsmio8mebf0p8ll096o.apps.googleusercontent.com',
 });
 
 export default function GoogleSign() {
-  const [isSigninInProgress, setIsSigninInProgress] = useState(false);
+  const [isSigninInProgress, setIsSigninInProgress] = useState(true);
   const dispatch = useDispatch();
 
   async function signIn() {

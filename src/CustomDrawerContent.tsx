@@ -126,66 +126,99 @@ export default function CustomDrawerContent() {
           paddingBottom: 0,
           justifyContent: 'center',
           backgroundColor: '#fff',
-          height: 100,
+          //height: 100,
         }}>
         {auth.signed ? (
-          <View
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-            }}>
-            <Image
-              source={{uri: auth.user.photo}}
+          <>
+            <View
               style={{
-                borderRadius: 100,
-                width: 40,
-                height: 40,
-              }}
-            />
-            <Text
-              style={{
-                color: '#666',
-                fontFamily: 'OpenSans-SemiBold',
-                fontSize: 18,
-                marginLeft: 10,
+                flexDirection: 'row',
+                alignItems: 'center',
+                paddingBottom: 10,
+                borderBottomWidth: 1,
+                marginBottom: 10,
+                borderColor: '#eee',
               }}>
-              {auth.user.name}
-            </Text>
+              <Image
+                source={{uri: auth.user.photo}}
+                style={{
+                  borderRadius: 100,
+                  width: 40,
+                  height: 40,
+                }}
+              />
+              <Text
+                style={{
+                  color: '#666',
+                  fontFamily: 'OpenSans-SemiBold',
+                  fontSize: 18,
+                  marginLeft: 10,
+                }}>
+                {auth.user.name}
+              </Text>
+            </View>
 
             {auth.signed ? (
               <>
-                <View style={{marginLeft: 20}}>
+                <View>
                   <TouchableOpacity
                     onPress={() => backup()}
                     style={styles.btnSigned}>
-                    <MaterialIcons name={'backup'} size={26} color={'#333'} />
+                    <MaterialIcons name={'backup'} size={20} color={'#333'} />
+                    <Text
+                      style={{
+                        color: '#000',
+                        //fontFamily: 'OpenSans-SemiBold',
+                        fontSize: 14,
+                        marginLeft: 10,
+                      }}>
+                      Backup
+                    </Text>
                   </TouchableOpacity>
                 </View>
 
-                <View style={{marginLeft: 20}}>
+                <View>
                   <TouchableOpacity
                     onPress={() => restored()}
                     style={styles.btnSigned}>
                     <MaterialIcons
                       name={'file-download'}
-                      size={26}
+                      size={20}
                       color={'#333'}
                     />
+                    <Text
+                      style={{
+                        color: '#000',
+                        //fontFamily: 'OpenSans-SemiBold',
+                        fontSize: 14,
+                        marginLeft: 10,
+                      }}>
+                      Restaurar
+                    </Text>
                   </TouchableOpacity>
                 </View>
 
-                <View style={{marginLeft: 20}}>
+                <View>
                   <TouchableOpacity
                     onPress={async () => {
                       dispatch(SignOut());
                     }}
                     style={styles.btnSigned}>
-                    <Ionicons name={'md-exit'} size={26} color={'#333'} />
+                    <Ionicons name={'md-exit'} size={20} color={'#333'} />
+                    <Text
+                      style={{
+                        color: '#000',
+                        //fontFamily: 'OpenSans-SemiBold',
+                        fontSize: 14,
+                        marginLeft: 10,
+                      }}>
+                      Sair
+                    </Text>
                   </TouchableOpacity>
                 </View>
               </>
             ) : null}
-          </View>
+          </>
         ) : (
           <GoogleSign />
         )}
