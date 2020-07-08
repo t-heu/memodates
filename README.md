@@ -6,8 +6,8 @@
 </a>
 
 <p align="center">
-  <img alt="Logo do projeto" src="./_docs/web_hi_res_512.png" width="150" />
-  <img alt="exemplo" src="./_docs/Peek 08-07-2020 10-57.gif" width="150" />
+  <img alt="Logo do projeto" src="./_docs/web_hi_res_512.png" width="150" /><br/>
+  <img alt="exemplo" src="./_docs/Peek 08-07-2020 10-57.gif" width="1080" />
 </p>
 
 ###  Tecnologias usadas
