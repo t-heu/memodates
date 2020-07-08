@@ -7,6 +7,7 @@
 
 <p align="center">
   <img alt="Logo do projeto" src="./_docs/web_hi_res_512.png" width="150" />
+  <img alt="exemplo" src="./_docs/Peek 08-07-2020 10-57.gif" width="150" />
 </p>
 
 ###  Tecnologias usadas
@@ -17,15 +18,20 @@ Este maravilhoso projeto foi desenvolvido com as seguintes tecnologias:
 - ~~jsonwebtoken~~
 - ~~Graphql~~
 - ~~Typeorm~~
-- Realm
+- ~~Realm~~
 - @react-native-community/google-signin
 - redux
 - redux-persist
+- redux-saga
 - date-fns
+- moment
+- code-push
+- service
+- admob
 - ~~react-native-fbsdk (oauth Facebook)~~
 - ~~Apollo~~
 - react-native-push-notification (notification local)
-- react-native-background-fetch
+- ~~react-native-background-fetch~~
 - TypeScript
 
 ###  Projeto

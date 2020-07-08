@@ -220,7 +220,14 @@ export default function CustomDrawerContent() {
             ) : null}
           </>
         ) : (
-          <GoogleSign />
+          <View
+            style={{
+              alignItems: 'center',
+              justifyContent: 'center',
+              paddingBottom: 10,
+            }}>
+            <GoogleSign />
+          </View>
         )}
       </View>
 

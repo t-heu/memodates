@@ -216,10 +216,10 @@ dependencies {
     implementation "com.facebook.android:facebook-android-sdk:[4,5)"
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0"
     implementation project(':react-native-push-notification')
-    implementation project(':realm')
+    //implementation project(':realm')
     implementation 'androidx.appcompat:appcompat:1.1.0-rc01'
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0-alpha02'
-    compile project(':react-native-calendar-events')
+    implementation project(':react-native-calendar-events')
 
     debugImplementation("com.facebook.flipper:flipper:${FLIPPER_VERSION}") {
       exclude group:'com.facebook.fbjni'

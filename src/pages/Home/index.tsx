@@ -15,24 +15,24 @@ export default function Home() {
   async function addCalendars() {
     try {
       const findAll = await RNCalendarEvents.findCalendars();
-      const find = findAll.filter((r) => r.source === 'memodates event');
+      const find = findAll.filter((r) => r.source === 'event_local_memodates');
 
-      //if (find.length <= 0) {
-      /*const res = await RNCalendarEvents.saveCalendar({
-        title: 'events_c',
-        color: '#30a8e3',
-        name: 'memodates',
-        entityType: 'event',
-        accessLevel: 'read',
-        ownerAccount: 'theu',
-        source: {
-          isLocalAccount: true,
-          name: 'event_local',
-          //type: 'com.google',
-        },
-      });*/
-      console.log(findAll);
-      //}
+      if (find.length <= 0) {
+        await RNCalendarEvents.saveCalendar({
+          title: 'events_c',
+          color: '#30a8e3',
+          name: 'memodates',
+          entityType: 'event',
+          accessLevel: 'read',
+          ownerAccount: 'theu',
+          source: {
+            isLocalAccount: true,
+            name: 'event_local_memodates',
+            //type: 'com.google',
+          },
+        });
+        //console.log(findAll);
+      }
     } catch (e) {
       console.log(e);
     }
@@ -65,7 +65,7 @@ export default function Home() {
 
   return (
     <ScrollView style={styles.container}>
-      <Button title="ca" onPress={() => addCalendars()} />
+      {/*<Button title="ca" onPress={() => addCalendars()} />*/}
       {statusP ? (
         <Button
           title="Conceder Permissão a Agenda"

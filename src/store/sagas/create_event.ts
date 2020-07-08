@@ -2,7 +2,6 @@ import {call, put} from 'redux-saga/effects';
 import {Alert} from 'react-native';
 import RNCalendarEvents from 'react-native-calendar-events';
 import moment from 'moment';
-import uuid from 'react-native-uuid';
 
 import {EventUpdate} from '../ducks/events/action';
 
@@ -42,7 +41,7 @@ export default function* createEvents({payload}: any) {
     const {title, date, startDate, endDate} = payload.event;
     const response = yield call(findAll);
 
-    const find = response.filter((r) => r.title === 'events_c');
+    const find = response.filter((r) => r.source === 'event_local_memodates');
 
     const res = yield call(
       save,
@@ -53,18 +52,6 @@ export default function* createEvents({payload}: any) {
       find,
       payload.event.id,
     );
-
-    /*
-      const dataAge = {
-        title,
-        date: new Date(date),
-        id: uuid.v4(), //'1',
-        color: colors[Number(color)].color,
-        startDate: new Date(timeStart),
-        endDate: new Date(timeEnd),
-      };
-
-      create([dataAge]);*/
 
     if (res) {
       Alert.alert('Salvo com sucesso');

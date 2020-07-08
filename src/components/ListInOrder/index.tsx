@@ -9,7 +9,7 @@ export default function ListInOrder() {
   const {events} = useSelector((state: ApplicationState) => state.events);
 
   return (
-    <View style={{marginBottom: 100}}>
+    <View style={{marginBottom: 50}}>
       <Text
         style={{
           color: '#222',
@@ -24,7 +24,8 @@ export default function ListInOrder() {
         <View
           key={r.id}
           style={{
-            margin: 5,
+            margin: 15,
+            marginBottom: 0,
             flexDirection: 'row',
             alignItems: 'center',
             backgroundColor: r.calendar.color,
@@ -63,7 +64,7 @@ export default function ListInOrder() {
 
 const styles = StyleSheet.create({
   summary: {
-    fontSize: 17,
+    fontSize: 16,
     color: '#222',
   },
   eventPrevision: {
