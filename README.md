@@ -45,26 +45,22 @@ Quem nunca teve um leve esquecimento de uma data de aniversário de um amigo(a) 
 ###  Como instalar
 
 - Faça um git clone desse repositório
-- Instale suas dependências: 
-- backend yarn
-- mobile yarn
+- Instale as dependências com: ```yarn```
 
 ### configuração e execução
 
 <ul>
-  <li>em backend</li>
-  <ul>
-    <li>crie um .env baseado no .env.example e forneça suas credenciais do banco de dados </li>
-  </ul>
-  <li>em Memodates</li>
-  <ul>
-    <li>gere seu google-services do firebase e coloque em <code>android/app</code></li>
-  </ul>
+  <li>gere seu google-services do firebase e coloque em <code>android/app</code></li>
+  <li>configure seu code-push e coloque sua key em<code>android/app/src/main/res/values/strings.xml</code></li>
+  <code> string name="CodePushDeploymentKey" moduleConfig="true">KEY</string></code>
+  <li>configure seu admob e coloque suas credencias
+<code>android/app/src/main/AndroidManifest.xml</code><br />
+<code> meta-data android:name="com.google.android.gms.ads.APPLICATION_ID" android:value="KEY"/></code>
+  </li>
 </ul>
 
 - Em seguida inicialize:
 ```
-backend: yarn dev 
 mobile: yarn android && yarn start
 ```
 
