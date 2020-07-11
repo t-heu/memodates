@@ -7,6 +7,7 @@
 
 <p align="center">
   <img alt="Logo do projeto" src="./_docs/web_hi_res_512.png" width="150" /><br/>
+  <h2>📸 Preview</h2>
   <img alt="exemplo" src="./_docs/Peek 08-07-2020 10-57.gif" width="1080" />
 </p>
 
@@ -25,7 +26,7 @@ Este maravilhoso projeto foi desenvolvido com as seguintes tecnologias:
 - redux-saga
 - date-fns
 - moment
-- code-push
+- code-push/Appcenter
 - service
 - admob
 - ~~react-native-fbsdk (oauth Facebook)~~
@@ -72,4 +73,4 @@ Esse projeto não possui um sistema de versionamento.
 Da uma olhada na aba [Releases](https://github.com/t-heu/memodates/releases) pra acompanhar as alterações feitas no projeto.
 
 ## License/Licença do Projeto
-[MIT License](./LICENSE) © [Math](https://github.com/t-heu/)
+[Apache License](./LICENSE) © [Math](https://github.com/t-heu/)
